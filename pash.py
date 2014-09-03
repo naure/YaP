@@ -4,12 +4,13 @@ import sys
 import re
 
 # Find python expression in shell commands
-re_py_inline = re.compile(r'\$(\{[^}]+\}|\w+)')  # ${expression} or $variable
-re_py_simple = re.compile(r'\$(\w+)')  # $variable
+re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression} or $variable
+re_arg = re.compile(r'\$([0-9]+)')  # $1
+re_env = re.compile(r'\$(\w+)')  # $variable
 
 # Find shell command in python expressions
-re_sh_inline = re.compile(r'!\[([^]]+)\]')  # ![inline command]
-re_sh_end = re.compile(r'!([^[].*)')  # !command until end of line
+re_sh_inline = re.compile(r'\w?!\(([^)]+)\)')  # ![inline command]
+re_sh_end = re.compile(r'\w?!([^(].*)')  # !command until end of line
 
 def split_sh(line):
     ' Decide if this line has a shell command and extract it. '
@@ -41,10 +42,11 @@ def expand_shell(sh):
     parts = split_expressions(re_py_inline, sh)
     if len(parts) == 1:
         return '"{}"'.format(parts[0])  # No expansion
-    if len(parts) == 3 and parts[0] == '' and parts[2] == '':
-        return 'str({})'.format(parts[1])  # Only one expansion without text
 
-    exprs = parts[1::2]
+    exprs = list(map(expand_env_strict, parts[1::2]))
+    if len(parts) == 3 and parts[0] == '' and parts[2] == '':
+        return 'str({})'.format(exprs[0])  # Only one expansion without text
+
     for i in range(1, len(parts), 2):
         parts[i] = '{}'  # Transform expressions into template arguments
 
@@ -61,9 +63,50 @@ def compile_sh(sh):
     return "subprocess.check_output([{}])".format(args)
 
 
+soft_index_lib = '''
+def softindex(array, i, alt=None):
+    return array[i] if i < len(array) else alt
+'''
+
+missing_lib = '''
+class Missing(object):
+    def __init__(self, what):
+        self.what = what
+
+    def __str__(self):
+        raise KeyError(self.what)
+
+    def __bool__(self):
+        return False
+
+missingget(obj, variable):
+    return obj.get(variable) or Missing(variable)
+
+missingindex(array, i):
+    return softindex(array, i) or Missing(
+        "Argument {}".format(i))
+'''
+
+
+def expand_env_strict(py):
+    # XXX Should use Missing instead
+    return re_env.sub(
+        r'os.environ["\1"]',
+        re_arg.sub(r'sys.argv[\1]', py))
+
+
+def expand_env_soft(py):
+    return re_env.sub(
+        r'os.environ.get("\1")',
+        re_arg.sub(r'softindex(sys.argv, \1)', py))
+
+
 def expand_python(py):
     ' Expand shell commands in python expressions. '
     parts = re_sh_inline.split(py)
+    # Expand environment variables
+    for i in range(0, len(parts), 2):
+        parts[i] = expand_env_soft(parts[i])
     if len(parts) == 1:
         return '{}'.format(parts[0])  # No expansion
 
@@ -83,12 +126,11 @@ with open(sys.argv[1]) as f:
 
 dest = [
     source[0],  # The #! line. XXX
+    'import os',
+    'import sys',
     'import subprocess',
 ]
+dest.extend(soft_index_lib.splitlines())
 dest.extend(map(process_line, source[1:]))
 
-#print('\n'.join(source))
-#print()
-#print(">>>>")
-#print()
 print('\n'.join(dest))
