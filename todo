@@ -1,0 +1,3 @@
+- Parsing of shell to find the right delimiter (counting pairs, ignore quotes)
+- Explicit multi parameters expansion with $*list
+- Automatic detection of shell based on syntax

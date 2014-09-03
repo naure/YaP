@@ -1,0 +1,15 @@
+Design Goals
+- Safe:
+  Syntax independent of variables content. Well-defined data structure.
+  Spaces in variable, quotes, escaping.
+  Check that all executables are there before even starting.
+- Easy:
+  Mix Python and Bash freely. Solve each task with the best suited
+  language.
+- Powerful:
+  All the power of Python for logic and of Bash for system
+  interaction.
+- Readable: Avoid quotes and escaping hell.
+- Simple:
+  Single file, no-dependencies compiler. On-the-fly or pre-compiled to
+  pure Python.
