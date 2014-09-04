@@ -14,16 +14,17 @@ files = ! ls -l
 f = ! ls {var} -l
 y = !y {var}
 
-multi = process(!
+multi = f(!
     echo "A B"
-    echo (parentheses)
-    echo ! ignore
+    -a (parentheses)
+    -o ! ignore
 )
 
-some_python = 'full output: ' + ! shell command
+some_string = 'full output: ' + ! shell command
+some_json = 'full output: ' + j! shell command
 some_integer = 2 + (i! echo 2) + 2
 list_of_lines = l! ls
-rows_then_fields = f! ls -l
+rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
 print(!date +%s)
 ! echo {some_python.upper()}

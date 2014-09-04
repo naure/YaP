@@ -106,7 +106,6 @@ re_symbol = re.compile(
 
 def safe_split(s):
     ' Like re.split() but aware of parenthesis, quotes, and escaping. '
-    print('\n==split== ' + s)
     #escaped = False  # XXX Support escaping
     in_quotes = False
     in_dquotes = False
@@ -119,7 +118,6 @@ def safe_split(s):
     part_start = 0
 
     for m in re_symbol.finditer(s):
-        print('==match== ' + str(m.groups()))
         capture, opening, closing, quote, eol = m.groups()
         eol = eol is not None
         if quote:
@@ -193,7 +191,7 @@ def expand_shell(sh):
     return '"{}".format({})'.format(orange(template), args)  # Will evaluate and render
 
 
-re_sh = re.compile(r'(\w*)!(.*)')
+re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
 
 def compile_sh(cmd):
     ' Compile a shell command into python code'
@@ -201,7 +199,16 @@ def compile_sh(cmd):
     parts = sh.split()
     expanded = map(expand_shell, parts)
     args = ', '.join(expanded)
-    return "subprocess.check_output([{}])".format(args)
+    process = "subprocess.check_output([{}])".format(args)
+    if 'l' in flags:
+        return "{}.splitlines()".format(process)
+    if 'i' in flags:
+        return "int({})".format(process)
+    if 'f' in flags:
+        return "float({})".format(process)
+    if 'j' in flags:
+        return "json.loads({})".format(process)
+    return process
 
 
 soft_index_lib = '''
@@ -261,7 +268,6 @@ def _expand_python(py):
 def expand_python(s, compile_fn):
     ' Expand shell commands in python code. '
     parts = safe_split(s)
-    print('==parts== ' + str(parts))
 
     def do(py, cmd):
         expanded_py = expand_env_soft(py)
@@ -289,6 +295,7 @@ dest = [
     'import os',
     'import sys',
     'import subprocess',
+    'import json',
 ]
 dest.extend(soft_index_lib.splitlines())
 #dest.extend(map(process_line, source[1:]))
