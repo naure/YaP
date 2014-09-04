@@ -2,6 +2,19 @@
 
 import sys
 import re
+from itertools import starmap
+
+COLORS = {
+    'blue': '\033[94m',
+    'green': '\033[92m',
+    'orange': '\033[93m',
+    'red': '\033[91m',
+}
+ENDCOLOR = '\033[0m'
+def _color(s, col='blue'):
+    return '{}{}{}'.format(COLORS[col], s, ENDCOLOR)
+
+color = _color
 
 # Find python expression in shell commands
 re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression} or $variable
@@ -11,6 +24,17 @@ re_env = re.compile(r'\$(\w+)')  # $variable
 # Find shell command in python expressions
 re_sh_inline = re.compile(r'\w?!\(([^)]+)\)')  # ![inline command]
 re_sh_end = re.compile(r'\w?!([^(].*)')  # !command until end of line
+re_sh = re.compile(r'''
+    (\w*)!  # Operator + leading flags
+    (?:  # Non-capturing group
+        \( ( [^)]+ ) \)  # !(inline)
+    |
+        ( [^(] .* )$  # ! command until end of line
+    )
+    ''', re.X)
+
+# Find comments
+re_comment = re.compile(r'^\s*#')
 
 def split_sh(line):
     ' Decide if this line has a shell command and extract it. '
@@ -35,6 +59,100 @@ def split_expressions(regex, raw):
     for i in range(1, len(parts), 2):
         parts[i] = check_curly(parts[i])  # Check and clean all expressions
     return parts
+
+
+
+
+def x(regex, s):
+
+
+    scanner = re.Scanner([
+        r'[([{]',
+        r'[)\]}]',
+        r'"\'\\',
+        regex,
+    ])
+
+#                          Capture       Opening   Closing     Quoting
+re_symbol = re.compile(
+    r'''(
+    \w*!  )|(
+    [({[]     )|(
+    [)}\]]    )|(
+    ["\'\\]   )|(
+    \s* (?:\#.*)? $    )
+    ''',
+    re.X | re.MULTILINE)
+
+
+def safe_split(s):
+    ' Like re.split() but aware of parenthesis, quotes, and escaping. '
+    print('\n==split== ' + s)
+    #escaped = False  # XXX Support escaping
+    in_quotes = False
+    in_dquotes = False
+    depth = 0
+
+    capturing_since = None
+    capturing_depth = None
+
+    parts = []
+    part_start = 0
+
+    for m in re_symbol.finditer(s):
+        print('==match== ' + str(m.groups()))
+        capture, opening, closing, quote, eol = m.groups()
+        eol = eol is not None
+        if quote:
+            # Toggle quote state and move on
+            if quote == "'":
+                in_quotes = not in_quotes
+            elif quote == '"':
+                in_dquotes = not in_dquotes
+
+        elif not in_quotes and not in_dquotes:
+            if opening:
+                depth += 1
+            elif closing:
+                depth -= 1
+
+            if capturing_depth is None:
+                if capture:
+                    # Start capturing
+                    capturing_since = m.start()
+                    capturing_depth = depth
+
+            elif depth < capturing_depth or (eol and depth == 0):
+                    # Finish capturing
+                    parts.append((
+                        s[part_start:capturing_since],  # Regular
+                        s[capturing_since:m.start()],  # Captured
+                    ))
+                    part_start = m.start()
+                    capturing_depth = None
+        #else: ignore quoted part
+    parts.append((s[part_start:], None))  # Regular end, possibly empty
+    return parts
+
+
+
+def decompose(regex, s):
+    ''' Split s using regex and return it in this format:
+        [(non-matching part, None),
+         (matching part, groups),
+         ...
+        ]
+        The first and last non-matching parts may be empty strings.
+    '''
+    matches = regex.finditer(s)
+    zipped = []
+    idx = 0
+    for m in matches:
+        zipped.append((s[idx:m.start()], None))
+        zipped.append((m.group(), m.groups()))
+        idx = m.end()
+    zipped.append((s[idx:], None))
+    return zipped
 
 
 def expand_shell(sh):
@@ -101,7 +219,7 @@ def expand_env_soft(py):
         re_arg.sub(r'softindex(sys.argv, \1)', py))
 
 
-def expand_python(py):
+def _expand_python(py):
     ' Expand shell commands in python expressions. '
     parts = re_sh_inline.split(py)
     # Expand environment variables
@@ -115,7 +233,23 @@ def expand_python(py):
     return ''.join(parts)
 
 
+def expand_python(s, compile_fn):
+    ' Expand shell commands in python expressions. '
+    parts = safe_split(s)
+    print('==parts== ' + str(parts))
+
+    def do(py, cmd):
+        if not cmd:
+            return py
+        return '{}{}'.format(py, compile_fn(cmd))
+
+    return ''.join(starmap(do, parts))
+
+
 def process_line(line):
+    if re_comment.match(line):
+        return line
+
     before, after = split_sh(line)
     sh = compile_sh(after) if after else ''
     return expand_python(before) + sh
@@ -131,6 +265,7 @@ dest = [
     'import subprocess',
 ]
 dest.extend(soft_index_lib.splitlines())
-dest.extend(map(process_line, source[1:]))
+#dest.extend(map(process_line, source[1:]))
+dest.append(expand_python('\n'.join(source[1:]), color))
 
 print('\n'.join(dest))

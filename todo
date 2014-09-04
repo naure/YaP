@@ -1,3 +1,6 @@
-- Parsing of shell to find the right delimiter (counting pairs, ignore quotes)
-- Explicit multi parameters expansion with $*list
-- Automatic detection of shell based on syntax
+- Parsing to find the right delimiter (counting pairs, ignore quotes)
+- Explicit multi parameters expansion with {*list}
+- Conversion of command output
+- Use shell with ?(..)
+- Globbing
+- Automatic detection of command based on syntax
