@@ -24,7 +24,7 @@ re_env = re.compile(r'\$(\w+)')  # $variable
 # Find shell command in python expressions
 re_sh_inline = re.compile(r'\w?!\(([^)]+)\)')  # ![inline command]
 re_sh_end = re.compile(r'\w?!([^(].*)')  # !command until end of line
-re_sh = re.compile(r'''
+re_sh_both = re.compile(r'''
     (\w*)!  # Operator + leading flags
     (?:  # Non-capturing group
         \( ( [^)]+ ) \)  # !(inline)
@@ -173,10 +173,13 @@ def expand_shell(sh):
     return '"{}".format({})'.format(template, args)  # Will evaluate and render
 
 
-def compile_sh(sh):
+re_sh = re.compile(r'(\w*)!(.*)')
+
+def compile_sh(cmd):
     ' Compile a shell command into python code'
-    cmd = sh.split()
-    expanded = map(expand_shell, cmd)
+    flags, sh = re_sh.match(cmd).groups()
+    parts = sh.split()
+    expanded = map(expand_shell, parts)
     args = ', '.join(expanded)
     return "subprocess.check_output([{}])".format(args)
 
@@ -234,7 +237,7 @@ def _expand_python(py):
 
 
 def expand_python(s, compile_fn):
-    ' Expand shell commands in python expressions. '
+    ' Expand shell commands in python code. '
     parts = safe_split(s)
     print('==parts== ' + str(parts))
 
@@ -266,6 +269,10 @@ dest = [
 ]
 dest.extend(soft_index_lib.splitlines())
 #dest.extend(map(process_line, source[1:]))
-dest.append(expand_python('\n'.join(source[1:]), color))
+rest = '\n'.join(source[1:])
+dest.append(expand_python(
+    rest,
+    lambda cmd: color(compile_sh(cmd)),
+))
 
 print('\n'.join(dest))

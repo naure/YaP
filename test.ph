@@ -15,7 +15,7 @@ f = ! ls {var} -l
 y = !(y {var})
 
 multi = process(!
-    echo A
+    echo "A B"
     echo (parentheses)
     echo ! ignore
 )

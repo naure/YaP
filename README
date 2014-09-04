@@ -1,7 +1,7 @@
 Design Goals
 - Safe:
   Syntax independent of variables content. Well-defined data structure.
-  Spaces in variable, quotes, escaping. No empty strings on unknown variables.
+  Not based on spaces in variables, quotes, escaping. No empty strings on unknown variables.
   Check that all executables are there before even starting.
 
 - Easy:
