@@ -4,20 +4,39 @@ import sys
 import re
 from itertools import starmap
 
-COLORS = {
-    'blue': '\033[94m',
-    'green': '\033[92m',
-    'orange': '\033[93m',
-    'red': '\033[91m',
-}
-ENDCOLOR = '\033[0m'
-def _color(s, col='blue'):
-    return '{}{}{}'.format(COLORS[col], s, ENDCOLOR)
+# Optional colored output
+if sys.stdout.isatty():
+    ENDCOLOR = '\033[0m'
 
-color = _color
+    def color(s, code):
+        ' Make `s` a colored text. Can be nested. '
+        return '{}{}{}'.format(
+            code,
+            s.replace(ENDCOLOR, code),
+            ENDCOLOR,
+        )
+
+    def gray(s):
+        return color(s, '\033[97m')
+
+    def blue(s):
+        return color(s, '\033[94m')
+
+    def green(s):
+        return color(s, '\033[92m')
+
+    def orange(s):
+        return color(s, '\033[93m')
+
+    def red(s):
+        return color(s, '\033[91m')
+else:
+    def color(s, code):
+        return s
+    blue = green = orange = red = color
 
 # Find python expression in shell commands
-re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression} or $variable
+re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression}
 re_arg = re.compile(r'\$([0-9]+)')  # $1
 re_env = re.compile(r'\$(\w+)')  # $variable
 
@@ -159,18 +178,19 @@ def expand_shell(sh):
     ' Expand expressions in a shell command or argument. '
     parts = split_expressions(re_py_inline, sh)
     if len(parts) == 1:
-        return '"{}"'.format(parts[0])  # No expansion
+        return '"{}"'.format(orange(parts[0]))  # No expansion
 
-    exprs = list(map(expand_env_strict, parts[1::2]))
+    exprs = [green(expand_env_strict(p)) for p in parts[1::2]]
+    # XXX Use ..strict with $var and ..soft with {expression}.
     if len(parts) == 3 and parts[0] == '' and parts[2] == '':
         return 'str({})'.format(exprs[0])  # Only one expansion without text
 
     for i in range(1, len(parts), 2):
-        parts[i] = '{}'  # Transform expressions into template arguments
+        parts[i] = green('{}')  # Transform expressions into template arguments
 
-    template = ''.join(parts)
+    template = ''.join(parts)  # Recompose the command with {} in it
     args = ', '.join(exprs)  # XXX Should wrap with ()
-    return '"{}".format({})'.format(template, args)  # Will evaluate and render
+    return '"{}".format({})'.format(orange(template), args)  # Will evaluate and render
 
 
 re_sh = re.compile(r'(\w*)!(.*)')
@@ -213,13 +233,15 @@ def expand_env_strict(py):
     # XXX Should use Missing instead
     return re_env.sub(
         r'os.environ["\1"]',
-        re_arg.sub(r'sys.argv[\1]', py))
+        re_arg.sub(
+            r'sys.argv[\1]', py))
 
 
 def expand_env_soft(py):
     return re_env.sub(
         r'os.environ.get("\1")',
-        re_arg.sub(r'softindex(sys.argv, \1)', py))
+        re_arg.sub(
+            r'softindex(sys.argv, \1)', py))
 
 
 def _expand_python(py):
@@ -242,9 +264,10 @@ def expand_python(s, compile_fn):
     print('==parts== ' + str(parts))
 
     def do(py, cmd):
+        expanded_py = expand_env_soft(py)
         if not cmd:
-            return py
-        return '{}{}'.format(py, compile_fn(cmd))
+            return expanded_py
+        return '{}{}'.format(expanded_py, compile_fn(cmd))
 
     return ''.join(starmap(do, parts))
 
@@ -270,9 +293,9 @@ dest = [
 dest.extend(soft_index_lib.splitlines())
 #dest.extend(map(process_line, source[1:]))
 rest = '\n'.join(source[1:])
-dest.append(expand_python(
+dest.append(blue(expand_python(
     rest,
-    lambda cmd: color(compile_sh(cmd)),
-))
+    lambda cmd: gray(compile_sh(cmd)),
+)))
 
 print('\n'.join(dest))
