@@ -1,6 +1,9 @@
-- Parsing to find the right delimiter (counting pairs, ignore quotes)
++ Parsing to find the right delimiter (counting pairs, ignore quotes)
+- Support quotes in commands
+- Support escaping
 - Explicit multi parameters expansion with {*list}
-- Conversion of command output
-- Use shell with ?(..)
+- Input conversion to json with {j list}, or J flag for stdin
++ Conversion of command output
+- Use shell with ?(..) or a flag
 - Globbing
 - Automatic detection of command based on syntax

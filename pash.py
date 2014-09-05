@@ -4,8 +4,15 @@ import sys
 import re
 from itertools import starmap
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('source', nargs='?', default='-')
+parser.add_argument('-o', '--output',
+                    help='Compile source to python and write it into output')
+args = parser.parse_args()
+
 # Optional colored output
-if sys.stdout.isatty():
+if args.output == '-' and sys.stdout.isatty():
     ENDCOLOR = '\033[0m'
 
     def color(s, code):
@@ -31,9 +38,9 @@ if sys.stdout.isatty():
     def red(s):
         return color(s, '\033[91m')
 else:
-    def color(s, code):
+    def color(s, code=None):
         return s
-    blue = green = orange = red = color
+    gray = blue = green = orange = red = color
 
 # Find python expression in shell commands
 re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression}
@@ -287,7 +294,7 @@ def process_line(line):
     return expand_python(before) + sh
 
 
-with open(sys.argv[1]) as f:
+with sys.stdin if args.source == '-' else open(args.source) as f:
     source = f.read().splitlines()
 
 dest = [
@@ -296,6 +303,9 @@ dest = [
     'import sys',
     'import subprocess',
     'import json',
+    'from os.path import *',
+    'from sys import stdin, stdout, stderr, exit',
+    'from glob import glob',
 ]
 dest.extend(soft_index_lib.splitlines())
 #dest.extend(map(process_line, source[1:]))
@@ -305,4 +315,9 @@ dest.append(blue(expand_python(
     lambda cmd: gray(compile_sh(cmd)),
 )))
 
-print('\n'.join(dest))
+output = '\n'.join(dest)
+if args.output:
+    with sys.stdout if args.output == '-' else open(args.output) as f:
+        print(output)
+else:
+    exec(output, {}, {})

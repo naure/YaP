@@ -1,7 +1,7 @@
-#!./pash.py
+#!./pash.py -o=-
 
 # Regular python stuff
-print "Python"
+print("Python")
 x = {i: {j: j*2 for j in range(i)} for i in range(4)}
 
 # Line comment
@@ -15,7 +15,7 @@ f = ! ls {var} -l
 y = !y {var}
 
 multi = f(!
-    echo "A B"
+    echo A B
     -a (parentheses)
     -o ! ignore
 )
