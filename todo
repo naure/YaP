@@ -1,9 +1,15 @@
 + Parsing to find the right delimiter (counting pairs, ignore quotes)
-- Support quotes in commands
+- Support quotes in commands. Interpret { with spaces } properly
+- Make ! $env strict and {$env} soft
 - Support escaping
 - Explicit multi parameters expansion with {*list}
 - Input conversion to json with {j list}, or J flag for stdin
-+ Conversion of command output
-- Use shell with ?(..) or a flag
++ Conversion of command output.
+- When to print the output and when to just return it? Print when alone on a
+  line. Otherwise return the stdout, but print stderr.
+- Capture stderr. Option to combine stdout and stderr
+- Use shell with ?(..) or a flag 's'
+- Run in backgroud with a flag 'b'
+- Flag to get binary instead of unicode
 - Globbing
 - Automatic detection of command based on syntax

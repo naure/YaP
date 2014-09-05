@@ -45,6 +45,7 @@ else:
 # Find python expression in shell commands
 re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression}
 re_arg = re.compile(r'\$([0-9]+)')  # $1
+re_all_args = re.compile(r'\$\*')  # $*
 re_env = re.compile(r'\$(\w+)')  # $variable
 
 # Find shell command in python expressions
@@ -203,7 +204,7 @@ re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
 def compile_sh(cmd):
     ' Compile a shell command into python code'
     flags, sh = re_sh.match(cmd).groups()
-    parts = sh.split()
+    parts = sh.split()  # XXX Support { with spaces }
     expanded = map(expand_shell, parts)
     args = ', '.join(expanded)
     process = "subprocess.check_output([{}])".format(args)
@@ -248,14 +249,18 @@ def expand_env_strict(py):
     return re_env.sub(
         r'os.environ["\1"]',
         re_arg.sub(
-            r'sys.argv[\1]', py))
+            r'sys.argv[\1]',
+            re_all_args.sub(
+                r'sys.argv', py)))
 
 
 def expand_env_soft(py):
     return re_env.sub(
         r'os.environ.get("\1")',
         re_arg.sub(
-            r'softindex(sys.argv, \1)', py))
+            r'softindex(sys.argv, \1)',
+            re_all_args.sub(
+                r'sys.argv', py)))
 
 
 def _expand_python(py):
