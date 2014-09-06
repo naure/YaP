@@ -42,50 +42,7 @@ else:
         return s
     gray = blue = green = orange = red = color
 
-# Find python expression in shell commands
-re_py_inline = re.compile(r'(\{[^}]+\}|\$\w+)')  # {expression}
-re_arg = re.compile(r'\$([0-9]+)')  # $1
-re_all_args = re.compile(r'\$\*')  # $*
-re_env = re.compile(r'\$(\w+)')  # $variable
 
-# Find shell command in python expressions
-re_sh_inline = re.compile(r'\w?!\(([^)]+)\)')  # ![inline command]
-re_sh_end = re.compile(r'\w?!([^(].*)')  # !command until end of line
-re_sh_both = re.compile(r'''
-    (\w*)!  # Operator + leading flags
-    (?:  # Non-capturing group
-        \( ( [^)]+ ) \)  # !(inline)
-    |
-        ( [^(] .* )$  # ! command until end of line
-    )
-    ''', re.X)
-
-# Find comments
-re_comment = re.compile(r'^\s*#')
-
-def split_sh(line):
-    ' Decide if this line has a shell command and extract it. '
-    parts = re_sh_end.split(line, maxsplit=1)
-    return parts[0], parts[1] if len(parts) >= 2 else None
-
-
-def check_curly(e):
-    ' Check that `e` is enclosed in {} or not at all. '
-    curlies = e.startswith('{') + e.endswith('}')
-    if curlies == 0:
-        return e
-    if curlies == 2:
-        return e[1:-1]
-    if curlies == 1:
-        raise SyntaxError(e)
-
-
-def split_expressions(regex, raw):
-    ' Split the raw string with regex, checking the {}. '
-    parts = regex.split(raw)
-    for i in range(1, len(parts), 2):
-        parts[i] = check_curly(parts[i])  # Check and clean all expressions
-    return parts
 
 
 def parse_cmd(s):
@@ -186,8 +143,6 @@ def safe_search(re_symbols, s, pos=0):
             if capture:
                 # Found it
                 return m
-
-        #else: ignore quoted part
     return None  # Not found
 
 
@@ -248,25 +203,6 @@ def safe_split(re_symbols, s):
         #else: ignore quoted part
     parts.append((s[part_start:], None))  # Regular end, possibly empty
     return parts
-
-
-def decompose(regex, s):
-    ''' Split s using regex and return it in this format:
-        [(non-matching part, None),
-         (matching part, groups),
-         ...
-        ]
-        The first and last non-matching parts may be empty strings.
-    '''
-    matches = regex.finditer(s)
-    zipped = []
-    idx = 0
-    for m in matches:
-        zipped.append((s[idx:m.start()], None))
-        zipped.append((m.group(), m.groups()))
-        idx = m.end()
-    zipped.append((s[idx:], None))
-    return zipped
 
 
 def render_py_expr(expr):
@@ -341,8 +277,13 @@ missingindex(array, i):
 '''
 
 
+# Find environment variables
+re_arg = re.compile(r'\$([0-9]+)')  # $1
+re_all_args = re.compile(r'\$\*')  # $*
+re_env = re.compile(r'\$(\w+)')  # $variable
+
+
 def expand_env_strict(py):
-    # XXX Should use Missing instead
     return re_env.sub(
         r'os.environ["\1"]',
         re_arg.sub(
@@ -351,6 +292,7 @@ def expand_env_strict(py):
                 r'sys.argv', py)))
 
 
+# XXX Should use Missing instead
 def expand_env_soft(py):
     return re_env.sub(
         r'os.environ.get("\1")',
@@ -358,20 +300,6 @@ def expand_env_soft(py):
             r'softindex(sys.argv, \1)',
             re_all_args.sub(
                 r'sys.argv', py)))
-
-
-def _expand_python(py):
-    ' Expand shell commands in python expressions. '
-    parts = re_sh_inline.split(py)
-    # Expand environment variables
-    for i in range(0, len(parts), 2):
-        parts[i] = expand_env_soft(parts[i])
-    if len(parts) == 1:
-        return '{}'.format(parts[0])  # No expansion
-
-    for i in range(1, len(parts), 2):
-        parts[i] = compile_sh(parts[i])
-    return ''.join(parts)
 
 
 def expand_python(s, compile_fn):
@@ -385,15 +313,6 @@ def expand_python(s, compile_fn):
         return '{}{}'.format(expanded_py, compile_fn(cmd))
 
     return ''.join(starmap(do, parts))
-
-
-def process_line(line):
-    if re_comment.match(line):
-        return line
-
-    before, after = split_sh(line)
-    sh = compile_sh(after) if after else ''
-    return expand_python(before) + sh
 
 
 with sys.stdin if args.source == '-' else open(args.source) as f:
@@ -410,7 +329,6 @@ dest = [
     'from glob import glob',
 ]
 dest.extend(soft_index_lib.splitlines())
-#dest.extend(map(process_line, source[1:]))
 rest = '\n'.join(source[1:])
 dest.append(blue(expand_python(
     rest,
