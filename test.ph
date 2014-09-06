@@ -27,7 +27,8 @@ for key, value in numbers.items():
 ! echo $HOME/somewhere
 # Environment variable in Python. Returns None if missing.
 $missing_variable is None
-! echo {$variable or "default value"}
+! echo a_{$variable or "default value"} b_c
+! find . -exec cat {} +
 
 # Same applies to program arguments
 if $1:

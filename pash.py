@@ -88,31 +88,121 @@ def split_expressions(regex, raw):
     return parts
 
 
+def parse_cmd(s):
+    ''' Extract arguments from a shell command while parsing the {expressions}.
+        Return [ (argument, [expressions, ..]), .. ].
+    '''
+    parts = []
+    current_part = ''
+    current_exprs = []
+    after = s
+    while after:
+        print('<< ' + after)
+        before, expr, after = extract_next_space_or_py_expr(after)
+        print('==== {} = <{}> = {}'.format(before, expr, after))
+        current_part += before
+        if expr is not None:
+            current_part += '{}'  # for format()
+            if expr == '{}':
+                expr = '{"{}"}'  # Replace literal {} by itself
+            current_exprs.append(expr)
+        else:  # New argument
+            parts.append((current_part, current_exprs))
+            current_part = ''
+            current_exprs = []
+    return parts
 
 
-def x(regex, s):
+def combine_re(res, flags=0):
+    return re.compile(
+        '({})'.format(
+            ')|('.join(res)),
+        flags)
+
+re_symbols_expr_open = combine_re([
+    r'(?: \s+ | \{ | \$)',   # Start capture
+    r'$x^',     # Ignore brackets (never matches)
+    r'$x^',     # Ignore brackets (never matches)
+    r'["\']',   # Quote
+], re.X | re.MULTILINE)
+
+re_symbols_expr_close = combine_re([
+    r'\}',  # End capture
+    r'$x^',     # Ignore brackets (never matches)
+    r'$x^',     # Ignore brackets (never matches)
+    r'["\']',   # Quote
+], re.X | re.MULTILINE)
+
+re_symbols_dollar_close = combine_re([
+    r'\w+',     # capture all alphanumeric characters
+    r'$x^',     # Ignore brackets (never matches)
+    r'$x^',     # Ignore brackets (never matches)
+    r'$x^',     # Ignore quotes (never matches)
+], re.X | re.MULTILINE)
 
 
-    scanner = re.Scanner([
-        r'[([{]',
-        r'[)\]}]',
-        r'"\'\\',
-        regex,
-    ])
+def extract_next_space_or_py_expr(s):
+    ' Extract the next {python} from a shell command '
+    mopen = safe_search(re_symbols_expr_open, s)
+    if mopen:
+        if mopen.group() == '{':
+            mclose = safe_search(re_symbols_expr_close, s, pos=mopen.end())
+        elif mopen.group() == '$':
+            mclose = safe_search(re_symbols_dollar_close, s, pos=mopen.end())
+        else:  # Just spaces, split around it and return
+            return s[:mopen.start()], None, s[mopen.end():]
 
-#                          Capture       Opening   Closing     Quoting
-re_symbol = re.compile(
+        if mclose:
+            return (
+                s[:mopen.start()],
+                s[mopen.start():mclose.end()],
+                s[mclose.end():],
+            )
+    return s, None, ''  # Nothing found
+
+
+def safe_search(re_symbols, s, pos=0):
+    ' Like re.search() but aware of parenthesis, quotes, and escaping. '
+    #escaped = False  # XXX Support escaping
+    in_quotes = False
+    in_dquotes = False
+    depth = 0
+
+    for m in re_symbols.finditer(s, pos=pos):
+        capture, opening, closing, quote = m.groups()
+        if quote:
+            # Toggle quote state and move on
+            if quote == "'":
+                in_quotes = not in_quotes
+            elif quote == '"':
+                in_dquotes = not in_dquotes
+
+        elif not in_quotes and not in_dquotes:
+            if opening:
+                depth += 1
+            elif closing:
+                depth -= 1
+
+            if capture:
+                # Found it
+                return m
+
+        #else: ignore quoted part
+    return None  # Not found
+
+
+re_symbols_py = re.compile(
     r'''(
-    \w*!  )|(
-    [({[]     )|(
-    [)}\]]    )|(
-    ["\'\\]   )|(
-    \s* (?:\#.*)? $    )
-    ''',
+    \w*!  )|(       # Start capture
+    \s* (?:\#.*)? $ )|(  # EOL
+    [({[]     )|(   # Open bracket
+    [)}\]]    )|(   # Close bracket
+    ["\']           # Quote
+    )''',
     re.X | re.MULTILINE)
 
-
-def safe_split(s):
+# XXX Make use of safe_search
+def safe_split(re_symbols, s):
     ' Like re.split() but aware of parenthesis, quotes, and escaping. '
     #escaped = False  # XXX Support escaping
     in_quotes = False
@@ -125,8 +215,8 @@ def safe_split(s):
     parts = []
     part_start = 0
 
-    for m in re_symbol.finditer(s):
-        capture, opening, closing, quote, eol = m.groups()
+    for m in re_symbols.finditer(s):
+        capture, eol, opening, closing, quote = m.groups()
         eol = eol is not None
         if quote:
             # Toggle quote state and move on
@@ -160,7 +250,6 @@ def safe_split(s):
     return parts
 
 
-
 def decompose(regex, s):
     ''' Split s using regex and return it in this format:
         [(non-matching part, None),
@@ -180,23 +269,32 @@ def decompose(regex, s):
     return zipped
 
 
-def expand_shell(sh):
+def render_py_expr(expr):
+    print('==== render: ' + expr)
+    if expr.startswith('{'):
+        return expand_env_soft(expr[1:-1])
+    elif expr.startswith('$'):
+        return expand_env_strict(expr)
+
+
+def render_sh_arg(arg, exprs):
+    if not exprs:  # No expansion, "plain string"
+        return '"{}"'.format(orange(arg))
+    # XXX Should wrap the expressions with ()
+    rendered_exprs = [green(render_py_expr(p)) for p in exprs]
+    if arg == '{}':  # Only one expression without text
+        # XXX Use ..strict with $var and ..soft with {expression}.
+        return 'str({})'.format(rendered_exprs[0])
+    # Will evaluate and render all expressions in the argument
+    format_args = ', '.join(rendered_exprs)
+    return '"{}".format({})'.format(orange(arg), format_args)
+
+
+def split_and_expand_shell(sh):
     ' Expand expressions in a shell command or argument. '
-    parts = split_expressions(re_py_inline, sh)
-    if len(parts) == 1:
-        return '"{}"'.format(orange(parts[0]))  # No expansion
-
-    exprs = [green(expand_env_strict(p)) for p in parts[1::2]]
-    # XXX Use ..strict with $var and ..soft with {expression}.
-    if len(parts) == 3 and parts[0] == '' and parts[2] == '':
-        return 'str({})'.format(exprs[0])  # Only one expansion without text
-
-    for i in range(1, len(parts), 2):
-        parts[i] = green('{}')  # Transform expressions into template arguments
-
-    template = ''.join(parts)  # Recompose the command with {} in it
-    args = ', '.join(exprs)  # XXX Should wrap with ()
-    return '"{}".format({})'.format(orange(template), args)  # Will evaluate and render
+    parts = parse_cmd(sh.strip())
+    rendered_parts = starmap(render_sh_arg, parts)
+    return rendered_parts
 
 
 re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
@@ -204,9 +302,8 @@ re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
 def compile_sh(cmd):
     ' Compile a shell command into python code'
     flags, sh = re_sh.match(cmd).groups()
-    parts = sh.split()  # XXX Support { with spaces }
-    expanded = map(expand_shell, parts)
-    args = ', '.join(expanded)
+    parts = split_and_expand_shell(sh)
+    args = ', '.join(parts)
     process = "subprocess.check_output([{}])".format(args)
     if 'l' in flags:
         return "{}.splitlines()".format(process)
@@ -279,7 +376,7 @@ def _expand_python(py):
 
 def expand_python(s, compile_fn):
     ' Expand shell commands in python code. '
-    parts = safe_split(s)
+    parts = safe_split(re_symbols_py, s)
 
     def do(py, cmd):
         expanded_py = expand_env_soft(py)

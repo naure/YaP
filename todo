@@ -1,12 +1,17 @@
 + Parsing to find the right delimiter (counting pairs, ignore quotes)
-- Support quotes in commands. Interpret { with spaces } properly
-- Make ! $env strict and {$env} soft
-- Support escaping
-- Explicit multi parameters expansion with {*list}
-- Input conversion to json with {j list}, or J flag for stdin
 + Conversion of command output.
++ Support quotes in commands. Interpret { with spaces } properly
++ Make ! $env strict and {$env} soft
+
 - When to print the output and when to just return it? Print when alone on a
   line. Otherwise return the stdout, but print stderr.
+- Explicit multi parameters expansion with {*list}
+- Explicit multi parameters groups expansion with {** [('-o', option) ..]}
+- Make redirects with | and > before or after the !command
+- Support escaping
+- Allow {..} inside of {python expressions}
+- Input conversion to json with {j list}, or J flag for stdin
+- Minimal imports
 - Capture stderr. Option to combine stdout and stderr
 - Use shell with ?(..) or a flag 's'
 - Run in backgroud with a flag 'b'
