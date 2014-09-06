@@ -21,7 +21,7 @@ multiline = print(!
 for key, value in numbers.items():
     !echo {key}={value}
 
-!echo {"Any python expression".upper()}
+!echo {"Any python expression, ignore in quotes".upper()}
 
 # Environment variable in shell. Raises an error if missing.
 ! echo $HOME/somewhere

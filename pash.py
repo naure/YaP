@@ -67,6 +67,8 @@ def parse_cmd(s):
             parts.append((current_part, current_exprs))
             current_part = ''
             current_exprs = []
+    if current_part:
+        parts.append((current_part, current_exprs))
     return parts
 
 
@@ -80,7 +82,7 @@ re_symbols_expr_open = combine_re([
     r'(?: \s+ | \{ | \$)',   # Start capture
     r'$x^',     # Ignore brackets (never matches)
     r'$x^',     # Ignore brackets (never matches)
-    r'["\']',   # Quote
+    r'$x^',     # Ignore quotes (never matches)
 ], re.X | re.MULTILINE)
 
 re_symbols_expr_close = combine_re([
@@ -118,6 +120,8 @@ def extract_next_space_or_py_expr(s):
     return s, None, ''  # Nothing found
 
 
+# XXX Add a 'stop capture' regex group, that goes after closing. 'closing' will
+# retry the 'stop' regex.
 def safe_search(re_symbols, s, pos=0):
     ' Like re.search() but aware of parenthesis, quotes, and escaping. '
     #escaped = False  # XXX Support escaping
@@ -328,7 +332,7 @@ dest = [
     'from sys import stdin, stdout, stderr, exit',
     'from glob import glob',
 ]
-dest.extend(soft_index_lib.splitlines())
+dest.append(soft_index_lib)
 rest = '\n'.join(source[1:])
 dest.append(blue(expand_python(
     rest,
