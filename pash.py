@@ -261,7 +261,7 @@ def compile_sh(cmd):
     # The command and arguments list
     cmd_args = split_and_expand_shell(sh)
     if args.dry_run:
-        cmd_args.insert(0, 'echo')
+        cmd_args.insert(0, '"echo"')
 
     # Input (XXX Not implemented)
     indata = 'None'
@@ -347,7 +347,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         ret.append(code)
     else:  # The user won't check the return code, so do it now
         if code != 0:
-            raise subprocess.CalledProcessError(code, cmd, ret)
+            raise CalledProcessError(code, cmd, ret)
     return ret[0] if len(ret) == 1 else ret
 '''
 
@@ -384,12 +384,11 @@ def main(args):
         '#!/usr/bin/env python',
         'import os',
         'import sys',
-        'import subprocess',
-        'from subprocess import Popen, PIPE, STDOUT',
-        'import json',
+        'from subprocess import Popen, PIPE, STDOUT, CalledProcessError',
         'from os.path import *',
         'from sys import stdin, stdout, stderr, exit',
         'from glob import glob',
+        'import json',
     ]
     header.append(soft_index_lib)
     header.append(call_lib)
@@ -405,7 +404,7 @@ def main(args):
                 f.write(pycode)
             print('Compiled to {}'.format(args.output))
     else:
-        exec(pycode, {}, {})
+        exec(pycode, {})
 
 
 if __name__ == '__main__':

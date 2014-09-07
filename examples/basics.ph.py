@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
-import subprocess
-from subprocess import Popen, PIPE, STDOUT
-import json
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 from os.path import *
 from sys import stdin, stdout, stderr, exit
 from glob import glob
+import json
 
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
@@ -35,7 +34,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         ret.append(code)
     else:  # The user won't check the return code, so do it now
         if code != 0:
-            raise subprocess.CalledProcessError(code, cmd, ret)
+            raise CalledProcessError(code, cmd, ret)
     return ret[0] if len(ret) == 1 else ret
 
 #!./pash.py
