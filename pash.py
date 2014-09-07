@@ -17,6 +17,7 @@ args = parser.parse_args()
 if args.python and not args.output:
     args.output = args.source + '.py'
 
+
 # Optional colored output
 if args.output == '-' and sys.stdout.isatty():
     ENDCOLOR = '\033[0m'
@@ -317,7 +318,7 @@ def expand_env_soft(py):
                 r'sys.argv', py)))
 
 
-def expand_python(s, compile_fn):
+def expand_python(s):
     ' Expand shell commands in python code. '
     parts = safe_split(re_symbols_py, s)
 
@@ -325,38 +326,40 @@ def expand_python(s, compile_fn):
         expanded_py = expand_env_soft(py)
         if not cmd:
             return expanded_py
-        return '{}{}'.format(expanded_py, compile_fn(cmd))
+        return '{}{}'.format(expanded_py, gray(compile_sh(cmd)))
 
     return ''.join(starmap(do, parts))
 
 
-with sys.stdin if args.source == '-' else open(args.source) as f:
-    source = f.read().splitlines()
+def main(args):
+    with sys.stdin if args.source == '-' else open(args.source) as f:
+        source = f.read()
 
-dest = [
-    '#!/usr/bin/env python',
-    'import os',
-    'import sys',
-    'import subprocess',
-    'import json',
-    'from os.path import *',
-    'from sys import stdin, stdout, stderr, exit',
-    'from glob import glob',
-]
-dest.append(soft_index_lib)
-rest = '\n'.join(source[1:])
-dest.append(blue(expand_python(
-    rest,
-    lambda cmd: gray(compile_sh(cmd)),
-)))
+    header = [
+        '#!/usr/bin/env python',
+        'import os',
+        'import sys',
+        'import subprocess',
+        'import json',
+        'from os.path import *',
+        'from sys import stdin, stdout, stderr, exit',
+        'from glob import glob',
+    ]
+    header.append(soft_index_lib)
 
-pycode = '\n'.join(dest)
-if args.output:
-    if args.output == '-':
-        print(pycode)
+    compiled = blue(expand_python(source))
+    pycode = '\n'.join(header) + '\n' + compiled
+
+    if args.output:
+        if args.output == '-':
+            print(pycode)
+        else:
+            with open(args.output, 'w') as f:
+                f.write(pycode)
+            print('Compiled to {}'.format(args.output))
     else:
-        with open(args.output, 'w') as f:
-            f.write(pycode)
-        print('Compiled in file {}'.format(args.output))
-else:
-    exec(pycode, {}, {})
+        exec(pycode, {}, {})
+
+
+if __name__ == '__main__':
+    main(args)

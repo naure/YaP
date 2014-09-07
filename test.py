@@ -6,11 +6,17 @@ from glob import glob
 import difflib
 
 
+def red(s):
+    return '\033[91m' + s + '\033[0m'
+def green(s):
+    return '\033[92m' + s + '\033[0m'
+
+
 def color_diffline(line):
     if line.startswith('-'):  # Red
-        return '\033[91m' + line + '\033[0m'
+        return red(line)
     if line.startswith('+'):  # Green
-        return '\033[92m' + line + '\033[0m'
+        return green(line)
     return line
 
 
@@ -28,7 +34,7 @@ class Test(unittest.TestCase):
     pash_path = './pash.py'
 
     def test_examples(self):
-        ''' Check that example.ph compiles to example.ph.py.
+        ''' Check that *.ph compile to *.ph.py.
             If not, the compiled file will be stored in example.ph-test.py
         '''
         for ph in glob(self.examples_path):
@@ -39,10 +45,22 @@ class Test(unittest.TestCase):
             with open(test_path) as test_f, open(ref_path) as ref_f:
                 ref_py = ref_f.read()
                 test_py = test_f.read()
+
+                ok = True
+                # Check Python syntax
+                try:
+                    compile(test_py, test_path, 'exec')
+                except Exception as e:
+                    ok = False
+                    print(red(repr(e)))
+                    print('')
+                # Check reference code
                 if test_py != ref_py:
+                    ok = False
                     print(diff(
                         ref_py, test_py, fromfile=ref_path, tofile=test_path,
                     ))
+                if not ok:
                     raise AssertionError(
                         'Compiled {} is different than reference {}'.format(
                             test_path, ref_path))

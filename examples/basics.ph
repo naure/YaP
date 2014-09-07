@@ -11,10 +11,10 @@ now = ! date +%s
 # Command in brackets. Print result
 print(! date +%s)
 
-multiline = print(!
+multiline = (!
     echo A B
     -a (parentheses)
-    -o ! ignore
+    -o ! is ignored
 )
 
 # Interpolation of commands
@@ -46,4 +46,3 @@ to_integer = 2 + (i! echo 2) + 2
 list_of_lines = l! ls
 rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
-

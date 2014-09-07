@@ -10,6 +10,7 @@ from glob import glob
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
+#!./pash.py
 
 # Regular python
 print("Python")
@@ -22,7 +23,7 @@ now = subprocess.check_output(["date", "+%s"])
 # Command in brackets. Print result
 print(subprocess.check_output(["date", "+%s"]))
 
-multiline = print(subprocess.check_output(["echo", "A", "B", "-a", "(parentheses)", "-o", "!", "ignore"]))
+multiline = (subprocess.check_output(["echo", "A", "B", "-a", "(parentheses)", "-o", "!", "is", "ignored"]))
 
 # Interpolation of commands
 for key, value in numbers.items():
