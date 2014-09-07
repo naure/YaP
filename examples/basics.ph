@@ -46,3 +46,14 @@ to_integer = 2 + (i! echo 2) + 2
 list_of_lines = l! ls
 rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
+
+# Print stdout and stderr
+! cmd
+# Capture stdout, print stderr
+out = ! cmd
+# Capture stderr, print stdout
+err = e! cmd
+# Capture both
+out, err = oe! cmd
+# Include the return code
+out, err, ret = oer! cmd

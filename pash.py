@@ -254,43 +254,28 @@ re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
 def compile_sh(cmd):
     ' Compile a shell command into python code'
     flags, sh = re_sh.match(cmd).groups()
-    parts = split_and_expand_shell(sh)
-    args = ', '.join(parts)
-    process = "subprocess.check_output([{}])".format(args)
+
+    # The command and arguments list
+    cmd_args = split_and_expand_shell(sh)
+
+    # Input (XXX Not implemented)
+    indata = 'None'
+
+    # Output conversions
+    convert = 'None'
     if 'l' in flags:
-        return "{}.splitlines()".format(process)
+        convert = 'str.splitlines'
     if 'i' in flags:
-        return "int({})".format(process)
+        convert = 'int'
     if 'f' in flags:
-        return "float({})".format(process)
+        convert = 'float'
     if 'j' in flags:
-        return "json.loads({})".format(process)
+        convert = 'json.loads'
+
+    # Call the process
+    process = 'pash_call([{}], "{}", {}, {})'.format(
+        ', '.join(cmd_args), flags, indata, convert)
     return process
-
-
-soft_index_lib = '''
-def softindex(array, i, alt=None):
-    return array[i] if i < len(array) else alt
-'''
-
-missing_lib = '''
-class Missing(object):
-    def __init__(self, what):
-        self.what = what
-
-    def __str__(self):
-        raise KeyError(self.what)
-
-    def __bool__(self):
-        return False
-
-missingget(obj, variable):
-    return obj.get(variable) or Missing(variable)
-
-missingindex(array, i):
-    return softindex(array, i) or Missing(
-        "Argument {}".format(i))
-'''
 
 
 # Find environment variables
@@ -331,6 +316,61 @@ def expand_python(s):
     return ''.join(starmap(do, parts))
 
 
+# A convenience function around Popen, configured by letters flags.
+# Allows to perform several operations as a single expression (function call).
+call_lib = '''
+def pash_call(cmd, flags='', indata=None, convert=None):
+    proc = Popen(
+        cmd,
+        stdin=PIPE if indata else None,
+        stdout=PIPE if ('o' in flags or 's' in flags) else None,
+        stderr=(
+            PIPE if 'e' in flags else
+            STDOUT if 's' in flags else None),
+    )
+    out, err = proc.communicate(indata)
+    code = proc.returncode
+    ret = []
+    if ('o' in flags or 's' in flags):
+        if convert:
+            ret.append(convert(out))
+        else:
+            ret.append(out)
+    if 'e' in flags:
+        ret.append(err)
+    if 'r' in flags:
+        ret.append(code)
+    else:  # The user won't check the return code, so do it now
+        if code != 0:
+            raise subprocess.CalledProcessError(code, cmd, ret)
+    return ret[0] if len(ret) == 1 else ret
+'''
+
+soft_index_lib = '''
+def softindex(array, i, alt=None):
+    return array[i] if i < len(array) else alt
+'''
+
+missing_lib = '''
+class Missing(object):
+    def __init__(self, what):
+        self.what = what
+
+    def __str__(self):
+        raise KeyError(self.what)
+
+    def __bool__(self):
+        return False
+
+missingget(obj, variable):
+    return obj.get(variable) or Missing(variable)
+
+missingindex(array, i):
+    return softindex(array, i) or Missing(
+        "Argument {}".format(i))
+'''
+
+
 def main(args):
     with sys.stdin if args.source == '-' else open(args.source) as f:
         source = f.read()
@@ -340,12 +380,14 @@ def main(args):
         'import os',
         'import sys',
         'import subprocess',
+        'from subprocess import Popen, PIPE, STDOUT',
         'import json',
         'from os.path import *',
         'from sys import stdin, stdout, stderr, exit',
         'from glob import glob',
     ]
     header.append(soft_index_lib)
+    header.append(call_lib)
 
     compiled = blue(expand_python(source))
     pycode = '\n'.join(header) + '\n' + compiled

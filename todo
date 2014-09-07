@@ -9,10 +9,12 @@
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
-- Make redirects with | and > before or after the !command
 - Support escaping
+- Allow stream/file-like pipes
+- Make redirects with | and > before or after the !command
 - Allow {..} inside of {python expressions}
-- Input conversion to json with {j list}, or J flag for stdin
+- Input conversion, {l list of lines}, {j json-like}, or J flag for json to stdin
+- Validate flags
 - Minimal imports
 - Capture stderr. Option to combine stdout and stderr
 - Use shell with ?(..) or a flag 's'
