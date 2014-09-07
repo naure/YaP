@@ -19,6 +19,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         stderr=(
             PIPE if 'e' in flags else
             STDOUT if 's' in flags else None),
+        universal_newlines='b' not in flags,
     )
     out, err = proc.communicate(indata)
     code = proc.returncode
@@ -82,6 +83,7 @@ to_integer = 2 + (pash_call(["echo", "2"], "io", None, int)) + 2
 list_of_lines = pash_call(["ls"], "lo", None, str.splitlines)
 rows_then_columns = pash_call(["ls", "-l"], "co", None, None)
 fields_then_rows = pash_call(["ls", "-l"], "r", None, None)
+binary = pash_call(["cat", "doc.pdf"], "bo", None, None)
 
 # Print stdout and stderr
 pash_call(["cmd"], "", None, None)

@@ -340,6 +340,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         stderr=(
             PIPE if 'e' in flags else
             STDOUT if 's' in flags else None),
+        universal_newlines='b' not in flags,
     )
     out, err = proc.communicate(indata)
     code = proc.returncode

@@ -46,6 +46,7 @@ to_integer = 2 + (i! echo 2) + 2
 list_of_lines = l! ls
 rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
+binary = b! cat doc.pdf
 
 # Print stdout and stderr
 ! cmd
