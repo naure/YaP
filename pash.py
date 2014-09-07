@@ -12,6 +12,9 @@ parser.add_argument('-p', '--python', action='store_true',
                     help='Compile source to python and write it')
 parser.add_argument('-o', '--output',
                     help='Python code output file. Implies --python')
+parser.add_argument('-n', '--dry-run', action='store_true',
+                    help='Shell commands will not execute, but output their '
+                         'command line instead')
 args = parser.parse_args()
 
 if args.python and not args.output:
@@ -245,7 +248,7 @@ def render_sh_arg(arg, exprs):
 def split_and_expand_shell(sh):
     ' Expand expressions in a shell command or argument. '
     parts = parse_cmd(sh.strip())
-    rendered_parts = starmap(render_sh_arg, parts)
+    rendered_parts = list(starmap(render_sh_arg, parts))
     return rendered_parts
 
 
@@ -257,6 +260,8 @@ def compile_sh(cmd):
 
     # The command and arguments list
     cmd_args = split_and_expand_shell(sh)
+    if args.dry_run:
+        cmd_args.insert(0, 'echo')
 
     # Input (XXX Not implemented)
     indata = 'None'
@@ -307,13 +312,13 @@ def expand_python(s):
     ' Expand shell commands in python code. '
     parts = safe_split(re_symbols_py, s)
 
-    def do(py, cmd):
+    def do_inline_sh(py, cmd):
         expanded_py = expand_env_soft(py)
         if not cmd:
             return expanded_py
         return '{}{}'.format(expanded_py, gray(compile_sh(cmd)))
 
-    return ''.join(starmap(do, parts))
+    return ''.join(starmap(do_inline_sh, parts))
 
 
 # A convenience function around Popen, configured by letters flags.
