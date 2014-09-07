@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 
 import sys
+from logging import debug
 import re
 from itertools import starmap
 
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('source', nargs='?', default='-')
+parser.add_argument('-p', '--python', action='store_true',
+                    help='Compile source to python and write it')
 parser.add_argument('-o', '--output',
-                    help='Compile source to python and write it into output')
+                    help='Python code output file. Implies --python')
 args = parser.parse_args()
+
+if args.python and not args.output:
+    args.output = args.source + '.py'
 
 # Optional colored output
 if args.output == '-' and sys.stdout.isatty():
@@ -38,11 +44,10 @@ if args.output == '-' and sys.stdout.isatty():
     def red(s):
         return color(s, '\033[91m')
 else:
+    # No colored output
     def color(s, code=None):
         return s
     gray = blue = green = orange = red = color
-
-
 
 
 def parse_cmd(s):
@@ -54,9 +59,9 @@ def parse_cmd(s):
     current_exprs = []
     after = s
     while after:
-        print('<< ' + after)
+        debug('<< ' + after)
         before, expr, after = extract_next_space_or_py_expr(after)
-        print('==== {} = <{}> = {}'.format(before, expr, after))
+        debug('==== {} = <{}> = {}'.format(before, expr, after))
         current_part += before
         if expr is not None:
             current_part += '{}'  # for format()
@@ -209,8 +214,13 @@ def safe_split(re_symbols, s):
     return parts
 
 
+# XXX Support escaping and keep quoted quotes ('"')
+def render_arg(arg):
+    return re.sub(r'["\']', '', arg)
+
+
 def render_py_expr(expr):
-    print('==== render: ' + expr)
+    debug('==== render: ' + expr)
     if expr.startswith('{'):
         return expand_env_soft(expr[1:-1])
     elif expr.startswith('$'):
@@ -218,8 +228,9 @@ def render_py_expr(expr):
 
 
 def render_sh_arg(arg, exprs):
+    rendered_arg = render_arg(arg)
     if not exprs:  # No expansion, "plain string"
-        return '"{}"'.format(orange(arg))
+        return '"{}"'.format(orange(rendered_arg))
     # XXX Should wrap the expressions with ()
     rendered_exprs = [green(render_py_expr(p)) for p in exprs]
     if arg == '{}':  # Only one expression without text
@@ -227,7 +238,7 @@ def render_sh_arg(arg, exprs):
         return 'str({})'.format(rendered_exprs[0])
     # Will evaluate and render all expressions in the argument
     format_args = ', '.join(rendered_exprs)
-    return '"{}".format({})'.format(orange(arg), format_args)
+    return '"{}".format({})'.format(orange(rendered_arg), format_args)
 
 
 def split_and_expand_shell(sh):
@@ -339,9 +350,13 @@ dest.append(blue(expand_python(
     lambda cmd: gray(compile_sh(cmd)),
 )))
 
-output = '\n'.join(dest)
+pycode = '\n'.join(dest)
 if args.output:
-    with sys.stdout if args.output == '-' else open(args.output) as f:
-        print(output)
+    if args.output == '-':
+        print(pycode)
+    else:
+        with open(args.output, 'w') as f:
+            f.write(pycode)
+        print('Compiled in file {}'.format(args.output))
 else:
-    exec(output, {}, {})
+    exec(pycode, {}, {})

@@ -6,6 +6,7 @@
 - When to print the output and when to just return it? Print when alone on a
   line. Otherwise return the stdout, but print stderr.
 - Support quoting properly
+- Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Make redirects with | and > before or after the !command
