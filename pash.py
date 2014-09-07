@@ -7,7 +7,8 @@ from itertools import starmap
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('source', nargs='?', default='-')
+parser.add_argument('source')
+parser.add_argument('script_args', nargs=argparse.REMAINDER)
 parser.add_argument('-p', '--python', action='store_true',
                     help='Compile source to python and write it')
 parser.add_argument('-o', '--output',
@@ -19,7 +20,6 @@ args = parser.parse_args()
 
 if args.python and not args.output:
     args.output = args.source + '.py'
-
 
 # Optional colored output
 if args.output == '-' and sys.stdout.isatty():
@@ -414,6 +414,7 @@ def main(args):
                 f.write(pycode)
             print('Compiled to {}'.format(args.output))
     else:
+        sys.argv = [args.source] + args.script_args
         exec(pycode, {})
 
 
