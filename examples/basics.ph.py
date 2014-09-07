@@ -35,7 +35,8 @@ def pash_call(cmd, flags='', indata=None, convert=None):
     else:  # The user won't check the return code, so do it now
         if code != 0:
             raise CalledProcessError(code, cmd, ret)
-    return ret[0] if len(ret) == 1 else ret
+    # Return either the unique output, the list of outputs, or None
+    return ret[0] if len(ret) == 1 else ret or None
 
 #!./pash.py
 
@@ -46,11 +47,11 @@ numbers = {1: 'one', 2: 'two'}
 # Regular shell commands
 pash_call(["echo", "Shell"], "", None, None)
 # Capture the output
-now = pash_call(["date", "+%s"], "", None, None)
+now = pash_call(["date", "+%s"], "o", None, None)
 # Command in brackets. Print result
-print(pash_call(["date", "+%s"], "", None, None))
+print(pash_call(["date", "+%s"], "o", None, None))
 
-multiline = (pash_call(["echo", "A", "B", "-a", "(parentheses)", "-o", "!", "is", "ignored"], "", None, None))
+multiline = (pash_call(["echo", "A", "B", "-a", "(parentheses)", "-o", "!", "is", "ignored"], "o", None, None))
 
 # Interpolation of commands
 for key, value in numbers.items():
@@ -73,19 +74,19 @@ if softindex(sys.argv, 1):
 
 
 # Output conversion
-file_list = pash_call(["ls", "-1"], "l", None, str.splitlines)
+file_list = pash_call(["ls", "-1"], "lo", None, str.splitlines)
 
-simple_string = 'Output: ' + pash_call(["echo", "some", "output"], "", None, None)
-from_json = pash_call(["echo", "[1,", "2]"], "j", None, json.loads)
-to_integer = 2 + (pash_call(["echo", "2"], "i", None, int)) + 2
-list_of_lines = pash_call(["ls"], "l", None, str.splitlines)
-rows_then_columns = pash_call(["ls", "-l"], "c", None, None)
+simple_string = 'Output: ' + pash_call(["echo", "some", "output"], "o", None, None)
+from_json = pash_call(["echo", "[1,", "2]"], "jo", None, json.loads)
+to_integer = 2 + (pash_call(["echo", "2"], "io", None, int)) + 2
+list_of_lines = pash_call(["ls"], "lo", None, str.splitlines)
+rows_then_columns = pash_call(["ls", "-l"], "co", None, None)
 fields_then_rows = pash_call(["ls", "-l"], "r", None, None)
 
 # Print stdout and stderr
 pash_call(["cmd"], "", None, None)
 # Capture stdout, print stderr
-out = pash_call(["cmd"], "", None, None)
+out = pash_call(["cmd"], "o", None, None)
 # Capture stderr, print stdout
 err = pash_call(["cmd"], "e", None, None)
 # Capture both

@@ -200,6 +200,10 @@ def safe_split(re_symbols, s):
                 depth -= 1
 
             if capturing_depth is None:
+                if eol and depth == 0:  # End of pure Python statement
+                    parts.append((s[part_start:m.end()], None))
+                    part_start = m.end()
+
                 if capture:
                     # Start capturing
                     capturing_since = m.start()
@@ -238,7 +242,6 @@ def render_sh_arg(arg, exprs):
     # XXX Should wrap the expressions with ()
     rendered_exprs = [green(render_py_expr(p)) for p in exprs]
     if arg == '{}':  # Only one expression without text
-        # XXX Use ..strict with $var and ..soft with {expression}.
         return 'str({})'.format(rendered_exprs[0])
     # Will evaluate and render all expressions in the argument
     format_args = ', '.join(rendered_exprs)
@@ -252,11 +255,14 @@ def split_and_expand_shell(sh):
     return rendered_parts
 
 
+output_flags = ('o', 'e', 'r')
 re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
 
-def compile_sh(cmd):
+def compile_sh(cmd, is_expr):
     ' Compile a shell command into python code'
     flags, sh = re_sh.match(cmd).groups()
+    if is_expr and not any(f in flags for f in output_flags):
+        flags += 'o'  # By default, capture stdout if inside an expression
 
     # The command and arguments list
     cmd_args = split_and_expand_shell(sh)
@@ -316,7 +322,9 @@ def expand_python(s):
         expanded_py = expand_env_soft(py)
         if not cmd:
             return expanded_py
-        return '{}{}'.format(expanded_py, gray(compile_sh(cmd)))
+        mixed = bool(py.strip())  # Shell inside of a Python expression
+        return '{}{}'.format(expanded_py, gray(
+            compile_sh(cmd, is_expr=mixed)))
 
     return ''.join(starmap(do_inline_sh, parts))
 
@@ -348,7 +356,8 @@ def pash_call(cmd, flags='', indata=None, convert=None):
     else:  # The user won't check the return code, so do it now
         if code != 0:
             raise CalledProcessError(code, cmd, ret)
-    return ret[0] if len(ret) == 1 else ret
+    # Return either the unique output, the list of outputs, or None
+    return ret[0] if len(ret) == 1 else ret or None
 '''
 
 soft_index_lib = '''

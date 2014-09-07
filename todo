@@ -2,9 +2,8 @@
 + Conversion of command output.
 + Support quotes in commands. Interpret { with spaces } properly
 + Make ! $env strict and {$env} soft
++ Print when alone on a line. Otherwise by default return the stdout, but print stderr.
 
-- When to print the output and when to just return it? Print when alone on a
-  line. Otherwise return the stdout, but print stderr.
 - Support quoting properly
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
