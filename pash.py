@@ -334,7 +334,7 @@ with sys.stdin if args.source == '-' else open(args.source) as f:
     source = f.read().splitlines()
 
 dest = [
-    source[0],  # The #! line. XXX
+    '#!/usr/bin/env python',
     'import os',
     'import sys',
     'import subprocess',

@@ -3,6 +3,23 @@ import os
 import unittest
 import subprocess
 from glob import glob
+import difflib
+
+
+def color_diffline(line):
+    if line.startswith('-'):  # Red
+        return '\033[91m' + line + '\033[0m'
+    if line.startswith('+'):  # Green
+        return '\033[92m' + line + '\033[0m'
+    return line
+
+
+def diff(a, b, **kwargs):
+    return '\n'.join(map(
+        color_diffline,
+        difflib.unified_diff(
+            a.splitlines(), b.splitlines(), **kwargs
+        )))
 
 
 class Test(unittest.TestCase):
@@ -16,12 +33,20 @@ class Test(unittest.TestCase):
         '''
         for ph in glob(self.examples_path):
             print('Testing {}'.format(ph))
-            refpy = '{}.py'.format(ph)
-            testpy = '{}-test.py'.format(ph)
-            subprocess.check_call([self.pash_path, '-o', testpy, ph])
-            with open(testpy) as testf, open(refpy) as reff:
-                self.assertEqual(testf.read(), reff.read())
-            os.remove(testpy)
+            ref_path = '{}.py'.format(ph)
+            test_path = '{}-test.py'.format(ph)
+            subprocess.check_call([self.pash_path, '-o', test_path, ph])
+            with open(test_path) as test_f, open(ref_path) as ref_f:
+                ref_py = ref_f.read()
+                test_py = test_f.read()
+                if test_py != ref_py:
+                    print(diff(
+                        ref_py, test_py, fromfile=ref_path, tofile=test_path,
+                    ))
+                    raise AssertionError(
+                        'Compiled {} is different than reference {}'.format(
+                            test_path, ref_path))
+            os.remove(test_path)
 
 
 if __name__ == '__main__':
