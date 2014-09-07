@@ -355,7 +355,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
     if 'r' in flags:
         ret.append(code)
     else:  # The user won't check the return code, so do it now
-        if code != 0:
+        if code != 0 and 'n' not in flags:
             raise CalledProcessError(code, cmd, ret)
     # Return either the unique output, the list of outputs, or None
     return ret[0] if len(ret) == 1 else ret or None

@@ -3,6 +3,7 @@
 # Regular python
 print("Python")
 numbers = {1: 'one', 2: 'two'}
+print(sys.argv)
 
 # Regular shell commands
 !echo "Shell"
@@ -13,8 +14,8 @@ print(! date +%s)
 
 multiline = (!
     echo A B
-    -a (parentheses)
-    -o ! is ignored
+    -o (parentheses)
+    -and ! are ignored
 )
 
 # Interpolation of commands
@@ -28,7 +29,7 @@ for key, value in numbers.items():
 # Environment variable in Python. Returns None if missing.
 $missing_variable is None
 ! echo a_{$variable or "default value"} b_c
-! find . -exec cat {} +
+! echo find . -exec cat {} +
 
 # Same applies to program arguments
 if $1:
@@ -41,20 +42,24 @@ if $1:
 file_list = l! ls -1
 
 simple_string = 'Output: ' + ! echo some output
-from_json = j! echo [1, 2]
+from_json = j! echo "[1, 2]"
 to_integer = 2 + (i! echo 2) + 2
 list_of_lines = l! ls
 rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
-binary = b! cat doc.pdf
+binary = b! echo cat doc.pdf
 
+# n to ignore errors
+n! false unsafe cmd
 # Print stdout and stderr
-! cmd
+! echo
 # Capture stdout, print stderr
-out = ! cmd
+out = ! echo
 # Capture stderr, print stdout
-err = e! cmd
+err = e! echo
 # Capture both
-out, err = oe! cmd
+out, err = oe! echo
 # Include the return code
-out, err, ret = oer! cmd
+out, err, ret = oer! echo "Ok!"
+if ret == 0:
+    print(out)

@@ -5,6 +5,7 @@
 + Print when alone on a line. Otherwise by default return the stdout, but print stderr.
 
 - Support quoting properly
+- Reset sys.argv
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
