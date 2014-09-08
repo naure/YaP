@@ -24,6 +24,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         universal_newlines='b' not in flags,
         shell='h' in flags,
         env={} if 'v' in flags else None,
+        bufsize=-1,  # Buffered
     )
     if 'p' in flags:  # Run in the background
         return proc
@@ -66,6 +67,14 @@ for key, value in numbers.items():
     pash_call(["echo", "{}={}".format(key, value)], "", None, None)
 
 pash_call(["echo", str("Any python expression, ignore in quotes".upper())], "", None, None)
+
+pash_call(["echo", str(
+    "Same lines joining rules as Python"
+)], "", None, None)
+
+pash_call(["echo", str(
+    {"inline": "dictionnary"}
+)], "", None, None)
 
 # Environment variable in shell. Raises an error if missing.
 pash_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", None, None)

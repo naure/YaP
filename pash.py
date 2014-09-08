@@ -96,9 +96,9 @@ re_symbols_expr_open = combine_re([
 
 re_symbols_expr_close = combine_re([
     r'\}',  # End capture
-    r'$x^',     # Ignore brackets (never matches)
-    r'$x^',     # Ignore brackets (never matches)
-    r'["\']',   # Quote
+    r'\{',     # Ignore other brackets
+    r'\}',     # Ignore other brackets
+    r'["\']',   # Quotes
 ], re.X | re.MULTILINE)
 
 re_symbols_dollar_close = combine_re([
@@ -131,7 +131,7 @@ def extract_next_space_or_py_expr(s):
 
 # XXX Add a 'stop capture' regex group, that goes after closing. 'closing' will
 # retry the 'stop' regex.
-def safe_search(re_symbols, s, pos=0):
+def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
     ' Like re.search() but aware of parenthesis, quotes, and escaping. '
     #escaped = False  # XXX Support escaping
     in_quotes = False
@@ -139,23 +139,23 @@ def safe_search(re_symbols, s, pos=0):
     depth = 0
 
     for m in re_symbols.finditer(s, pos=pos):
+        c = m.group()
         capture, opening, closing, quote = m.groups()
-        if quote:
-            # Toggle quote state and move on
-            if quote == "'":
-                in_quotes = not in_quotes
-            elif quote == '"':
-                in_dquotes = not in_dquotes
+        # Toggle quote state and move on
+        if c == "'":
+            in_quotes = not in_quotes
+        elif c == '"':
+            in_dquotes = not in_dquotes
 
         elif not in_quotes and not in_dquotes:
-            if opening:
-                depth += 1
-            elif closing:
-                depth -= 1
-
-            if capture:
+            if depth == 0 and capture:
                 # Found it
                 return m
+            if c in openings:
+                depth += 1
+            elif c in closings:
+                depth -= 1
+
     return None  # Not found
 
 
@@ -345,6 +345,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
         universal_newlines='b' not in flags,
         shell='h' in flags,
         env={} if 'v' in flags else None,
+        bufsize=-1,  # Buffered
     )
     if 'p' in flags:  # Run in the background
         return proc

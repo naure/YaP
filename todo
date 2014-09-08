@@ -9,17 +9,20 @@
 + Run in backgroud with a flag 'p', return the proc object
 + Flag 'b' to get binary instead of unicode
 + Flag 'v' to clean the environment
++ Allow {..} inside of {python expressions}
 
 - Support quoting properly
 - Auto quote in shell mode ('h')
+- Alternative list syntax: (Aaa Bbb "quoted string" "for" "if")
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Support escaping
+- Full syntax check and error messages (brackets matching, ..)
+- Make the runtime part safe from user overwriting variables
 - Handling of fds? close_fds, ..
 - Allow stream/file-like pipes
 - Make redirects with | and > before or after the !command
-- Allow {..} inside of {python expressions}
 - Input conversion, {l list of lines}, {j json-like}, or J flag for json to stdin
 - Validate flags
 - Minimal imports

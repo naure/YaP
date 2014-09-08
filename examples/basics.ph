@@ -24,6 +24,14 @@ for key, value in numbers.items():
 
 !echo {"Any python expression, ignore in quotes".upper()}
 
+! echo {
+    "Same lines joining rules as Python"
+}
+
+! echo {
+    {"inline": "dictionnary"}
+}
+
 # Environment variable in shell. Raises an error if missing.
 ! echo $HOME/somewhere
 # Environment variable in Python. Returns None if missing.
