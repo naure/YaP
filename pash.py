@@ -333,6 +333,8 @@ def expand_python(s):
 # Allows to perform several operations as a single expression (function call).
 call_lib = '''
 def pash_call(cmd, flags='', indata=None, convert=None):
+    if 'h' in flags:  # Shell mode
+        cmd = ' '.join(cmd)  # XXX Quote
     proc = Popen(
         cmd,
         stdin=PIPE if indata else None,
@@ -341,7 +343,10 @@ def pash_call(cmd, flags='', indata=None, convert=None):
             PIPE if 'e' in flags else
             STDOUT if 's' in flags else None),
         universal_newlines='b' not in flags,
+        shell='h' in flags,
     )
+    if 'p' in flags:  # Run in the background
+        return proc
     out, err = proc.communicate(indata)
     code = proc.returncode
     ret = []

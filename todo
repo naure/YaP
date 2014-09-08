@@ -3,22 +3,24 @@
 + Support quotes in commands. Interpret { with spaces } properly
 + Make ! $env strict and {$env} soft
 + Print when alone on a line. Otherwise by default return the stdout, but print stderr.
++ Capture stderr. Option to combine stdout and stderr
 + Reset sys.argv
++ Use shell with a flag 's'
++ Run in backgroud with a flag 'p', return the proc object
++ Flag 'b' to get binary instead of unicode
 
 - Support quoting properly
+- Auto quote in shell mode ('h')
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Support escaping
+- Handling of fds? close_fds, ..
 - Allow stream/file-like pipes
 - Make redirects with | and > before or after the !command
 - Allow {..} inside of {python expressions}
 - Input conversion, {l list of lines}, {j json-like}, or J flag for json to stdin
 - Validate flags
 - Minimal imports
-- Capture stderr. Option to combine stdout and stderr
-- Use shell with ?(..) or a flag 's'
-- Run in backgroud with a flag 'b'
-- Flag to get binary instead of unicode
 - Globbing
 - Automatic detection of command based on syntax

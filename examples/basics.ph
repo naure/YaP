@@ -49,8 +49,6 @@ rows_then_columns = c! ls -l
 fields_then_rows = r! ls -l
 binary = b! echo cat doc.pdf
 
-# n to ignore errors
-n! false unsafe cmd
 # Print stdout and stderr
 ! echo
 # Capture stdout, print stderr
@@ -63,3 +61,10 @@ out, err = oe! echo
 out, err, ret = oer! echo "Ok!"
 if ret == 0:
     print(out)
+# n to ignore errors
+n! false unsafe cmd
+# p to run in the background and get a proc object
+proc = p! echo sleep 1
+ret = proc.wait()
+# h to run through a shell
+print(h! echo a b | grep a)

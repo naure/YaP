@@ -12,6 +12,8 @@ def softindex(array, i, alt=None):
 
 
 def pash_call(cmd, flags='', indata=None, convert=None):
+    if 'h' in flags:  # Shell mode
+        cmd = ' '.join(cmd)  # XXX Quote
     proc = Popen(
         cmd,
         stdin=PIPE if indata else None,
@@ -20,7 +22,10 @@ def pash_call(cmd, flags='', indata=None, convert=None):
             PIPE if 'e' in flags else
             STDOUT if 's' in flags else None),
         universal_newlines='b' not in flags,
+        shell='h' in flags,
     )
+    if 'p' in flags:  # Run in the background
+        return proc
     out, err = proc.communicate(indata)
     code = proc.returncode
     ret = []
@@ -86,8 +91,6 @@ rows_then_columns = pash_call(["ls", "-l"], "co", None, None)
 fields_then_rows = pash_call(["ls", "-l"], "r", None, None)
 binary = pash_call(["echo", "cat", "doc.pdf"], "bo", None, None)
 
-# n to ignore errors
-pash_call(["false", "unsafe", "cmd"], "n", None, None)
 # Print stdout and stderr
 pash_call(["echo"], "", None, None)
 # Capture stdout, print stderr
@@ -100,3 +103,10 @@ out, err = pash_call(["echo"], "oe", None, None)
 out, err, ret = pash_call(["echo", "Ok!"], "oer", None, None)
 if ret == 0:
     print(out)
+# n to ignore errors
+pash_call(["false", "unsafe", "cmd"], "n", None, None)
+# p to run in the background and get a proc object
+proc = pash_call(["echo", "sleep", "1"], "po", None, None)
+ret = proc.wait()
+# h to run through a shell
+print(pash_call(["echo", "a", "b", "|", "grep", "a"], "ho", None, None))
