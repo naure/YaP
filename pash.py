@@ -91,7 +91,7 @@ re_symbols_expr_open = combine_re([
     r'(?: \s+ | \{ | \$)',   # Start capture
     r'$x^',     # Ignore brackets (never matches)
     r'$x^',     # Ignore brackets (never matches)
-    r'$x^',     # Ignore quotes (never matches)
+    r'["\']',   # Quotes
 ], re.X | re.MULTILINE)
 
 re_symbols_expr_close = combine_re([
@@ -110,22 +110,39 @@ re_symbols_dollar_close = combine_re([
 
 
 def extract_next_space_or_py_expr(s):
-    ' Extract the next {python} from a shell command '
-    mopen = safe_search(re_symbols_expr_open, s)
-    if mopen:
+    ' Extract the next {python} or next argument from a shell command '
+    def ret(mopen, mclose):
+        return (
+            s[:mopen.start()],
+            s[mopen.start():mclose.end()],
+            s[mclose.end():],
+        )
+
+    for mopen, quoted, depth in safe_search(re_symbols_expr_open, s):
+        if not mopen:
+            break
+
         if mopen.group() == '{':
-            mclose = safe_search(re_symbols_expr_close, s, pos=mopen.end())
+            for mclose, close_quoted, close_depth in safe_search(
+                    re_symbols_expr_close, s, pos=mopen.end()):
+
+                if mclose and not close_quoted and close_depth == 0:
+                    return ret(mopen, mclose)
+
         elif mopen.group() == '$':
-            mclose = safe_search(re_symbols_dollar_close, s, pos=mopen.end())
-        else:  # Just spaces, split around it and return
+            for mclose, close_quoted, close_depth in safe_search(
+                    re_symbols_dollar_close, s, pos=mopen.end()):
+
+                if mclose:
+                    return ret(mopen, mclose)
+
+        # Just spaces
+        elif quoted:
+            continue
+        else:  # Split around the spaces and return
             return s[:mopen.start()], None, s[mopen.end():]
 
-        if mclose:
-            return (
-                s[:mopen.start()],
-                s[mopen.start():mclose.end()],
-                s[mclose.end():],
-            )
+        break  # Close not found, ignore. Could raise SyntaxError instead XXX
     return s, None, ''  # Nothing found
 
 
@@ -136,27 +153,29 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
     #escaped = False  # XXX Support escaping
     in_quotes = False
     in_dquotes = False
+    quoted = False
     depth = 0
 
     for m in re_symbols.finditer(s, pos=pos):
         c = m.group()
         capture, opening, closing, quote = m.groups()
-        # Toggle quote state and move on
+        # Toggle quote state
         if c == "'":
             in_quotes = not in_quotes
         elif c == '"':
             in_dquotes = not in_dquotes
+        quoted = in_quotes or in_dquotes
 
-        elif not in_quotes and not in_dquotes:
-            if depth == 0 and capture:
-                # Found it
-                return m
+        if capture:  # Found it
+            yield m, quoted, depth
+
+        if not quoted:
             if c in openings:
                 depth += 1
             elif c in closings:
                 depth -= 1
 
-    return None  # Not found
+    yield None, quoted, depth  # Not found
 
 
 re_symbols_py = re.compile(

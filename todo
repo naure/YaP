@@ -10,8 +10,8 @@
 + Flag 'b' to get binary instead of unicode
 + Flag 'v' to clean the environment
 + Allow {..} inside of {python expressions}
++ Support quoting properly
 
-- Support quoting properly
 - Auto quote in shell mode ('h')
 - Alternative list syntax: (Aaa Bbb "quoted string" "for" "if")
 - Easy way to work with path ('base' / 'file')

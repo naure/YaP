@@ -6,7 +6,7 @@ numbers = {1: 'one', 2: 'two'}
 print(sys.argv)
 
 # Regular shell commands
-!echo "Shell"
+!echo "Shell command"
 # Capture the output
 now = ! date +%s
 # Command in brackets. Print result

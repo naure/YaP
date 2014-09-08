@@ -54,7 +54,7 @@ numbers = {1: 'one', 2: 'two'}
 print(sys.argv)
 
 # Regular shell commands
-pash_call(["echo", "Shell"], "", None, None)
+pash_call(["echo", "Shell command"], "", None, None)
 # Capture the output
 now = pash_call(["date", "+%s"], "o", None, None)
 # Command in brackets. Print result
@@ -85,7 +85,7 @@ pash_call(["echo", "find", ".", "-exec", "cat", str("{}"), "+"], "", None, None)
 
 # Same applies to program arguments
 if softindex(sys.argv, 1):
-    pash_call(["echo", "First", "argument:", "{}".format(sys.argv[1])], "", None, None)
+    pash_call(["echo", "First argument: {}".format(sys.argv[1])], "", None, None)
     for arg in sys.argv:
         print(arg)
 
@@ -94,7 +94,7 @@ if softindex(sys.argv, 1):
 file_list = pash_call(["ls", "-1"], "lo", None, str.splitlines)
 
 simple_string = 'Output: ' + pash_call(["echo", "some", "output"], "o", None, None)
-from_json = pash_call(["echo", "[1,", "2]"], "jo", None, json.loads)
+from_json = pash_call(["echo", "[1, 2]"], "jo", None, json.loads)
 to_integer = 2 + (pash_call(["echo", "2"], "io", None, int)) + 2
 list_of_lines = pash_call(["ls"], "lo", None, str.splitlines)
 rows_then_columns = pash_call(["ls", "-l"], "co", None, None)
