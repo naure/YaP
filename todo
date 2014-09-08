@@ -8,6 +8,7 @@
 + Use shell with a flag 's'
 + Run in backgroud with a flag 'p', return the proc object
 + Flag 'b' to get binary instead of unicode
++ Flag 'v' to clean the environment
 
 - Support quoting properly
 - Auto quote in shell mode ('h')

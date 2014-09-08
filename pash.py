@@ -344,6 +344,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
             STDOUT if 's' in flags else None),
         universal_newlines='b' not in flags,
         shell='h' in flags,
+        env={} if 'v' in flags else None,
     )
     if 'p' in flags:  # Run in the background
         return proc

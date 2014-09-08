@@ -65,6 +65,8 @@ if ret == 0:
 n! false unsafe cmd
 # p to run in the background and get a proc object
 proc = p! echo sleep 1
-ret = proc.wait()
+out, err = proc.communicate("input")
 # h to run through a shell
 print(h! echo a b | grep a)
+# v to run with a clean environment
+print(v! echo clean)

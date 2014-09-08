@@ -23,6 +23,7 @@ def pash_call(cmd, flags='', indata=None, convert=None):
             STDOUT if 's' in flags else None),
         universal_newlines='b' not in flags,
         shell='h' in flags,
+        env={} if 'v' in flags else None,
     )
     if 'p' in flags:  # Run in the background
         return proc
@@ -107,6 +108,8 @@ if ret == 0:
 pash_call(["false", "unsafe", "cmd"], "n", None, None)
 # p to run in the background and get a proc object
 proc = pash_call(["echo", "sleep", "1"], "po", None, None)
-ret = proc.wait()
+out, err = proc.communicate("input")
 # h to run through a shell
 print(pash_call(["echo", "a", "b", "|", "grep", "a"], "ho", None, None))
+# v to run with a clean environment
+print(pash_call(["echo", "clean"], "vo", None, None))
