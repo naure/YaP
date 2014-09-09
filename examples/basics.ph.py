@@ -2,6 +2,7 @@
 import os
 import sys
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
+from pipes import quote
 from os.path import *
 from sys import stdin, stdout, stderr, exit
 from glob import glob
@@ -13,10 +14,10 @@ def softindex(array, i, alt=None):
 
 def pash_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode
-        cmd = ' '.join(cmd)  # XXX Quote
+        cmd = ' '.join(cmd)
     proc = Popen(
         cmd,
-        stdin=PIPE if indata else None,
+        stdin=PIPE if indata is not None else None,
         stdout=PIPE if ('o' in flags or 's' in flags) else None,
         stderr=(
             PIPE if 'e' in flags else
@@ -61,6 +62,9 @@ now = pash_call(["date", "+%s"], "o", None, None)
 print(pash_call(["date", "+%s"], "o", None, None))
 
 multiline = (pash_call(["echo", "A", "B", "-o", "(parentheses)", "-and", "!", "are", "ignored"], "o", None, None))
+
+system_shell = (pash_call(["A=Aaa;", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", None, None))
+print(system_shell)
 
 # Interpolation of commands
 for key, value in numbers.items():

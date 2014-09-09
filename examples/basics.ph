@@ -18,6 +18,14 @@ multiline = (!
     -and ! are ignored
 )
 
+system_shell = (h!
+    A="Aaa";
+    echo $A;
+    echo "Semi-colons are"
+        "required to separate commands."
+)
+print(system_shell)
+
 # Interpolation of commands
 for key, value in numbers.items():
     !echo {key}={value}

@@ -54,28 +54,30 @@ else:
     gray = blue = green = orange = red = color
 
 
-def parse_cmd(s):
+def parse_cmd(s, flags):
     ''' Extract arguments from a shell command while parsing the {expressions}.
         Return [ (argument, [expressions, ..]), .. ].
     '''
+    parse_dollar = not 'h' in flags
     parts = []
     current_part = ''
     current_exprs = []
     after = s
     while after:
         debug('<< ' + after)
-        before, expr, after = extract_next_space_or_py_expr(after)
+        before, expr, after = extract_next_space_or_py_expr(after, parse_dollar)
         debug('==== {} = <{}> = {}'.format(before, expr, after))
         current_part += before
         if expr is not None:
-            current_part += '{}'  # for format()
-            if expr == '{}':
-                expr = '{"{}"}'  # Replace literal {} by itself
-            current_exprs.append(expr)
-        else:  # New argument
-            parts.append((current_part, current_exprs))
-            current_part = ''
-            current_exprs = []
+            if expr.isspace():  # New argument
+                parts.append((current_part, current_exprs))
+                current_part = ''
+                current_exprs = []
+            else:  # An expression in the current argument
+                current_part += '{}'  # for format()
+                if expr == '{}':
+                    expr = '{"{}"}'  # Replace literal {} by itself
+                current_exprs.append(expr)
     if current_part:
         parts.append((current_part, current_exprs))
     return parts
@@ -109,7 +111,7 @@ re_symbols_dollar_close = combine_re([
 ], re.X | re.MULTILINE)
 
 
-def extract_next_space_or_py_expr(s):
+def extract_next_space_or_py_expr(s, parse_dollar=True):
     ' Extract the next {python} or next argument from a shell command '
     def ret(mopen, mclose):
         return (
@@ -130,6 +132,8 @@ def extract_next_space_or_py_expr(s):
                     return ret(mopen, mclose)
 
         elif mopen.group() == '$':
+            if not parse_dollar:
+                continue
             for mclose, close_quoted, close_depth in safe_search(
                     re_symbols_dollar_close, s, pos=mopen.end()):
 
@@ -140,7 +144,7 @@ def extract_next_space_or_py_expr(s):
         elif quoted:
             continue
         else:  # Split around the spaces and return
-            return s[:mopen.start()], None, s[mopen.end():]
+            return ret(mopen, mopen)
 
         break  # Close not found, ignore. Could raise SyntaxError instead XXX
     return s, None, ''  # Nothing found
@@ -267,10 +271,10 @@ def render_sh_arg(arg, exprs):
     return '"{}".format({})'.format(orange(rendered_arg), format_args)
 
 
-def split_and_expand_shell(sh):
+def split_and_expand_shell(sh, flags):
     ' Expand expressions in a shell command or argument. '
-    parts = parse_cmd(sh.strip())
-    rendered_parts = list(starmap(render_sh_arg, parts))
+    parts = parse_cmd(sh.strip(), flags)
+    rendered_parts = [render_sh_arg(arg, exprs) for arg, exprs in parts]
     return rendered_parts
 
 
@@ -284,7 +288,7 @@ def compile_sh(cmd, is_expr):
         flags += 'o'  # By default, capture stdout if inside an expression
 
     # The command and arguments list
-    cmd_args = split_and_expand_shell(sh)
+    cmd_args = split_and_expand_shell(sh, flags)
     if args.dry_run:
         cmd_args.insert(0, '"echo"')
 
@@ -353,10 +357,10 @@ def expand_python(s):
 call_lib = '''
 def pash_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode
-        cmd = ' '.join(cmd)  # XXX Quote
+        cmd = ' '.join(cmd)
     proc = Popen(
         cmd,
-        stdin=PIPE if indata else None,
+        stdin=PIPE if indata is not None else None,
         stdout=PIPE if ('o' in flags or 's' in flags) else None,
         stderr=(
             PIPE if 'e' in flags else
@@ -421,6 +425,7 @@ def main(args):
         'import os',
         'import sys',
         'from subprocess import Popen, PIPE, STDOUT, CalledProcessError',
+        'from pipes import quote',
         'from os.path import *',
         'from sys import stdin, stdout, stderr, exit',
         'from glob import glob',

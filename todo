@@ -12,7 +12,7 @@
 + Allow {..} inside of {python expressions}
 + Support quoting properly
 
-- Auto quote in shell mode ('h')
+- Auto quote expression in shell mode ('h'). Handle new lines, comments, quotes.
 - Alternative list syntax: (Aaa Bbb "quoted string" "for" "if")
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
