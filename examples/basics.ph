@@ -40,6 +40,8 @@ for key, value in numbers.items():
     {"inline": "dictionnary"}
 }
 
+! echo "With 'quotes'"
+
 # Environment variable in shell. Raises an error if missing.
 ! echo $HOME/somewhere
 # Environment variable in Python. Returns None if missing.

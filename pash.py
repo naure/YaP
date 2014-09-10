@@ -245,9 +245,18 @@ def safe_split(re_symbols, s):
     return parts
 
 
+re_escape_py = re.compile(r'([\\\'"])')
+
+def escape_py(s):
+    return re_escape_py.sub(r'\\\1', s)
+
 # XXX Support escaping and keep quoted quotes ('"')
 def render_arg(arg):
-    return re.sub(r'["\']', '', arg)
+    if arg.startswith('"'):
+        assert arg.endswith('"')
+        return escape_py(arg[1:-1])
+    else:
+        return escape_py(arg)
 
 
 def render_py_expr(expr):
@@ -390,8 +399,6 @@ def main(args):
         '#!/usr/bin/env python',
         'import os',
         'import sys',
-        'from subprocess import Popen, PIPE, STDOUT, CalledProcessError',
-        'from pipes import quote',
         'from os.path import *',
         'from sys import stdin, stdout, stderr, exit',
         'from glob import glob',

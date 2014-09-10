@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import os
 import sys
-from subprocess import Popen, PIPE, STDOUT, CalledProcessError
-from pipes import quote
 from os.path import *
 from sys import stdin, stdout, stderr, exit
 from glob import glob
@@ -11,16 +9,17 @@ import json
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import re
 
-re_escape_sh = re.compile(r'[\\ \'\"]')
+re_escape_sh = re.compile(r'([\\ ])')
 
 def escape_sh(s):
-    return re_escape_sh.sub(s, r'\\\0')
+    return re_escape_sh.sub(r'\\\1', s)
 
 def pash_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode
-        cmd = ' '.join(cmd)
+        cmd = ' '.join(map(escape_sh, cmd))
     proc = Popen(
         cmd,
         stdin=PIPE if indata is not None else None,
@@ -69,7 +68,7 @@ print(pash_call(["date", "+%s"], "o", None, None))
 
 multiline = (pash_call(["echo", "A", "B", "-o", "(parentheses)", "-and", "!", "are", "ignored"], "o", None, None))
 
-system_shell = (pash_call(["A=Aaa;", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", None, None))
+system_shell = (pash_call(["A=\"Aaa\";", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", None, None))
 print(system_shell)
 
 # Interpolation of commands
@@ -85,6 +84,8 @@ pash_call(["echo", str(
 pash_call(["echo", str(
     {"inline": "dictionnary"}
 )], "", None, None)
+
+pash_call(["echo", "With \'quotes\'"], "", None, None)
 
 # Environment variable in shell. Raises an error if missing.
 pash_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", None, None)

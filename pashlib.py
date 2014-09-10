@@ -1,13 +1,14 @@
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import re
 
-re_escape_sh = re.compile(r'[\\ \'\"]')
+re_escape_sh = re.compile(r'([\\ ])')
 
 def escape_sh(s):
-    return re_escape_sh.sub(s, r'\\\0')
+    return re_escape_sh.sub(r'\\\1', s)
 
 def pash_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode
-        cmd = ' '.join(cmd)
+        cmd = ' '.join(map(escape_sh, cmd))
     proc = Popen(
         cmd,
         stdin=PIPE if indata is not None else None,
