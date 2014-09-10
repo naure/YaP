@@ -6,23 +6,31 @@ import re
 from itertools import starmap
 
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('source')
-parser.add_argument('script_args', nargs=argparse.REMAINDER)
-parser.add_argument('-p', '--python', action='store_true',
-                    help='Compile source to python and write it')
-parser.add_argument('-o', '--output',
-                    help='Python code output file. Implies --python')
-parser.add_argument('-n', '--dry-run', action='store_true',
-                    help='Shell commands will not execute, but output their '
-                         'command line instead')
-args = parser.parse_args()
 
-if args.python and not args.output:
-    args.output = args.source + '.py'
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source')
+    parser.add_argument('script_args', nargs=argparse.REMAINDER)
+    parser.add_argument('-p', '--python', action='store_true',
+                        help='Compile source to python and write it')
+    parser.add_argument('-o', '--output',
+                        help='Python code output file. Implies --python')
+    parser.add_argument('-n', '--dry-run', action='store_true',
+                        help='Shell commands will not execute, but output their '
+                             'command line instead')
+    args = parser.parse_args()
+
+    if args.python and not args.output:
+        args.output = args.source + '.py'
+
+    dry_run = args.dry_run
+else:
+    dry_run = False
+
 
 # Optional colored output
-if args.output == '-' and sys.stdout.isatty():
+if __name__ == '__main__' and args.output == '-' and sys.stdout.isatty():
     ENDCOLOR = '\033[0m'
 
     def color(s, code):
@@ -298,7 +306,7 @@ def compile_sh(cmd, is_expr):
 
     # The command and arguments list
     cmd_args = split_and_expand_shell(sh, flags)
-    if args.dry_run:
+    if dry_run:
         cmd_args.insert(0, '"echo"')
 
     # Input (XXX Not implemented)
