@@ -1,20 +1,30 @@
 
+Yapy
+
 # Design Goals
+
+## Truly integrated
+
+Mix Shell and Python expressions. Outputs can be used
+directly as strings, or easily interpreted in various ways.
+
+Lots of convenience for scripting: $1 for sys.argv[1], $env_var, listdir, ...
+Command interpolation with { any(expression) }.
 
 ## Safe:
 
-Syntax independent of variables content. Well-defined data structure.
-Not based on spaces in variables, quotes, escaping. No empty strings on unknown variables.
-Check that all executables are there before even starting.
+Hell is quotes. And spaces in filenames. Or space-separated lists. When missing arguments gives an empty string messing up your paths. And logic with nothing but strings. Avoid all of this.
 
-## Easy:
+In Yapi, code is independent of input. Python's data structures and logic are
+well-defined. Missing arguments like $1 or environment variables like $var will
+raise an error as expected.
 
-Mix Python and Bash freely. Solve each task with the best suited
-language. Conversion of string for common patterns (read lines, read fields).
+    print($1)  # Raises an exception if missing
+    print($1 or 'Default')  # Or provide an alternative
 
 ## Powerful:
 
-All the power of Python for logic and of Bash for system
+Solve each task with the best suited language. Python for logic and shell for system
 interaction.
 
 ## Simple:
@@ -22,11 +32,11 @@ interaction.
 Single file, no-dependencies compiler. On-the-fly or pre-compiled to
 pure Python.
 
-## Readable:
+## Clear:
 
-Avoid quotes and escaping hell. Common functions and patterns
-readily available: os, sys.argv[1] as $1, $env_var, listdir, re.*
-Command interpolation.
+Any Python programmer should be able to understand Yapy. And he should be able to
+write some after glancing sideways at the examples in this README.
+
 
 
 # Syntax:

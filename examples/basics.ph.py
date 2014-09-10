@@ -11,6 +11,12 @@ import json
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
+import re
+
+re_escape_sh = re.compile(r'[\\ \'\"]')
+
+def escape_sh(s):
+    return re_escape_sh.sub(s, r'\\\0')
 
 def pash_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode

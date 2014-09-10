@@ -12,12 +12,12 @@
 + Allow {..} inside of {python expressions}
 + Support quoting properly
 
-- Auto quote expression in shell mode ('h'). Handle new lines, comments, quotes.
 - Alternative list syntax: (Aaa Bbb "quoted string" "for" "if")
 - Easy way to work with path ('base' / 'file')
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Support escaping
+- Auto quote expression in shell mode ('h'). Handle new lines, comments, quotes.
 - Full syntax check and error messages (brackets matching, ..)
 - Make the runtime part safe from user overwriting variables
 - Handling of fds? close_fds, ..
@@ -28,3 +28,4 @@
 - Minimal imports
 - Globbing
 - Automatic detection of command based on syntax
+- Check existence of executables, arguments and variables before starting
