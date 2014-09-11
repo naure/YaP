@@ -76,7 +76,7 @@ err = e! echo
 # Capture both
 out, err = oe! echo
 # Include the return code
-out, err, ret = oer! echo "Ok!"
+out, err, ret = oer! echo "May fail.."
 if ret == 0:
     print(out)
 # n to ignore errors
@@ -88,3 +88,4 @@ out, err = proc.communicate("input")
 print(h! echo a b | grep a)
 # v to run with a clean environment
 print(v! echo clean)
+! echo "Ok!"

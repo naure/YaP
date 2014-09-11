@@ -121,7 +121,7 @@ err = yap_call(["echo"], "e", None, None)
 # Capture both
 out, err = yap_call(["echo"], "oe", None, None)
 # Include the return code
-out, err, ret = yap_call(["echo", "Ok!"], "oer", None, None)
+out, err, ret = yap_call(["echo", "May fail.."], "oer", None, None)
 if ret == 0:
     print(out)
 # n to ignore errors
@@ -133,3 +133,4 @@ out, err = proc.communicate("input")
 print(yap_call(["echo", "a", "b", "|", "grep", "a"], "ho", None, None))
 # v to run with a clean environment
 print(yap_call(["echo", "clean"], "vo", None, None))
+yap_call(["echo", "Ok!"], "", None, None)
