@@ -1,3 +1,11 @@
 
 
+print(! echo Coucou!)
 print(! echo "Coucou!")
+print(l! echo "Coucou!")
+print(! echo Coucou toi!)
+print(! echo "Coucou toi!")
+print(h! A="Aaa" ; echo "A=.." ; echo $A )
+
+# XXX Not yet passing
+#print(h! A="Aaa" ; echo "A=.."; echo $A )
