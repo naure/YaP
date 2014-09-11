@@ -1,4 +1,4 @@
-#!./pash.py
+#!./yap.py
 
 # Regular python
 print("Python")

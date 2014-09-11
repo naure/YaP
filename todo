@@ -29,3 +29,4 @@
 - Globbing
 - Automatic detection of command based on syntax
 - Check existence of executables, arguments and variables before starting
+- Add syntax for anonymous functions

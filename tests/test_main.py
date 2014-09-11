@@ -3,7 +3,7 @@ import unittest
 import sys
 sys.path.append('.')
 
-import pash
+import yap
 
 
 def B(s):
@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
         ]
         for raw, escaped in data:
             self.assertEqual(
-                pash.escape_py(B(raw)),
+                yap.escape_py(B(raw)),
                 B(escaped),
             )
 

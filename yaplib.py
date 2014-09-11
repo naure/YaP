@@ -6,7 +6,7 @@ re_escape_sh = re.compile(r'([\\ ])')
 def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
-def pash_call(cmd, flags='', indata=None, convert=None):
+def yap_call(cmd, flags='', indata=None, convert=None):
     if 'h' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
     proc = Popen(

@@ -324,7 +324,7 @@ def compile_sh(cmd, is_expr):
         convert = 'json.loads'
 
     # Call the process
-    process = 'pash_call([{}], "{}", {}, {})'.format(
+    process = 'yap_call([{}], "{}", {}, {})'.format(
         ', '.join(cmd_args), flags, indata, convert)
     return process
 
@@ -371,7 +371,7 @@ def expand_python(s):
 
 # A convenience function around Popen, configured by letters flags.
 # Allows to perform several operations as a single expression (function call).
-with open('pashlib.py') as f:
+with open('yaplib.py') as f:
     call_lib = f.read()
 
 soft_index_lib = '''

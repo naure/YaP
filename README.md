@@ -1,5 +1,5 @@
 
-Yapy
+Yap
 
 # Design Goals
 
@@ -15,7 +15,7 @@ Command interpolation with { any(expression) }.
 
 Hell is quotes. And spaces in filenames. Or space-separated lists. When missing arguments gives an empty string messing up your paths. And logic with nothing but strings. Avoid all of this.
 
-In Yapi, code is independent of input. Python's data structures and logic are
+In Yap, code is independent of input. Python's data structures and logic are
 well-defined. Missing arguments like $1 or environment variables like $var will
 raise an error as expected.
 
@@ -34,7 +34,7 @@ pure Python.
 
 ## Clear:
 
-Any Python programmer should be able to understand Yapy. And he should be able to
+Any Python programmer should be able to understand Yap. And he should be able to
 write some after glancing sideways at the examples in this README.
 
 

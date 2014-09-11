@@ -30,18 +30,20 @@ def diff(a, b, **kwargs):
 
 class Test(unittest.TestCase):
     examples_dir = 'examples'
-    examples_path = os.path.join(examples_dir, '*.ph')
-    pash_path = './pash.py'
+    examples_path = os.path.join(examples_dir, '*.yp')
+    yap_path = './yap.py'
 
     def test_examples(self):
-        ''' Check that *.ph compile to *.ph.py.
-            If not, the compiled file will be stored in example.ph-test.py
+        ''' Check that *.yp compile to *.yp.py.
+            If not, the compiled file will be stored in example.yp-test.py
         '''
-        for ph in glob(self.examples_path):
-            print('Testing {}'.format(ph))
-            ref_path = '{}.py'.format(ph)
-            test_path = '{}-test.py'.format(ph)
-            subprocess.check_call([self.pash_path, '-o', test_path, ph])
+        yps = glob(self.examples_path)
+        self.assertTrue(yps)
+        for yp in yps:
+            print('Testing {}'.format(yp))
+            ref_path = '{}.py'.format(yp)
+            test_path = '{}-test.py'.format(yp)
+            subprocess.check_call([self.yap_path, '-o', test_path, yp])
             with open(test_path) as test_f, open(ref_path) as ref_f:
                 ref_py = ref_f.read()
                 test_py = test_f.read()
