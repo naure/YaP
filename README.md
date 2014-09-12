@@ -43,7 +43,8 @@ write some after glancing sideways at the examples in this README.
 
 ## Output
 
-* Default: Capture stdout, print stderr
+Default: Capture stdout, print stderr
+
     some_python = 'full output: ' + ! shell command
 
     some_integer = 2 + i! echo 2

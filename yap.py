@@ -5,61 +5,14 @@ from logging import debug
 import re
 from itertools import starmap
 
-import argparse
 
+dry_run = False
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('source')
-    parser.add_argument('script_args', nargs=argparse.REMAINDER)
-    parser.add_argument('-p', '--python', action='store_true',
-                        help='Compile source to python and write it')
-    parser.add_argument('-o', '--output',
-                        help='Python code output file. Implies --python')
-    parser.add_argument('-n', '--dry-run', action='store_true',
-                        help='Shell commands will not execute, but output their '
-                             'command line instead')
-    args = parser.parse_args()
+# No colored output
+def nocolor(s, code=None):
+    return s
 
-    if args.python and not args.output:
-        args.output = args.source + '.py'
-
-    dry_run = args.dry_run
-else:
-    dry_run = False
-
-
-# Optional colored output
-if __name__ == '__main__' and args.output == '-' and sys.stdout.isatty():
-    ENDCOLOR = '\033[0m'
-
-    def color(s, code):
-        ' Make `s` a colored text. Can be nested. '
-        return '{}{}{}'.format(
-            code,
-            s.replace(ENDCOLOR, code),
-            ENDCOLOR,
-        )
-
-    def gray(s):
-        return color(s, '\033[97m')
-
-    def blue(s):
-        return color(s, '\033[94m')
-
-    def green(s):
-        return color(s, '\033[92m')
-
-    def orange(s):
-        return color(s, '\033[93m')
-
-    def red(s):
-        return color(s, '\033[91m')
-else:
-    # No colored output
-    def color(s, code=None):
-        return s
-    gray = blue = green = orange = red = color
+gray = blue = green = orange = red = color = nocolor
 
 
 def parse_cmd(s, flags):
@@ -399,7 +352,8 @@ missingindex(array, i):
 '''
 
 
-def main(args):
+def run(args):
+    " Compile yap file and execute it, or just save it "
     with sys.stdin if args.source == '-' else open(args.source) as f:
         source = f.read()
 
@@ -430,5 +384,57 @@ def main(args):
         exec(pycode, {})
 
 
+def main(cmd_args):
+    " Parse arguments and call run() "
+    global dry_run, color, gray, blue, green, orange, red
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source')
+    parser.add_argument('script_args', nargs=argparse.REMAINDER)
+    parser.add_argument('-p', '--python', action='store_true',
+                        help='Compile source to python and write it')
+    parser.add_argument('-o', '--output',
+                        help='Python code output file. Implies --python')
+    parser.add_argument('-n', '--dry-run', action='store_true',
+                        help='Shell commands will not execute, but output their '
+                             'command line instead')
+    args = parser.parse_args(cmd_args)
+
+    if args.python and not args.output:
+        args.output = args.source + '.py'
+
+    dry_run = args.dry_run
+
+    # Optional colored output
+    if args.output == '-' and sys.stdout.isatty():
+        ENDCOLOR = '\033[0m'
+
+        def color(s, code):
+            ' Make `s` a colored text. Can be nested. '
+            return '{}{}{}'.format(
+                code,
+                s.replace(ENDCOLOR, code),
+                ENDCOLOR,
+            )
+
+        def gray(s):
+            return color(s, '\033[97m')
+
+        def blue(s):
+            return color(s, '\033[94m')
+
+        def green(s):
+            return color(s, '\033[92m')
+
+        def orange(s):
+            return color(s, '\033[93m')
+
+        def red(s):
+            return color(s, '\033[91m')
+
+    run(args)
+
+
 if __name__ == '__main__':
-    main(args)
+    main(sys.argv[1:])
