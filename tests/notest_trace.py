@@ -6,7 +6,7 @@ import sys
 sys.path.append('.')
 
 from .utils import compare_paths, red
-from . import tracer
+import tracetest
 import yap
 
 
@@ -26,8 +26,8 @@ class Test(unittest.TestCase):
     @unittest.skip
     def test_trace_trace(self):
         a = A()
-        db = tracer.trace(main, [a])
-        dbs = tracer.format_db(db)
+        db = tracetest.trace(main, [a])
+        dbs = tracetest.format_db(db)
         print(dbs)
 
     def test_trace(self):
@@ -35,10 +35,10 @@ class Test(unittest.TestCase):
         self.assertTrue(yps)
         for yp in yps:
             print('Tracing compilation of {}'.format(yp))
-            db = tracer.trace(yap.main, [[
+            db = tracetest.trace(yap.main, [[
                 '-o', '/dev/null', yp,
             ]])
-            dbs = tracer.format_db(db)
+            dbs = tracetest.format_db(db)
 
             ref_path = '{}.yml'.format(yp)
             test_path = '{}-test.yml'.format(yp)

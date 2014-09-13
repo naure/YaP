@@ -1,1048 +1,2002 @@
 !!python/object/apply:collections.defaultdict
-args: [!!python/name:tests.tracer.newFunc '']
+args: [!!python/name:tracetest.newFunc '']
 dictitems:
-  ./yap.py:compile_sh: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{cmd: ''! echo Coucou!'', is_expr: true}
+  ./yap.py:compile_sh: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo Coucou!''
 
-        ', 'yap_call(["echo", "Coucou!"], "o", None, None)
+          ', is_expr: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: ''! echo "Coucou!"'', is_expr:
-        true}
-
-        ', 'yap_call(["echo", "Coucou!"], "o", None, None)
+          '}
+      - 'yap_call(["echo", "Coucou!"], "o", None, None)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: l! echo "Coucou!", is_expr: true}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo "Coucou!"''
 
-        ', 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
+          ', is_expr: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: ''! echo Coucou toi!'', is_expr:
-        true}
-
-        ', 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)
-
-        ...
-
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: ''! echo "Coucou toi!"'', is_expr:
-        true}
-
-        ', 'yap_call(["echo", "Coucou toi!"], "o", None, None)
+          '}
+      - 'yap_call(["echo", "Coucou!"], "o", None, None)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: ''h! A="Aaa" ; echo "A=.." ; echo
-        $A '', is_expr: true}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'l! echo "Coucou!"
 
-        ', 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
-        None, None)
+          ...
 
-        ...
+          ', is_expr: 'true
 
-        ']
-  ./yap.py:do_inline_sh: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ["{cmd: null, py: '\n\n    '}\n", "'\n\
-        \n  '\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: ''''}
+          ...
 
-        ', '''''
-
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: '! echo Coucou!', py: '\n\n  \
-        \  print('}\n", "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None,\
-        \ None)'\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: )}
-
-        ', ')
+          '}
+      - 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: '! echo \"Coucou!\"', py: '\n\n\
-        \    print('}\n", "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None,\
-        \ None)'\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: )}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo Coucou toi!''
 
-        ', ')
+          ', is_expr: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: l! echo \"Coucou!\", py: '\n\n\
-        \    print('}\n", "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\",\
-        \ None, str.splitlines)'\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: )}
-
-        ', ')
+          '}
+      - 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: '! echo Coucou toi!', py: '\n\n\
-        \    print('}\n", "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"],\
-        \ \"o\", None, None)'\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: )}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo "Coucou toi!"''
 
-        ', ')
+          ', is_expr: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: '! echo \"Coucou toi!\"', py:\
-        \ '\n\n    print('}\n", "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"\
-        ], \"o\", None, None)'\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: )}
-
-        ', ')
+          '}
+      - 'yap_call(["echo", "Coucou toi!"], "o", None, None)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{cmd: 'h! A=\"Aaa\" ; echo \"A=..\"\
-        \ ; echo $A ', py: '\n\n    print('}\n", "'\n\n  print(yap_call([\"A=\\\"\
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''
+
+          ', is_expr: 'true
+
+          ...
+
+          '}
+      - 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho", None,
+        None)
+
+        ...
+
+        '
+      - null
+  ./yap.py:do_inline_sh: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: "'\n\n  '\n"}
+      - "'\n\n  '\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo Coucou!''
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo "Coucou!"''
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'l! echo "Coucou!"
+
+          ...
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo Coucou toi!''
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None, None)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''! echo "Coucou toi!"''
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''
+
+          ', py: "'\n\n  print('\n"}
+      - "'\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\"\
+        , \"echo\", \"$A\"], \"ho\", None,\n  None)'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: "')\n\n\n  # XXX Not yet passing'\n"}
+      - "')\n\n\n  # XXX Not yet passing'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'\n"}
+      - "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"A\") )'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: "'\n\n  '\n"}
+      - "'\n\n  '\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {cmd: 'null
+
+          ...
+
+          ', py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+  ./yap.py:escape_py: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'Coucou!
+
+          ...
+
+          '}
+      - 'Coucou!
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'Coucou!
+
+          ...
+
+          '}
+      - 'Coucou!
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'Coucou!
+
+          ...
+
+          '}
+      - 'Coucou!
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'Coucou
+
+          ...
+
+          '}
+      - 'Coucou
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'toi!
+
+          ...
+
+          '}
+      - 'toi!
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'Coucou toi!
+
+          ...
+
+          '}
+      - 'Coucou toi!
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'A="Aaa"
+
+          ...
+
+          '}
+      - 'A=\"Aaa\"
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: ';
+
+          ...
+
+          '}
+      - ';
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'A=..
+
+          ...
+
+          '}
+      - 'A=..
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: ';
+
+          ...
+
+          '}
+      - ';
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {s: '$A
+
+          ...
+
+          '}
+      - '$A
+
+        ...
+
+        '
+      - null
+  ./yap.py:expand_env_soft: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  '\n"}
+      - "'\n\n  '\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: ')
+
+          ...
+
+          '}
+      - ')
+
+        ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  print('\n"}
+      - "'\n\n  print('\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "')\n\n\n  # XXX Not yet passing'\n"}
+      - "')\n\n\n  # XXX Not yet passing'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'\n"}
+      - "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"A\") )'\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: "'\n\n  '\n"}
+      - "'\n\n  '\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {py: '''''
+
+          '}
+      - '''''
+
+        '
+      - null
+  ./yap.py:expand_python: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l!\
+          \ echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"\
+          Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n\
+          \  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo\
+          \ $A )\n\n  '\n"}
+      - "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n\
+        \  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
+        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
         Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
-        \  None)'\n"]
-    - !!python/object/new:tests.tracer.Call ["{cmd: null, py: ')\n\n\n    # XXX Not\
-        \ yet passing'}\n", "')\n\n\n  # XXX Not yet passing'\n"]
-    - !!python/object/new:tests.tracer.Call ["{cmd: null, py: '\n\n    #print(h! A=\"\
-        Aaa\" ; echo \"A=..\"; echo $A )'}\n", "'\n\n  #print(h! A=\"Aaa\" ; echo\
-        \ \"A=..\"; echo os.environ.get(\"A\") )'\n"]
-    - !!python/object/new:tests.tracer.Call ["{cmd: null, py: '\n\n    '}\n", "'\n\
-        \n  '\n"]
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: ''''}
+        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo os.environ.get(\"A\") )\n\n  '\n"
+      - null
+  ./yap.py:extract_next_space_or_py_expr: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ', '''''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{cmd: null, py: ''''}
+          ', s: 'echo Coucou!
 
-        ', '''''
+          ...
 
-        ']
-  ./yap.py:escape_py: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{s: echo}
+          '}
+      - '!!python/tuple [echo, '' '', Coucou!]
 
-        ', 'echo
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: Coucou!}
+          ', s: 'Coucou!
 
-        ', 'Coucou!
+          ...
 
-        ...
+          '}
+      - '!!python/tuple [Coucou!, null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ', 'echo
+          ...
 
-        ...
+          ', s: 'echo "Coucou!"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: Coucou!}
+          ...
 
-        ', 'Coucou!
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou!"'']
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+          ...
 
-        ', 'echo
+          ', s: '''"Coucou!"''
 
-        ...
+          '}
+      - '!!python/tuple [''"Coucou!"'', null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: Coucou!}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ', 'Coucou!
+          ...
 
-        ...
+          ', s: 'echo "Coucou!"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+          ...
 
-        ', 'echo
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou!"'']
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: Coucou}
+          ...
 
-        ', 'Coucou
+          ', s: '''"Coucou!"''
 
-        ...
+          '}
+      - '!!python/tuple [''"Coucou!"'', null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: toi!}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ', 'toi!
+          ...
 
-        ...
+          ', s: 'echo Coucou toi!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+          ...
 
-        ', 'echo
+          '}
+      - '!!python/tuple [echo, '' '', Coucou toi!]
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: Coucou toi!}
+          ...
 
-        ', 'Coucou toi!
+          ', s: 'Coucou toi!
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: A="Aaa"}
+          '}
+      - '!!python/tuple [Coucou, '' '', toi!]
 
-        ', 'A=\"Aaa\"
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: ;}
+          ', s: 'toi!
 
-        ', ';
+          ...
 
-        ...
+          '}
+      - '!!python/tuple [toi!, null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ', 'echo
+          ...
 
-        ...
+          ', s: 'echo "Coucou toi!"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: A=..}
+          ...
 
-        ', 'A=..
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou toi!"'']
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'true
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: ;}
+          ...
 
-        ', ';
+          ', s: '''"Coucou toi!"''
 
-        ...
+          '}
+      - '!!python/tuple [''"Coucou toi!"'', null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ', 'echo
+          ...
 
-        ...
+          ', s: 'A="Aaa" ; echo "A=.." ; echo $A
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{s: $A}
+          ...
 
-        ', '$A
+          '}
+      - '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ']
-  ./yap.py:expand_env_soft: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ["{py: '\n\n    '}\n", "'\n\n  '\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: ''''}
+          ...
 
-        ', '''''
+          ', s: '; echo "A=.." ; echo $A
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: )}
+          ...
 
-        ', ')
+          '}
+      - '!!python/tuple [;, '' '', echo "A=.." ; echo $A]
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: )}
+          ...
 
-        ', ')
+          ', s: 'echo "A=.." ; echo $A
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: )}
+          '}
+      - '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']
 
-        ', ')
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ...
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: )}
+          ', s: '''"A=.." ; echo $A''
 
-        ', ')
+          '}
+      - '!!python/tuple [''"A=.."'', '' '', ; echo $A]
 
-        ...
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: )}
+          ...
 
-        ', ')
+          ', s: '; echo $A
 
-        ...
+          ...
+
+          '}
+      - '!!python/tuple [;, '' '', echo $A]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    print('}\n", "'\n\n  print('\n"]
-    - !!python/object/new:tests.tracer.Call ["{py: ')\n\n\n    # XXX Not yet passing'}\n",
-      "')\n\n\n  # XXX Not yet passing'\n"]
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    #print(h! A=\"Aaa\" ;\
-        \ echo \"A=..\"; echo $A )'}\n", "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"\
-        ; echo os.environ.get(\"A\") )'\n"]
-    - !!python/object/new:tests.tracer.Call ["{py: '\n\n    '}\n", "'\n\n  '\n"]
-    - !!python/object/new:tests.tracer.Call ['{py: ''''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ', '''''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{py: ''''}
+          ', s: 'echo $A
 
-        ', '''''
+          ...
 
-        ']
-  ./yap.py:expand_python: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ["{s: '\n\n\n    print(! echo Coucou!)\n\
-        \n    print(! echo \"Coucou!\")\n\n    print(l! echo \"Coucou!\")\n\n    print(!\
-        \ echo Coucou toi!)\n\n    print(! echo \"Coucou toi!\")\n\n    print(h! A=\"\
-        Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n    # XXX Not yet passing\n\n    #print(h!\
-        \ A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n    '}\n", "'\n\n\n  print(yap_call([\"\
-        echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"\
-        Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"Coucou!\"\
-        ], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"echo\", \"Coucou\"\
-        , \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"Coucou toi!\"\
-        ], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\"\
-        , \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n  None))\n\n\n  # XXX\
-        \ Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
-        A\") )\n\n  '\n"]
-  ./yap.py:extract_next_space_or_py_expr: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: echo Coucou!}
+          '}
+      - '!!python/tuple [echo, '' '', $A]
 
-        ', '!!python/tuple [echo, '' '', Coucou!]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {parse_dollar: 'false
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: Coucou!}
+          ...
 
-        ', '!!python/tuple [Coucou!, null, '''']
+          ', s: '$A
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: echo "Coucou!"}
+          ...
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou!"'']
+          '}
+      - '!!python/tuple [$A, null, '''']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: ''"Coucou!"''}
+        '
+      - null
+  ./yap.py:main: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {cmd_args: '[-o, /dev/null, regtests/coucou.yp]
 
-        ', '!!python/tuple [''"Coucou!"'', null, '''']
+          '}
+      - 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: echo "Coucou!"}
+        ...
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou!"'']
+        '
+      - null
+  ./yap.py:nocolor: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: ''"Coucou!"''}
+          ...
 
-        ', '!!python/tuple [''"Coucou!"'', null, '''']
+          ', s: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: echo Coucou
-        toi!}
+          ...
 
-        ', '!!python/tuple [echo, '' '', Coucou toi!]
+          '}
+      - 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: Coucou toi!}
+        ...
 
-        ', '!!python/tuple [Coucou, '' '', toi!]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: toi!}
+          ...
 
-        ', '!!python/tuple [toi!, null, '''']
+          ', s: 'Coucou!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: echo "Coucou
-        toi!"}
+          ...
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou toi!"'']
+          '}
+      - 'Coucou!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: true, s: ''"Coucou toi!"''}
+        ...
 
-        ', '!!python/tuple [''"Coucou toi!"'', null, '''']
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: A="Aaa" ; echo
-        "A=.." ; echo $A}
+          ...
 
-        ', '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]
+          ', s: 'yap_call(["echo", "Coucou!"], "o", None, None)
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: ; echo "A=.."
-        ; echo $A}
+          ...
 
-        ', '!!python/tuple [;, '' '', echo "A=.." ; echo $A]
+          '}
+      - 'yap_call(["echo", "Coucou!"], "o", None, None)
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: echo "A=.."
-        ; echo $A}
+        ...
 
-        ', '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: ''"A=.." ;
-        echo $A''}
+          ...
 
-        ', '!!python/tuple [''"A=.."'', '' '', ; echo $A]
+          ', s: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: ; echo $A}
+          ...
 
-        ', '!!python/tuple [;, '' '', echo $A]
+          '}
+      - 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: echo $A}
+        ...
 
-        ', '!!python/tuple [echo, '' '', $A]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{parse_dollar: false, s: $A}
+          ...
 
-        ', '!!python/tuple [$A, null, '''']
+          ', s: 'Coucou!
 
-        ']
-  ./yap.py:main: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['cmd_args: [-o, /dev/null, regtests/coucou.yp]
+          ...
 
-        ', 'null
+          '}
+      - 'Coucou!
 
         ...
 
-        ']
-  ./yap.py:nocolor: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'echo
+          ...
 
-        ...
+          ', s: 'yap_call(["echo", "Coucou!"], "o", None, None)
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: Coucou!}
+          ...
 
-        ', 'Coucou!
+          '}
+      - 'yap_call(["echo", "Coucou!"], "o", None, None)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ''yap_call(["echo",
-        "Coucou!"], "o", None, None)''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'yap_call(["echo", "Coucou!"], "o", None, None)
+          ...
 
-        ...
+          ', s: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: Coucou!}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'Coucou!
+          ...
 
-        ...
+          ', s: 'Coucou!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ''yap_call(["echo",
-        "Coucou!"], "o", None, None)''}
+          ...
 
-        ', 'yap_call(["echo", "Coucou!"], "o", None, None)
+          '}
+      - 'Coucou!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'echo
+          ...
 
-        ...
+          ', s: 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: Coucou!}
+          ...
 
-        ', 'Coucou!
+          '}
+      - 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ''yap_call(["echo",
-        "Coucou!"], "lo", None, str.splitlines)''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
+          ...
 
-        ...
+          ', s: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: Coucou}
+          ', s: 'Coucou
 
-        ', 'Coucou
+          ...
 
+          '}
+      - 'Coucou
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: 'toi!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: toi!}
+          ...
 
-        ', 'toi!
+          '}
+      - 'toi!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ''yap_call(["echo",
-        "Coucou", "toi!"], "o", None, None)''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+          ...
 
+          ', s: 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+
+          ...
+
+          '}
+      - 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+          ', s: 'echo
 
-        ', 'echo
+          ...
 
+          '}
+      - 'echo
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: 'Coucou toi!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: Coucou toi!}
+          ...
 
-        ', 'Coucou toi!
+          '}
+      - 'Coucou toi!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ''yap_call(["echo",
-        "Coucou toi!"], "o", None, None)''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'yap_call(["echo", "Coucou toi!"], "o", None, None)
+          ...
 
+          ', s: 'yap_call(["echo", "Coucou toi!"], "o", None, None)
+
+          ...
+
+          '}
+      - 'yap_call(["echo", "Coucou toi!"], "o", None, None)
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: A=\"Aaa\"}
+          ', s: 'A=\"Aaa\"
 
-        ', 'A=\"Aaa\"
+          ...
 
+          '}
+      - 'A=\"Aaa\"
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: ';
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ;}
+          ...
 
-        ', ';
+          '}
+      - ';
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'echo
+          ...
 
+          ', s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: A=..}
+          ', s: 'A=..
 
-        ', 'A=..
+          ...
 
+          '}
+      - 'A=..
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: ';
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: ;}
+          ...
 
-        ', ';
+          '}
+      - ';
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
 
-        ', 'echo
+          ...
 
+          ', s: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{code: null, s: $A}
+          ', s: '$A
 
-        ', '$A
+          ...
 
+          '}
+      - '$A
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
+          None, None)
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{code: null, s: 'yap_call([\"A=\\\"\
-        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\",\n\
-        \    None, None)'}\n", 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo",
-        "$A"], "ho", None, None)
+          ...
 
+          '}
+      - 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho", None,
+        None)
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {code: 'null
+
+          ...
+
+          ', s: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
+          \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+          echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
+          echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+          echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\
+          \"Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\"\
+          , None,\n  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\"\
+          \ ; echo \"A=..\"; echo os.environ.get(\"A\") )\n\n  '\n"}
+      - "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n\
+        \  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
+        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
+        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
+        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo os.environ.get(\"A\") )\n\n  '\n"
+      - null
+  ./yap.py:parse_cmd: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {flags: 'o
+
+          ...
+
+          ', s: 'echo Coucou!
+
+          ...
+
+          '}
+      - "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou!\n  - []\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
+
+          ...
+
+          ', s: 'echo "Coucou!"
+
+          ...
+
+          '}
+      - "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"'\n\
+        \  - []\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'lo
+
+          ...
+
+          ', s: 'echo "Coucou!"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["{code: null, s: '\n\n\n    print(yap_call([\"\
-        echo\", \"Coucou!\"], \"o\", None, None))\n\n    print(yap_call([\"echo\"\
-        , \"Coucou!\"], \"o\", None, None))\n\n    print(yap_call([\"echo\", \"Coucou!\"\
-        ], \"lo\", None, str.splitlines))\n\n    print(yap_call([\"echo\", \"Coucou\"\
-        , \"toi!\"], \"o\", None, None))\n\n    print(yap_call([\"echo\", \"Coucou\
-        \ toi!\"], \"o\", None, None))\n\n    print(yap_call([\"A=\\\"Aaa\\\"\", \"\
-        ;\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n    None))\n\
-        \n\n    # XXX Not yet passing\n\n    #print(h! A=\"Aaa\" ; echo \"A=..\";\
-        \ echo os.environ.get(\"A\") )\n\n    '}\n", "'\n\n\n  print(yap_call([\"\
-        echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"\
-        Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"Coucou!\"\
-        ], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"echo\", \"Coucou\"\
-        , \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"echo\", \"Coucou toi!\"\
-        ], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\"\
-        , \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n  None))\n\n\n  # XXX\
-        \ Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
-        A\") )\n\n  '\n"]
-  ./yap.py:parse_cmd: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{flags: o, s: echo Coucou!}
+          ...
 
-        ', "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou!\n  -\
-        \ []\n"]
-    - !!python/object/new:tests.tracer.Call ['{flags: o, s: echo "Coucou!"}
+          '}
+      - "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"'\n\
+        \  - []\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
 
-        ', "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"\
-        '\n  - []\n"]
-    - !!python/object/new:tests.tracer.Call ['{flags: lo, s: echo "Coucou!"}
+          ...
 
-        ', "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"\
-        '\n  - []\n"]
-    - !!python/object/new:tests.tracer.Call ['{flags: o, s: echo Coucou toi!}
+          ', s: 'echo Coucou toi!
 
-        ', "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou\n  -\
-        \ []\n- !!python/tuple\n  - toi!\n  - []\n"]
-    - !!python/object/new:tests.tracer.Call ['{flags: o, s: echo "Coucou toi!"}
+          ...
 
-        ', "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou toi!\"\
-        '\n  - []\n"]
-    - !!python/object/new:tests.tracer.Call ['{flags: ho, s: A="Aaa" ; echo "A=.."
-        ; echo $A}
+          '}
+      - "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou\n  - []\n\
+        - !!python/tuple\n  - toi!\n  - []\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
 
-        ', "- !!python/tuple\n  - A=\"Aaa\"\n  - []\n- !!python/tuple\n  - ;\n  -\
-        \ []\n- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"A=..\"\
-        '\n  - []\n- !!python/tuple\n  - ;\n  - []\n- !!python/tuple\n  - echo\n \
-        \ - []\n- !!python/tuple\n  - $A\n  - []\n"]
-  ./yap.py:render_arg: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{arg: echo}
+          ...
 
-        ', 'echo
+          ', s: 'echo "Coucou toi!"
 
+          ...
+
+          '}
+      - "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou toi!\"\
+        '\n  - []\n"
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'ho
+
+          ...
+
+          ', s: 'A="Aaa" ; echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - "- !!python/tuple\n  - A=\"Aaa\"\n  - []\n- !!python/tuple\n  - ;\n  - []\n\
+        - !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"A=..\"'\n  -\
+        \ []\n- !!python/tuple\n  - ;\n  - []\n- !!python/tuple\n  - echo\n  - []\n\
+        - !!python/tuple\n  - $A\n  - []\n"
+      - null
+  ./yap.py:render_arg: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {arg: 'echo
+
+          ...
+
+          '}
+      - 'echo
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'Coucou!
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: Coucou!}
+          ...
 
-        ', 'Coucou!
+          '}
+      - 'Coucou!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ', 'echo
+          ...
 
+          '}
+      - 'echo
+
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ''"Coucou!"''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou!"''
 
-        ', 'Coucou!
+          '}
+      - 'Coucou!
 
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ''"Coucou!"''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou!"''
 
-        ', 'Coucou!
+          '}
+      - 'Coucou!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ', 'echo
+          ...
 
+          '}
+      - 'echo
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'Coucou
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: Coucou}
+          ...
 
-        ', 'Coucou
+          '}
+      - 'Coucou
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: toi!}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'toi!
 
-        ', 'toi!
+          ...
 
+          '}
+      - 'toi!
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ''"Coucou toi!"''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou toi!"''
 
-        ', 'Coucou toi!
+          '}
+      - 'Coucou toi!
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: A="Aaa"}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'A="Aaa"
 
-        ', 'A=\"Aaa\"
+          ...
 
+          '}
+      - 'A=\"Aaa\"
+
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ;}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: ';
 
-        ', ';
+          ...
 
+          '}
+      - ';
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ''"A=.."''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"A=.."''
 
-        ', 'A=..
+          '}
+      - 'A=..
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: ;}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: ';
 
-        ', ';
+          ...
 
+          '}
+      - ';
+
         ...
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: echo}
+          ...
 
-        ', 'echo
+          '}
+      - 'echo
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{arg: $A}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '$A
 
-        ', '$A
+          ...
 
+          '}
+      - '$A
+
         ...
+
+        '
+      - null
+  ./yap.py:render_sh_arg: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {arg: 'echo
+
+          ...
+
+          ', exprs: '[]
+
+          '}
+      - '''"echo"''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'Coucou!
+
+          ...
+
+          ', exprs: '[]
+
+          '}
+      - '''"Coucou!"''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
+
+          ...
+
+          ', exprs: '[]
+
+          '}
+      - '''"echo"''
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou!"''
+
+          ', exprs: '[]
+
+          '}
+      - '''"Coucou!"''
 
-        ']
-  ./yap.py:render_sh_arg: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['arg: echo
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        exprs: []
+          ...
 
-        ', '''"echo"''
+          ', exprs: '[]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: Coucou!
+          '}
+      - '''"echo"''
 
-        exprs: []
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou!"''
 
-        ', '''"Coucou!"''
+          ', exprs: '[]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          '}
+      - '''"Coucou!"''
 
-        exprs: []
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ', '''"echo"''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ''"Coucou!"''
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"echo"''
 
-        ', '''"Coucou!"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'Coucou
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          ...
 
-        exprs: []
+          ', exprs: '[]
 
-        ', '''"echo"''
+          '}
+      - '''"Coucou"''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ''"Coucou!"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'toi!
 
-        exprs: []
+          ...
 
-        ', '''"Coucou!"''
+          ', exprs: '[]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          '}
+      - '''"toi!"''
 
-        exprs: []
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ', '''"echo"''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: Coucou
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"echo"''
 
-        ', '''"Coucou"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"Coucou toi!"''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: toi!
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"Coucou toi!"''
 
-        ', '''"toi!"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'A="Aaa"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          ...
 
-        exprs: []
+          ', exprs: '[]
 
-        ', '''"echo"''
+          '}
+      - '''"A=\"Aaa\""''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ''"Coucou toi!"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: ';
 
-        exprs: []
+          ...
 
-        ', '''"Coucou toi!"''
+          ', exprs: '[]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: A="Aaa"
+          '}
+      - '''";"''
 
-        exprs: []
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        ', '''"A=\"Aaa\""''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ;
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"echo"''
 
-        ', '''";"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '''"A=.."''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"A=.."''
 
-        ', '''"echo"''
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: ';
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ''"A=.."''
+          ...
 
-        exprs: []
+          ', exprs: '[]
 
-        ', '''"A=.."''
+          '}
+      - '''";"''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: ;
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: 'echo
 
-        exprs: []
+          ...
 
-        ', '''";"''
+          ', exprs: '[]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: echo
+          '}
+      - '''"echo"''
 
-        exprs: []
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {arg: '$A
 
-        ', '''"echo"''
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['arg: $A
+          ', exprs: '[]
 
-        exprs: []
+          '}
+      - '''"$A"''
 
-        ', '''"$A"''
+        '
+      - null
+  ./yap.py:ret: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        ']
-  ./yap.py:ret: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', s: 'echo Coucou!
 
-        s: echo Coucou!
+          ...
 
-        ', '!!python/tuple [echo, '' '', Coucou!]
+          '}
+      - '!!python/tuple [echo, '' '', Coucou!]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        s: echo "Coucou!"
+          ', s: 'echo "Coucou!"
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou!"'']
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou!"'']
 
-        mopen: *id001
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        s: echo "Coucou!"
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou!"'']
+          ', s: 'echo "Coucou!"
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ...
 
-        mopen: *id001
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou!"'']
 
-        s: echo Coucou toi!
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        ', '!!python/tuple [echo, '' '', Coucou toi!]
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ', s: 'echo Coucou toi!
 
-        mopen: *id001
+          ...
 
-        s: Coucou toi!
+          '}
+      - '!!python/tuple [echo, '' '', Coucou toi!]
 
-        ', '!!python/tuple [Coucou, '' '', toi!]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', s: 'Coucou toi!
 
-        s: echo "Coucou toi!"
+          ...
 
-        ', '!!python/tuple [echo, '' '', ''"Coucou toi!"'']
+          '}
+      - '!!python/tuple [Coucou, '' '', toi!]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        s: A="Aaa" ; echo "A=.." ; echo $A
+          ', s: 'echo "Coucou toi!"
 
-        ', '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          '}
+      - '!!python/tuple [echo, '' '', ''"Coucou toi!"'']
 
-        mopen: *id001
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        s: ; echo "A=.." ; echo $A
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        ', '!!python/tuple [;, '' '', echo "A=.." ; echo $A]
+          ', s: 'A="Aaa" ; echo "A=.." ; echo $A
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ...
 
-        mopen: *id001
+          '}
+      - '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]
 
-        s: echo "A=.." ; echo $A
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        ', '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ', s: '; echo "A=.." ; echo $A
 
-        mopen: *id001
+          ...
 
-        s: ''"A=.." ; echo $A''
+          '}
+      - '!!python/tuple [;, '' '', echo "A=.." ; echo $A]
 
-        ', '!!python/tuple [''"A=.."'', '' '', ; echo $A]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', s: 'echo "A=.." ; echo $A
 
-        s: ; echo $A
+          ...
 
-        ', '!!python/tuple [;, '' '', echo $A]
+          '}
+      - '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['mclose: &id001 !!python/object:_sre.SRE_Match
-        {}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
-        mopen: *id001
+          ', mopen: '!!python/object:_sre.SRE_Match {}
 
-        s: echo $A
+          ', s: '''"A=.." ; echo $A''
 
-        ', '!!python/tuple [echo, '' '', $A]
+          '}
+      - '!!python/tuple [''"A=.."'', '' '', ; echo $A]
 
-        ']
-  ./yap.py:run: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call [<object>, 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
 
+          ', mopen: '!!python/object:_sre.SRE_Match {}
+
+          ', s: '; echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple [;, '' '', echo $A]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {mclose: '!!python/object:_sre.SRE_Match {}
+
+          ', mopen: '!!python/object:_sre.SRE_Match {}
+
+          ', s: 'echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple [echo, '' '', $A]
+
+        '
+      - null
+  ./yap.py:run: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {args: <object>}
+      - 'null
+
         ...
+
+        '
+      - null
+  ./yap.py:safe_search: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo Coucou!
+
+          ...
 
-        ']
-  ./yap.py:safe_search: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo Coucou!\n", '!!python/tuple
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1050,32 +2004,159 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo Coucou!\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo Coucou!
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: Coucou!\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\ndepth: 0\nin_dquotes:\
-        \ false\nin_quotes: false\nopenings: ({[\npos: 0\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: Coucou!\n", 'null
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'Coucou!
+
+          ...
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'Coucou!
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou!\"\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou!"
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1083,33 +2164,173 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou!\"\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou!"
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou!\"'\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: '\"'\ncapture: null\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: '\"'\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou!\"'\n", 'null
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou!"''
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: '''"''
+
+          ', capture: 'null
+
+          ...
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: '''"''
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou!"''
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou!\"\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou!"
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1117,33 +2338,173 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou!\"\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou!"
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou!\"'\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: '\"'\ncapture: null\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: '\"'\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou!\"'\n", 'null
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou!"''
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: '''"''
+
+          ', capture: 'null
+
+          ...
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: '''"''
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou!"''
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo Coucou toi!\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo Coucou toi!
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1151,19 +2512,91 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo Coucou toi!\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo Coucou toi!
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: Coucou toi!\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'Coucou toi!
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1171,32 +2604,159 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: Coucou toi!\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'Coucou toi!
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: toi!\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\ndepth: 0\nin_dquotes:\
-        \ false\nin_quotes: false\nopenings: ({[\npos: 0\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: toi!\n", 'null
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'toi!
+
+          ...
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'toi!
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou toi!\"\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou toi!"
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1204,19 +2764,89 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"Coucou toi!\"\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "Coucou toi!"
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou toi!\"'\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou toi!"''
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1224,26 +2854,166 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: true\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: true\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou toi!\"'\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: '\"'\ncapture: null\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: '\"'\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"Coucou toi!\"'\n", 'null
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'true
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'true
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou toi!"''
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - {c: '
+
+          - "'' ''\n"
+
+          + ''\''"\''\n''', capture: '
+
+          - "'' ''\n"
+
+          + ''null\n...\n''', in_dquotes: '
+
+          - ''true\n...\n''
+
+          + ''false\n...\n''', quote: '
+
+          - ''null\n...\n''
+
+          + ''\''"\''\n''', quoted: '
+
+          - ''true\n...\n''
+
+          + ''false\n...\n'''}
+    - !!python/object/new:tracetest.Call
+      - {c: '''"''
+
+          ', capture: 'null
+
+          ...
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: '''"''
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"Coucou toi!"''
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: A=\"Aaa\" ; echo \"A=..\" ; echo $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'A="Aaa" ; echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1251,19 +3021,91 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: A=\"Aaa\" ; echo \"A=..\" ; echo $A\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'A="Aaa" ; echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: ; echo \"A=..\" ; echo $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '; echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1271,19 +3113,91 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: ; echo \"A=..\" ; echo $A\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '; echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"A=..\" ; echo $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1291,19 +3205,89 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo \"A=..\" ; echo $A\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo "A=.." ; echo $A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"A=..\" ; echo $A'\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"A=.." ; echo $A''
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1311,19 +3295,89 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: '\"A=..\" ; echo $A'\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '''"A=.." ; echo $A''
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: ; echo $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '; echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1331,19 +3385,91 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: ; echo $A\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '; echo $A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo $A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1351,19 +3477,91 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: ' '\ncapture: ' '\nclosing: null\n\
-        closings: )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: echo $A\n", 'null
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: ''' ''
+
+          ', capture: ''' ''
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: 'echo $A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["closings: )}]\nopenings: ({[\npos: 0\n\
-        re_symbols: !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: $A\n", '!!python/tuple
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {closings: ')}]
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '$A
+
+          ...
+
+          '}
+      - '!!python/tuple
 
         - !!python/object:_sre.SRE_Match {}
 
@@ -1371,73 +3569,229 @@ dictitems:
 
         - 0
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: $\ncapture: $\nclosing: null\nclosings:\
-        \ )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: $A\n", '!!python/tuple [null, false, 0]
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: '$
 
-        ']
-    - !!python/object/new:tests.tracer.Call ["c: $\ncapture: $\nclosing: null\nclosings:\
-        \ )}]\ndepth: 0\nin_dquotes: false\nin_quotes: false\nm: !!python/object:_sre.SRE_Match\
-        \ {}\nopening: null\nopenings: ({[\npos: 0\nquote: null\nquoted: false\nre_symbols:\
-        \ !!python/object/apply:re._compile ['((?: \\s+ | \\{ | \\$))|($x^)|($x^)|([\"\
-        \\''])',\n  104]\ns: $A\n", 'null
+          ...
+
+          ', capture: '$
+
+          ...
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '$A
+
+          ...
+
+          '}
+      - '!!python/tuple [null, false, 0]
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {c: '$
+
+          ...
+
+          ', capture: '$
+
+          ...
+
+          ', closing: 'null
+
+          ...
+
+          ', closings: ')}]
+
+          ...
+
+          ', depth: '0
+
+          ...
+
+          ', in_dquotes: 'false
+
+          ...
+
+          ', in_quotes: 'false
+
+          ...
+
+          ', m: '!!python/object:_sre.SRE_Match {}
+
+          ', opening: 'null
+
+          ...
+
+          ', openings: '({[
+
+          ...
+
+          ', pos: '0
+
+          ...
+
+          ', quote: 'null
+
+          ...
+
+          ', quoted: 'false
+
+          ...
+
+          ', re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+          104]
+
+          ', s: '$A
+
+          ...
+
+          '}
+      - 'null
 
         ...
 
-        ']
-  ./yap.py:safe_split: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ["re_symbols: !!python/object/apply:re._compile\
-        \ [\"(\\n    \\\\w*!  )|(       # Start capture\\n\\\n    \\    \\\\s* (?:\\\
-        \\#.*)? $ )|(  # EOL\\n    [({[]     )|(   # Open bracket\\n    [)}\\\\\\\n\
-        \    ]]    )|(   # Close bracket\\n    [\\\"\\\\']           # Quote\\n  \
-        \  )\", 104]\ns: '\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
-        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
-        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
-        \ )\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"\
-        ; echo $A )\n\n  '\n", "- !!python/tuple ['\n\n    ', null]\n- !!python/tuple\
-        \ ['', null]\n- !!python/tuple ['\n\n    print(', '! echo Coucou!']\n- !!python/tuple\
-        \ [), null]\n- !!python/tuple ['\n\n    print(', '! echo \"Coucou!\"']\n-\
-        \ !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(', l! echo \"\
-        Coucou!\"]\n- !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(',\
-        \ '! echo Coucou toi!']\n- !!python/tuple [), null]\n- !!python/tuple ['\n\
-        \n    print(', '! echo \"Coucou toi!\"']\n- !!python/tuple [), null]\n- !!python/tuple\
-        \ ['\n\n    print(', 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple\
-        \ [')\n\n\n    # XXX Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h!\
-        \ A=\"Aaa\" ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n  \
-        \  ', null]\n- !!python/tuple ['', null]\n- !!python/tuple ['', null]\n"]
-  ./yap.py:split_and_expand_shell: !!python/object/new:tests.tracer.Func
-  - - !!python/object/new:tests.tracer.Call ['{flags: o, sh: '' echo Coucou!''}
+        '
+      - null
+  ./yap.py:safe_split: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {re_symbols: "!!python/object/apply:re._compile [\"(\\n    \\\\w*!  )|(  \
+          \     # Start capture\\n    \\\\\\\n    s* (?:\\\\#.*)? $ )|(  # EOL\\n\
+          \    [({[]     )|(   # Open bracket\\n    [)}\\\\]]  \\\n    \\  )|(   #\
+          \ Close bracket\\n    [\\\"\\\\']           # Quote\\n    )\", 104]\n",
+        s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l!\
+          \ echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"\
+          Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n\
+          \  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo\
+          \ $A )\n\n  '\n"}
+      - "- !!python/tuple ['\n\n    ', null]\n- !!python/tuple ['', null]\n- !!python/tuple\
+        \ ['\n\n    print(', '! echo Coucou!']\n- !!python/tuple [), null]\n- !!python/tuple\
+        \ ['\n\n    print(', '! echo \"Coucou!\"']\n- !!python/tuple [), null]\n-\
+        \ !!python/tuple ['\n\n    print(', l! echo \"Coucou!\"]\n- !!python/tuple\
+        \ [), null]\n- !!python/tuple ['\n\n    print(', '! echo Coucou toi!']\n-\
+        \ !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(', '! echo \"\
+        Coucou toi!\"']\n- !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(',\
+        \ 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple [')\n\n\n \
+        \   # XXX Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"\
+        Aaa\" ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
+        - !!python/tuple ['', null]\n- !!python/tuple ['', null]\n"
+      - null
+  ./yap.py:split_and_expand_shell: !!python/object/new:tracetest.Func
+  - - !!python/object/new:tracetest.Call
+      - {flags: 'o
 
-        ', '[''"echo"'', ''"Coucou!"'']
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{flags: o, sh: '' echo "Coucou!"''}
+          ', sh: ''' echo Coucou!''
 
-        ', '[''"echo"'', ''"Coucou!"'']
+          '}
+      - '[''"echo"'', ''"Coucou!"'']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{flags: lo, sh: '' echo "Coucou!"''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
 
-        ', '[''"echo"'', ''"Coucou!"'']
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{flags: o, sh: '' echo Coucou toi!''}
+          ', sh: ''' echo "Coucou!"''
 
-        ', '[''"echo"'', ''"Coucou"'', ''"toi!"'']
+          '}
+      - '[''"echo"'', ''"Coucou!"'']
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{flags: o, sh: '' echo "Coucou toi!"''}
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'lo
 
-        ', '[''"echo"'', ''"Coucou toi!"'']
+          ...
 
-        ']
-    - !!python/object/new:tests.tracer.Call ['{flags: ho, sh: '' A="Aaa" ; echo "A=.."
-        ; echo $A ''}
+          ', sh: ''' echo "Coucou!"''
 
-        ', '[''"A=\"Aaa\""'', ''";"'', ''"echo"'', ''"A=.."'', ''";"'', ''"echo"'',
-        ''"$A"'']
+          '}
+      - '[''"echo"'', ''"Coucou!"'']
 
-        ']
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
+
+          ...
+
+          ', sh: ''' echo Coucou toi!''
+
+          '}
+      - '[''"echo"'', ''"Coucou"'', ''"toi!"'']
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'o
+
+          ...
+
+          ', sh: ''' echo "Coucou toi!"''
+
+          '}
+      - '[''"echo"'', ''"Coucou toi!"'']
+
+        '
+      - null
+    - !!python/object/new:tracetest.Call
+      - {flags: 'ho
+
+          ...
+
+          ', sh: ''' A="Aaa" ; echo "A=.." ; echo $A ''
+
+          '}
+      - '[''"A=\"Aaa\""'', ''";"'', ''"echo"'', ''"A=.."'', ''";"'', ''"echo"'', ''"$A"'']
+
+        '
+      - null
