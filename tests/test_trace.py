@@ -5,7 +5,7 @@ from glob import glob
 import sys
 sys.path.append('.')
 
-from utils import compare_paths, red
+from .utils import compare_paths, red
 import yap
 from tests import tracer
 

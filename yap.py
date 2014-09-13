@@ -121,7 +121,7 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
     quoted = False
     depth = 0
 
-    for m in re_symbols.finditer(s, pos=pos):
+    for m in re_symbols.finditer(s, pos):
         c = m.group()
         capture, opening, closing, quote = m.groups()
         # Toggle quote state

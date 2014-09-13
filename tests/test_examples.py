@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import unittest
 import subprocess
 from glob import glob
 
-from utils import compare_paths, red
+from .utils import compare_paths, red
 
 
 class Test(unittest.TestCase):

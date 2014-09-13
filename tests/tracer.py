@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from collections import defaultdict, namedtuple
 import yaml
@@ -53,6 +54,7 @@ def trace(fn, fn_args=[]):
                 serialize(call_args),
                 serialize(value),
             ))
+        return trace_body
 
     def trace_calls(frame, event, value):
 
