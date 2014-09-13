@@ -6,8 +6,8 @@ import sys
 sys.path.append('.')
 
 from .utils import compare_paths, red
+from . import tracer
 import yap
-from tests import tracer
 
 
 class A(object):
