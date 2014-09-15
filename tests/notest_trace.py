@@ -33,28 +33,35 @@ class Test(unittest.TestCase):
     def test_trace(self):
         yps = glob(self.regtests_path)
         self.assertTrue(yps)
+        db = None
         for yp in yps:
             print('Tracing compilation of {}'.format(yp))
             db = tracetest.trace(yap.main, [[
                 '-o', '/dev/null', yp,
-            ]])
-            dbs = tracetest.format_db(db)
+            ]],
+                fndb=db,  # Reuse the same db to merge data
+            )
 
-            ref_path = '{}.yml'.format(yp)
-            test_path = '{}-test.yml'.format(yp)
+        dbs = tracetest.format_db(db)
 
-            with open(test_path, 'w') as f:
-                f.write(dbs)
-            #with open(ref_path) as f:
-            #    dbs_ref = f.read()
+        ref_path = os.path.join(self.regtests_dir, 'trace.yml')
+        test_path = os.path.join(self.regtests_dir, 'trace-test.yml')
 
-            errors = compare_paths(ref_path, test_path, 'Trace')
-            if errors:
-                raise AssertionError(red(
-                    'There have been {} errors with {}.'.format(errors, yp)))
-            else:
-                # Clean up only on success
-                os.remove(test_path)
+        with open(test_path, 'w') as f:
+            f.write(dbs)
+        #with open(ref_path) as f:
+        #    dbs_ref = f.read()
+
+        if not os.path.exists(ref_path):
+            open(ref_path, 'w').close()
+
+        errors = compare_paths(ref_path, test_path, 'Trace')
+        if errors:
+            raise AssertionError(red(
+                'There have been {} errors with {}.'.format(errors, test_path)))
+        else:
+            # Clean up only on success
+            os.remove(test_path)
 
 
 if __name__ == '__main__':

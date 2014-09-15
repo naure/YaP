@@ -1,0 +1,1433 @@
+!FunctionsDB
+./yap.py:compile_sh: !Function
+  cardinality: 6 known parameter lists
+  parameters lists:
+  - !Call
+    args: {cmd: l! echo "Coucou!", is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
+  - !Call
+    args: {cmd: '''! echo Coucou!''', is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["echo", "Coucou!"], "o", None, None)
+  - !Call
+    args: {cmd: '''! echo "Coucou!"''', is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["echo", "Coucou!"], "o", None, None)
+  - !Call
+    args: {cmd: '''! echo Coucou toi!''', is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+  - !Call
+    args: {cmd: '''! echo "Coucou toi!"''', is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["echo", "Coucou toi!"], "o", None, None)
+  - !Call
+    args: {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''', is_expr: 'true'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [split_and_expand_shell]
+      local_changes: null
+      returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
+        None, None)
+./yap.py:do_inline_sh: !Function
+  cardinality: 11 known parameter lists
+  parameters lists:
+  - !Call
+    args: {cmd: 'null', py: )}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: )
+  - !Call
+    args: {cmd: 'null', py: ''''''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: ''''''
+  - !Call
+    args: {cmd: 'null', py: "'\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "'\n\n  '"
+  - !Call
+    args: {cmd: l! echo "Coucou!", py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines)'"
+  - !Call
+    args: {cmd: '''! echo Coucou!''', py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
+  - !Call
+    args: {cmd: '''! echo "Coucou!"''', py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
+  - !Call
+    args: {cmd: '''! echo Coucou toi!''', py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None,\
+        \ None)'"
+  - !Call
+    args: {cmd: '''! echo "Coucou toi!"''', py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None)'"
+  - !Call
+    args: {cmd: 'null', py: "')\n\n\n  # XXX Not yet passing'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "')\n\n\n  # XXX Not yet passing'"
+  - !Call
+    args: {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''', py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh, nocolor]
+      local_changes: null
+      returns: "'\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\"\
+        , \";\", \"echo\", \"$A\"], \"ho\", None,\n  None)'"
+  - !Call
+    args: {cmd: 'null', py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
+        A\") )'"
+./yap.py:escape_py: !Function
+  cardinality: 9 known parameter lists
+  parameters lists:
+  - !Call
+    args: {s: ;}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: ;
+  - !Call
+    args: {s: $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: $A
+  - !Call
+    args: {s: A=..}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: A=..
+  - !Call
+    args: {s: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: toi!
+  - !Call
+    args: {s: echo}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: echo
+  - !Call
+    args: {s: A="Aaa"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: A=\"Aaa\"
+  - !Call
+    args: {s: Coucou}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou
+  - !Call
+    args: {s: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou!
+  - !Call
+    args: {s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou toi!
+./yap.py:expand_env_soft: !Function
+  cardinality: 6 known parameter lists
+  parameters lists:
+  - !Call
+    args: {py: )}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: )
+  - !Call
+    args: {py: ''''''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: ''''''
+  - !Call
+    args: {py: "'\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  '"
+  - !Call
+    args: {py: "'\n\n  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  print('"
+  - !Call
+    args: {py: "')\n\n\n  # XXX Not yet passing'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "')\n\n\n  # XXX Not yet passing'"
+  - !Call
+    args: {py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
+        A\") )'"
+./yap.py:expand_python: !Function
+  cardinality: Single parameter list
+  parameters lists:
+  - !Call
+    args: {s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n \
+        \ print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo\
+        \ \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\
+        \n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A\
+        \ )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_split, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
+        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
+        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
+        do_inline_sh, do_inline_sh]
+      local_changes: null
+      returns: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
+        \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
+        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
+        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
+        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo os.environ.get(\"A\") )\n\n  '"
+./yap.py:extract_next_space_or_py_expr: !Function
+  cardinality: 16 known parameter lists
+  parameters lists:
+  - !Call
+    args: {parse_dollar: 'false', s: $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [$A, null, '''']'
+  - !Call
+    args: {parse_dollar: 'true', s: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [toi!, null, '''']'
+  - !Call
+    args: {parse_dollar: 'false', s: echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', $A]'
+  - !Call
+    args: {parse_dollar: 'true', s: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [Coucou!, null, '''']'
+  - !Call
+    args: {parse_dollar: 'false', s: ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [;, '' '', echo $A]'
+  - !Call
+    args: {parse_dollar: 'true', s: '''"Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [''"Coucou!"'', null, '''']'
+  - !Call
+    args: {parse_dollar: 'true', s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [Coucou, '' '', toi!]'
+  - !Call
+    args: {parse_dollar: 'true', s: echo Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', Coucou!]'
+  - !Call
+    args: {parse_dollar: 'true', s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"Coucou!"'']'
+  - !Call
+    args: {parse_dollar: 'false', s: '''"A=.." ; echo $A'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [''"A=.."'', '' '', ; echo $A]'
+  - !Call
+    args: {parse_dollar: 'true', s: '''"Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [''"Coucou toi!"'', null, '''']'
+  - !Call
+    args: {parse_dollar: 'true', s: echo Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', Coucou toi!]'
+  - !Call
+    args: {parse_dollar: 'false', s: echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']'
+  - !Call
+    args: {parse_dollar: 'true', s: echo "Coucou toi!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"Coucou toi!"'']'
+  - !Call
+    args: {parse_dollar: 'false', s: ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [;, '' '', echo "A=.." ; echo $A]'
+  - !Call
+    args: {parse_dollar: 'false', s: A="Aaa" ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, ret, safe_search]
+      local_changes: null
+      returns: '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]'
+./yap.py:main: !Function
+  cardinality: Single parameter list
+  parameters lists:
+  - !Call
+    args: {cmd_args: '[-o, /dev/null, regtests/coucou.yp]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [run]
+      local_changes: null
+      returns: 'null'
+./yap.py:nocolor: !Function
+  cardinality: 15 known parameter lists
+  parameters lists:
+  - !Call
+    args: {code: 'null', s: ;}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: ;
+  - !Call
+    args: {code: 'null', s: $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: $A
+  - !Call
+    args: {code: 'null', s: A=..}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: A=..
+  - !Call
+    args: {code: 'null', s: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: toi!
+  - !Call
+    args: {code: 'null', s: echo}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: echo
+  - !Call
+    args: {code: 'null', s: Coucou}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou
+  - !Call
+    args: {code: 'null', s: A=\"Aaa\"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: A=\"Aaa\"
+  - !Call
+    args: {code: 'null', s: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou!
+  - !Call
+    args: {code: 'null', s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: Coucou toi!
+  - !Call
+    args: {code: 'null', s: 'yap_call(["echo", "Coucou!"], "o", None, None)'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: yap_call(["echo", "Coucou!"], "o", None, None)
+  - !Call
+    args: {code: 'null', s: 'yap_call(["echo", "Coucou toi!"], "o", None, None)'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: yap_call(["echo", "Coucou toi!"], "o", None, None)
+  - !Call
+    args: {code: 'null', s: 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+  - !Call
+    args: {code: 'null', s: 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
+  - !Call
+    args: {code: 'null', s: 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo",
+        "$A"], "ho", None, None)'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
+        None, None)
+  - !Call
+    args: {code: 'null', s: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\"\
+        , None, None))\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
+        \n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\
+        \n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\
+        \n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\"\
+        , None,\n  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo os.environ.get(\"A\") )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
+        \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
+        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
+        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
+        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
+        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo os.environ.get(\"A\") )\n\n  '"
+./yap.py:parse_cmd: !Function
+  cardinality: 6 known parameter lists
+  parameters lists:
+  - !Call
+    args: {flags: o, s: echo Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou!\n\
+        \  - []"
+  - !Call
+    args: {flags: o, s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"\
+        '\n  - []"
+  - !Call
+    args: {flags: lo, s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou!\"\
+        '\n  - []"
+  - !Call
+    args: {flags: o, s: echo Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr, extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - Coucou\n\
+        \  - []\n- !!python/tuple\n  - toi!\n  - []"
+  - !Call
+    args: {flags: o, s: echo "Coucou toi!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"Coucou\
+        \ toi!\"'\n  - []"
+  - !Call
+    args: {flags: ho, s: A="Aaa" ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [extract_next_space_or_py_expr, extract_next_space_or_py_expr, extract_next_space_or_py_expr,
+        extract_next_space_or_py_expr, extract_next_space_or_py_expr, extract_next_space_or_py_expr,
+        extract_next_space_or_py_expr]
+      local_changes: null
+      returns: "- !!python/tuple\n  - A=\"Aaa\"\n  - []\n- !!python/tuple\n  - ;\n\
+        \  - []\n- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"A=..\"\
+        '\n  - []\n- !!python/tuple\n  - ;\n  - []\n- !!python/tuple\n  - echo\n \
+        \ - []\n- !!python/tuple\n  - $A\n  - []"
+./yap.py:render_arg: !Function
+  cardinality: 10 known parameter lists
+  parameters lists:
+  - !Call
+    args: {arg: ;}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: ;
+  - !Call
+    args: {arg: $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: $A
+  - !Call
+    args: {arg: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: toi!
+  - !Call
+    args: {arg: echo}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: echo
+  - !Call
+    args: {arg: A="Aaa"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: A=\"Aaa\"
+  - !Call
+    args: {arg: '''"A=.."'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: A=..
+  - !Call
+    args: {arg: Coucou}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: Coucou
+  - !Call
+    args: {arg: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: Coucou!
+  - !Call
+    args: {arg: '''"Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: Coucou!
+  - !Call
+    args: {arg: '''"Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [escape_py]
+      local_changes: null
+      returns: Coucou toi!
+./yap.py:render_sh_arg: !Function
+  cardinality: 10 known parameter lists
+  parameters lists:
+  - !Call
+    args: {arg: ;, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''";"'''
+  - !Call
+    args: {arg: $A, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"$A"'''
+  - !Call
+    args: {arg: toi!, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"toi!"'''
+  - !Call
+    args: {arg: echo, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"echo"'''
+  - !Call
+    args: {arg: A="Aaa", exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"A=\"Aaa\""'''
+  - !Call
+    args: {arg: '''"A=.."''', exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"A=.."'''
+  - !Call
+    args: {arg: Coucou, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"Coucou"'''
+  - !Call
+    args: {arg: Coucou!, exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"Coucou!"'''
+  - !Call
+    args: {arg: '''"Coucou!"''', exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"Coucou!"'''
+  - !Call
+    args: {arg: '''"Coucou toi!"''', exprs: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [render_arg, nocolor]
+      local_changes: null
+      returns: '''"Coucou toi!"'''
+./yap.py:ret: !Function
+  cardinality: 11 known parameter lists
+  parameters lists:
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', $A]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [;, '' '', echo $A]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [Coucou, '' '', toi!]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', Coucou!]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"Coucou!"'']'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: '''"A=.." ; echo $A'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [''"A=.."'', '' '', ; echo $A]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"A=.." ; echo $A'']'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', Coucou toi!]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [;, '' '', echo "A=.." ; echo $A]'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: echo "Coucou toi!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [echo, '' '', ''"Coucou toi!"'']'
+  - !Call
+    args: {mclose: '!!python/object:_sre.SRE_Match {}', mopen: '!!python/object:_sre.SRE_Match
+        {}', s: A="Aaa" ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]'
+./yap.py:run: !Function
+  cardinality: Single parameter list
+  parameters lists:
+  - !Call
+    args: {args: <object>}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_python, nocolor]
+      local_changes: null
+      returns: 'null'
+./yap.py:safe_search: !Function
+  cardinality: 33 known parameter lists
+  parameters lists:
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [null, false, 0]'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [null, false, 0]'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [null, false, 0]'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"A=.." ; echo
+        $A'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - true
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "A=.." ;
+        echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou toi!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo "A=.."
+        ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: A="Aaa" ; echo
+        "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - 0'
+  - !Call
+    args: {closings: ')}]', depth: '0', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
+      pos: '0', quoted: 'false', re_symbols: '!!python/object/apply:re._compile [''((?:
+        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {closings: ')}]', depth: '0', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
+      pos: '0', quoted: 'false', re_symbols: '!!python/object/apply:re._compile [''((?:
+        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: $, capture: $, closing: 'null', closings: ')}]', depth: '0', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: $A}
+    cardinality: 2 different effects, depends on side-effects!
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple [null, false, 0]'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: '''"''', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: '''"Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo Coucou!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo "Coucou!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'true', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}',
+      opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'true', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''"''', capture: 'null', in_dquotes: 'false', quote: '''"''',
+        quoted: 'false'}
+      returns: '!!python/tuple [null, false, 0]'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: '''"A=.." ; echo $A'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: '''"''', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: '''"Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo Coucou toi!}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: echo "Coucou toi!"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
+        104]', s: A="Aaa" ; echo "A=.." ; echo $A}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+./yap.py:safe_split: !Function
+  cardinality: Single parameter list
+  parameters lists:
+  - !Call
+    args: {re_symbols: "!!python/object/apply:re._compile [\"(\\n    \\\\w*!  )|(\
+        \       # Start capture\\n    \\\\\\\n    s* (?:\\\\#.*)? $ )|(  # EOL\\n\
+        \    [({[]     )|(   # Open bracket\\n    [)}\\\\]]  \\\n    \\  )|(   # Close\
+        \ bracket\\n    [\\\"\\\\']           # Quote\\n    )\", 104]", s: "'\n\n\n\
+        \  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  # XXX Not yet\
+        \ passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "- !!python/tuple ['\n\n    ', null]\n- !!python/tuple ['', null]\n\
+        - !!python/tuple ['\n\n    print(', '! echo Coucou!']\n- !!python/tuple [),\
+        \ null]\n- !!python/tuple ['\n\n    print(', '! echo \"Coucou!\"']\n- !!python/tuple\
+        \ [), null]\n- !!python/tuple ['\n\n    print(', l! echo \"Coucou!\"]\n- !!python/tuple\
+        \ [), null]\n- !!python/tuple ['\n\n    print(', '! echo Coucou toi!']\n-\
+        \ !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(', '! echo \"\
+        Coucou toi!\"']\n- !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(',\
+        \ 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple [')\n\n\n \
+        \   # XXX Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"\
+        Aaa\" ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
+        - !!python/tuple ['', null]\n- !!python/tuple ['', null]"
+./yap.py:split_and_expand_shell: !Function
+  cardinality: 6 known parameter lists
+  parameters lists:
+  - !Call
+    args: {flags: o, sh: ''' echo Coucou!'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"echo"'', ''"Coucou!"'']'
+  - !Call
+    args: {flags: o, sh: ''' echo "Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"echo"'', ''"Coucou!"'']'
+  - !Call
+    args: {flags: lo, sh: ''' echo "Coucou!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"echo"'', ''"Coucou!"'']'
+  - !Call
+    args: {flags: o, sh: ''' echo Coucou toi!'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"echo"'', ''"Coucou"'', ''"toi!"'']'
+  - !Call
+    args: {flags: o, sh: ''' echo "Coucou toi!"'''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"echo"'', ''"Coucou toi!"'']'
+  - !Call
+    args: {flags: ho, sh: ''' A="Aaa" ; echo "A=.." ; echo $A '''}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [parse_cmd, render_sh_arg, render_sh_arg, render_sh_arg, render_sh_arg,
+        render_sh_arg, render_sh_arg, render_sh_arg]
+      local_changes: null
+      returns: '[''"A=\"Aaa\""'', ''";"'', ''"echo"'', ''"A=.."'', ''";"'', ''"echo"'',
+        ''"$A"'']'
