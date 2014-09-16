@@ -6,7 +6,8 @@ import sys
 sys.path.append('.')
 
 from .utils import compare_paths, red
-import tracetest
+from behavior_tests.trace import trace, format_db
+#import behavior_tests.tools
 import yap
 
 
@@ -21,28 +22,37 @@ def main(a):
 class Test(unittest.TestCase):
 
     regtests_dir = 'regtests'
-    regtests_path = os.path.join(regtests_dir, '*.yp')
+    regtests_paths = glob(os.path.join(regtests_dir, '*.yp'))
+    assert regtests_paths, 'No example .yp'
 
     @unittest.skip
     def test_trace_trace(self):
         a = A()
-        db = tracetest.trace(main, [a])
-        dbs = tracetest.format_db(db)
+        db = trace(main, [a])
+        dbs = format_db(db)
         print(dbs)
 
+    #@behavior_tests.tools.tracing
+    @unittest.skip
     def test_trace(self):
-        yps = glob(self.regtests_path)
-        self.assertTrue(yps)
+        for yp in self.regtests_paths:
+            yap.main([
+                '-o', '/dev/null', yp,
+            ])
+            self.assertTrue('Some test')
+
+    def test_big_trace(self):
+        self.assertTrue(self.regtests_paths)
         db = None
-        for yp in yps:
+        for yp in self.regtests_paths:
             print('Tracing compilation of {}'.format(yp))
-            db = tracetest.trace(yap.main, [[
+            db = trace(yap.main, [[
                 '-o', '/dev/null', yp,
             ]],
                 fndb=db,  # Reuse the same db to merge data
             )
 
-        dbs = tracetest.format_db(db)
+        dbs = format_db(db)
 
         ref_path = os.path.join(self.regtests_dir, 'trace.yml')
         test_path = os.path.join(self.regtests_dir, 'trace-test.yml')
