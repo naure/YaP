@@ -1,5 +1,5 @@
 !FunctionsDB
-./yap.py:compile_sh: !Function
+yap.compile_sh: !Function
   cardinality: 6 known parameter lists
   parameters lists:
   - !Call
@@ -51,7 +51,7 @@
       local_changes: null
       returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
         None, None)
-./yap.py:do_inline_sh: !Function
+yap.do_inline_sh: !Function
   cardinality: 11 known parameter lists
   parameters lists:
   - !Call
@@ -145,7 +145,7 @@
       local_changes: null
       returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
         A\") )'"
-./yap.py:escape_py: !Function
+yap.escape_py: !Function
   cardinality: 9 known parameter lists
   parameters lists:
   - !Call
@@ -220,7 +220,7 @@
       calls_made: []
       local_changes: null
       returns: Coucou toi!
-./yap.py:expand_env_soft: !Function
+yap.expand_env_soft: !Function
   cardinality: 6 known parameter lists
   parameters lists:
   - !Call
@@ -272,7 +272,7 @@
       local_changes: null
       returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
         A\") )'"
-./yap.py:expand_python: !Function
+yap.expand_python: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
@@ -297,7 +297,7 @@
         Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
         \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
         A=..\"; echo os.environ.get(\"A\") )\n\n  '"
-./yap.py:extract_next_space_or_py_expr: !Function
+yap.extract_next_space_or_py_expr: !Function
   cardinality: 16 known parameter lists
   parameters lists:
   - !Call
@@ -428,7 +428,7 @@
       calls_made: [safe_search, ret, safe_search]
       local_changes: null
       returns: '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]'
-./yap.py:main: !Function
+yap.main: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
@@ -439,7 +439,7 @@
       calls_made: [run]
       local_changes: null
       returns: 'null'
-./yap.py:nocolor: !Function
+yap.nocolor: !Function
   cardinality: 15 known parameter lists
   parameters lists:
   - !Call
@@ -578,7 +578,7 @@
         Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
         \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
         A=..\"; echo os.environ.get(\"A\") )\n\n  '"
-./yap.py:parse_cmd: !Function
+yap.parse_cmd: !Function
   cardinality: 6 known parameter lists
   parameters lists:
   - !Call
@@ -639,7 +639,7 @@
         \  - []\n- !!python/tuple\n  - echo\n  - []\n- !!python/tuple\n  - '\"A=..\"\
         '\n  - []\n- !!python/tuple\n  - ;\n  - []\n- !!python/tuple\n  - echo\n \
         \ - []\n- !!python/tuple\n  - $A\n  - []"
-./yap.py:render_arg: !Function
+yap.render_arg: !Function
   cardinality: 10 known parameter lists
   parameters lists:
   - !Call
@@ -722,7 +722,7 @@
       calls_made: [escape_py]
       local_changes: null
       returns: Coucou toi!
-./yap.py:render_sh_arg: !Function
+yap.render_sh_arg: !Function
   cardinality: 10 known parameter lists
   parameters lists:
   - !Call
@@ -805,7 +805,7 @@
       calls_made: [render_arg, nocolor]
       local_changes: null
       returns: '''"Coucou toi!"'''
-./yap.py:ret: !Function
+yap.ret: !Function
   cardinality: 11 known parameter lists
   parameters lists:
   - !Call
@@ -907,7 +907,7 @@
       calls_made: []
       local_changes: null
       returns: '!!python/tuple [A="Aaa", '' '', ; echo "A=.." ; echo $A]'
-./yap.py:run: !Function
+yap.run: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
@@ -918,7 +918,7 @@
       calls_made: [expand_python, nocolor]
       local_changes: null
       returns: 'null'
-./yap.py:safe_search: !Function
+yap.safe_search: !Function
   cardinality: 33 known parameter lists
   parameters lists:
   - !Call
@@ -1350,7 +1350,7 @@
       calls_made: []
       local_changes: null
       returns: 'null'
-./yap.py:safe_split: !Function
+yap.safe_split: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
@@ -1378,7 +1378,7 @@
         \   # XXX Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"\
         Aaa\" ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
         - !!python/tuple ['', null]\n- !!python/tuple ['', null]"
-./yap.py:split_and_expand_shell: !Function
+yap.split_and_expand_shell: !Function
   cardinality: 6 known parameter lists
   parameters lists:
   - !Call

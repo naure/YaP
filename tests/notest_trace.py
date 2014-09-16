@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
     @unittest.skip
     def test_trace_trace(self):
         a = A()
-        db = trace(main, [a])
+        db, ret = trace(main, [a])
         dbs = format_db(db)
         print(dbs)
 
@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
         db = None
         for yp in self.regtests_paths:
             print('Tracing compilation of {}'.format(yp))
-            db = trace(yap.main, [[
+            db, ret = trace(yap.main, [[
                 '-o', '/dev/null', yp,
             ]],
                 fndb=db,  # Reuse the same db to merge data
