@@ -8,11 +8,8 @@ from itertools import starmap
 
 dry_run = False
 
-# No colored output
-def nocolor(s, code=None):
-    return s
-
-gray = blue = green = orange = red = color = nocolor
+# No colored output for now
+blue = gray = green = orange = red = _yap_color = lambda s, c='': s
 
 
 def parse_cmd(s, flags):
@@ -393,6 +390,35 @@ missingindex(array, i):
         "Argument {}".format(i))
 '''
 
+color_lib = r'''
+if sys.stdout.isatty():
+    def _yap_color(s, code):
+        ' Make `s` a colored text. Can be nested. '
+        return '{}{}{}'.format(
+            code,
+            s.replace('\033[0m', code),
+            '\033[0m',
+        )
+
+    def blue(s):
+        return _yap_color(s, '\033[94m')
+
+    def gray(s):
+        return _yap_color(s, '\033[97m')
+
+    def green(s):
+        return _yap_color(s, '\033[92m')
+
+    def orange(s):
+        return _yap_color(s, '\033[93m')
+
+    def red(s):
+        return _yap_color(s, '\033[91m')
+
+else:
+    blue = gray = green = orange = red = _yap_color = lambda s, c='': s
+'''
+
 
 def run(args):
     " Compile yap file and execute it, or just save it "
@@ -405,11 +431,13 @@ def run(args):
         'import sys',
         'from os.path import *',
         'from sys import stdin, stdout, stderr, exit',
+        'from pprint import pprint',
         'from glob import glob',
         'import json',
+        color_lib,
+        soft_index_lib,
+        call_lib,
     ]
-    header.append(soft_index_lib)
-    header.append(call_lib)
 
     compiled = blue(expand_python(source))
     pycode = '\n'.join(header) + '\n' + compiled
@@ -428,7 +456,7 @@ def run(args):
 
 def main(cmd_args):
     " Parse arguments and call run() "
-    global dry_run, color, gray, blue, green, orange, red
+    global dry_run
 
     import argparse
     parser = argparse.ArgumentParser()
@@ -449,31 +477,8 @@ def main(cmd_args):
     dry_run = args.dry_run
 
     # Optional colored output
-    if args.output == '-' and sys.stdout.isatty():
-        ENDCOLOR = '\033[0m'
-
-        def color(s, code):
-            ' Make `s` a colored text. Can be nested. '
-            return '{}{}{}'.format(
-                code,
-                s.replace(ENDCOLOR, code),
-                ENDCOLOR,
-            )
-
-        def gray(s):
-            return color(s, '\033[97m')
-
-        def blue(s):
-            return color(s, '\033[94m')
-
-        def green(s):
-            return color(s, '\033[92m')
-
-        def orange(s):
-            return color(s, '\033[93m')
-
-        def red(s):
-            return color(s, '\033[91m')
+    if args.output == '-':
+        exec(color_lib, globals())  # Bring in the same code as in outputs
 
     run(args)
 

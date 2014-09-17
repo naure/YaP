@@ -83,7 +83,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines)'"
   - !Call
@@ -91,7 +91,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
   - !Call
@@ -99,7 +99,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
   - !Call
@@ -107,7 +107,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None,\
         \ None)'"
@@ -116,7 +116,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None)'"
   - !Call
@@ -132,7 +132,7 @@ yap:do_inline_sh: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh, nocolor]
+      calls_made: [expand_env_soft, compile_sh]
       local_changes: null
       returns: "'\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\"\
         , \";\", \"echo\", \"$A\"], \"ho\", None,\n  None)'"
@@ -439,145 +439,6 @@ yap:main: !Function
       calls_made: [run]
       local_changes: null
       returns: 'null'
-yap:nocolor: !Function
-  cardinality: 15 known parameter lists
-  parameters lists:
-  - !Call
-    args: {code: 'null', s: ;}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: ;
-  - !Call
-    args: {code: 'null', s: $A}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: $A
-  - !Call
-    args: {code: 'null', s: A=..}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: A=..
-  - !Call
-    args: {code: 'null', s: toi!}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: toi!
-  - !Call
-    args: {code: 'null', s: echo}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: echo
-  - !Call
-    args: {code: 'null', s: Coucou}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: Coucou
-  - !Call
-    args: {code: 'null', s: A=\"Aaa\"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: A=\"Aaa\"
-  - !Call
-    args: {code: 'null', s: Coucou!}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: Coucou!
-  - !Call
-    args: {code: 'null', s: Coucou toi!}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: Coucou toi!
-  - !Call
-    args: {code: 'null', s: 'yap_call(["echo", "Coucou!"], "o", None, None)'}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: yap_call(["echo", "Coucou!"], "o", None, None)
-  - !Call
-    args: {code: 'null', s: 'yap_call(["echo", "Coucou toi!"], "o", None, None)'}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: yap_call(["echo", "Coucou toi!"], "o", None, None)
-  - !Call
-    args: {code: 'null', s: 'yap_call(["echo", "Coucou", "toi!"], "o", None, None)'}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: yap_call(["echo", "Coucou", "toi!"], "o", None, None)
-  - !Call
-    args: {code: 'null', s: 'yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)'}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
-  - !Call
-    args: {code: 'null', s: 'yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo",
-        "$A"], "ho", None, None)'}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
-        None, None)
-  - !Call
-    args: {code: 'null', s: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\"\
-        , None, None))\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
-        \n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\
-        \n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\
-        \n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
-        A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\"\
-        , None,\n  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
-        \ echo \"A=..\"; echo os.environ.get(\"A\") )\n\n  '"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
-        \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
-        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
-        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
-        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
-        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
-        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
-        A=..\"; echo os.environ.get(\"A\") )\n\n  '"
 yap:parse_cmd: !Function
   cardinality: 6 known parameter lists
   parameters lists:
@@ -730,7 +591,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''";"'''
   - !Call
@@ -738,7 +599,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"$A"'''
   - !Call
@@ -746,7 +607,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"toi!"'''
   - !Call
@@ -754,7 +615,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"echo"'''
   - !Call
@@ -762,7 +623,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"A=\"Aaa\""'''
   - !Call
@@ -770,7 +631,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"A=.."'''
   - !Call
@@ -778,7 +639,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"Coucou"'''
   - !Call
@@ -786,7 +647,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"Coucou!"'''
   - !Call
@@ -794,7 +655,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"Coucou!"'''
   - !Call
@@ -802,7 +663,7 @@ yap:render_sh_arg: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [render_arg, nocolor]
+      calls_made: [render_arg]
       local_changes: null
       returns: '''"Coucou toi!"'''
 yap:ret: !Function
@@ -915,7 +776,7 @@ yap:run: !Function
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_python, nocolor]
+      calls_made: [expand_python]
       local_changes: null
       returns: 'null'
 yap:safe_search: !Function

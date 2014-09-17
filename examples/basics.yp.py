@@ -3,8 +3,37 @@ import os
 import sys
 from os.path import *
 from sys import stdin, stdout, stderr, exit
+from pprint import pprint
 from glob import glob
 import json
+
+if sys.stdout.isatty():
+    def _yap_color(s, code):
+        ' Make `s` a colored text. Can be nested. '
+        return '{}{}{}'.format(
+            code,
+            s.replace('\033[0m', code),
+            '\033[0m',
+        )
+
+    def blue(s):
+        return _yap_color(s, '\033[94m')
+
+    def gray(s):
+        return _yap_color(s, '\033[97m')
+
+    def green(s):
+        return _yap_color(s, '\033[92m')
+
+    def orange(s):
+        return _yap_color(s, '\033[93m')
+
+    def red(s):
+        return _yap_color(s, '\033[91m')
+
+else:
+    blue = gray = green = orange = red = _yap_color = lambda s, c='': s
+
 
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
