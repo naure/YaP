@@ -7,6 +7,10 @@ from sys import stdin, stdout, stderr, exit
 from pprint import pprint
 from glob import glob
 
+def set_usage(usage):
+    print(orange('Usage yet not implemented'))
+
+
 if sys.stdout.isatty():
     def _yap_color(s, code):
         ' Make `s` a colored text. Can be nested. '
@@ -57,7 +61,7 @@ def joinpaths(*args):
     return os.sep.join(args)
 
 
-def softindex(array, i, alt=None):
+def listget(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
 
@@ -125,6 +129,12 @@ def yap_call(cmd, flags='', indata=None, convert=None):
 
 #!./yap.py
 # vim: set ft=python:
+
+set_usage('''
+Usage: cmd.yp command argument
+
+''')
+
 
 if missingindex(sys.argv, 1) == 'list':
     print(gray('Listing nicely'))

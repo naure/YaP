@@ -396,8 +396,8 @@ def joinpaths(*args):
 '''
 
 
-soft_index_lib = r'''
-def softindex(array, i, alt=None):
+listget_lib = r'''
+def listget(array, i, alt=None):
     return array[i] if i < len(array) else alt
 '''
 
@@ -450,6 +450,11 @@ else:
     blue = gray = green = orange = red = _yap_color = lambda s, c='': s
 '''
 
+usage_lib = '''
+def set_usage(usage):
+    print(orange('Usage yet not implemented'))
+'''
+
 
 def run(args):
     " Compile yap file and execute it, or just save it "
@@ -467,9 +472,10 @@ def run(args):
         'from glob import glob',
 
         # YaP libs
+        usage_lib,
         color_lib,
         convert_lib,
-        soft_index_lib,
+        listget_lib,
         missing_lib,
         call_lib,
     ]

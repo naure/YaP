@@ -1,6 +1,12 @@
 #!./yap.py
 # vim: set ft=python:
 
+set_usage('''
+Usage: cmd.yp command argument
+
+''')
+
+
 if $1 == 'list':
     print(gray('Listing nicely'))
     filenames = listdir($2 or '.')
