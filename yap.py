@@ -142,7 +142,7 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
 
 re_symbols_py = re.compile(
     r'''(
-    \w*!  )|(       # Start capture
+    \w*! (?! = )      )|(  # Start capture
     \s* (?:\#.*)? $ )|(  # EOL
     [({[]     )|(   # Open bracket
     [)}\]]    )|(   # Close bracket

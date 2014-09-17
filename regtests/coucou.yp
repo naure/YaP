@@ -7,5 +7,8 @@ print(! echo Coucou toi!)
 print(! echo "Coucou toi!")
 print(h! A="Aaa" ; echo "A=.." ; echo $A )
 
+1 != 2
+assert (1 != 2) is True
+
 # XXX Not yet passing
 #print(h! A="Aaa" ; echo "A=.."; echo $A )

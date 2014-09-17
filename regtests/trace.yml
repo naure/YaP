@@ -52,7 +52,7 @@ yap:compile_sh: !Function
       returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
         None, None)
 yap:do_inline_sh: !Function
-  cardinality: 11 known parameter lists
+  cardinality: 13 known parameter lists
   parameters lists:
   - !Call
     args: {cmd: 'null', py: )}
@@ -78,6 +78,22 @@ yap:do_inline_sh: !Function
       calls_made: [expand_env_soft]
       local_changes: null
       returns: "'\n\n  '"
+  - !Call
+    args: {cmd: 'null', py: "')\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "')\n\n  '"
+  - !Call
+    args: {cmd: 'null', py: "'\n\n  1 != 2'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "'\n\n  1 != 2'"
   - !Call
     args: {cmd: l! echo "Coucou!", py: "'\n\n  print('"}
     cardinality: Single possible effect
@@ -120,14 +136,6 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None)'"
   - !Call
-    args: {cmd: 'null', py: "')\n\n\n  # XXX Not yet passing'"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: [expand_env_soft]
-      local_changes: null
-      returns: "')\n\n\n  # XXX Not yet passing'"
-  - !Call
     args: {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''', py: "'\n\n  print('"}
     cardinality: Single possible effect
     effects list:
@@ -145,6 +153,14 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
         \ \"A\") )'"
+  - !Call
+    args: {cmd: 'null', py: "'\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft]
+      local_changes: null
+      returns: "'\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing'"
 yap:escape_py: !Function
   cardinality: 9 known parameter lists
   parameters lists:
@@ -221,7 +237,7 @@ yap:escape_py: !Function
       local_changes: null
       returns: Coucou toi!
 yap:expand_env_soft: !Function
-  cardinality: 6 known parameter lists
+  cardinality: 8 known parameter lists
   parameters lists:
   - !Call
     args: {py: )}
@@ -248,6 +264,22 @@ yap:expand_env_soft: !Function
       local_changes: null
       returns: "'\n\n  '"
   - !Call
+    args: {py: "')\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "')\n\n  '"
+  - !Call
+    args: {py: "'\n\n  1 != 2'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  1 != 2'"
+  - !Call
     args: {py: "'\n\n  print('"}
     cardinality: Single possible effect
     effects list:
@@ -255,14 +287,6 @@ yap:expand_env_soft: !Function
       calls_made: []
       local_changes: null
       returns: "'\n\n  print('"
-  - !Call
-    args: {py: "')\n\n\n  # XXX Not yet passing'"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: "')\n\n\n  # XXX Not yet passing'"
   - !Call
     args: {py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'"}
     cardinality: Single possible effect
@@ -272,6 +296,14 @@ yap:expand_env_soft: !Function
       local_changes: null
       returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
         \ \"A\") )'"
+  - !Call
+    args: {py: "'\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing'"
 yap:expand_python: !Function
   cardinality: Single parameter list
   parameters lists:
@@ -279,15 +311,15 @@ yap:expand_python: !Function
     args: {s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n \
         \ print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo\
         \ \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\
-        \n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A\
-        \ )\n\n  '"}
+        \n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n \
+        \ #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [safe_split, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
         do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
         do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
-        do_inline_sh, do_inline_sh]
+        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh]
       local_changes: null
       returns: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
         \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
@@ -295,8 +327,9 @@ yap:expand_python: !Function
         echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
         echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
         Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
-        \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
-        A=..\"; echo missingget(os.environ, \"A\") )\n\n  '"
+        \  None))\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet\
+        \ passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
+        \ \"A\") )\n\n  '"
 yap:extract_next_space_or_py_expr: !Function
   cardinality: 16 known parameter lists
   parameters lists:
@@ -1215,14 +1248,15 @@ yap:safe_split: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
-    args: {re_symbols: "!!python/object/apply:re._compile [\"(\\n    \\\\w*!  )|(\
-        \       # Start capture\\n    \\\\\\\n    s* (?:\\\\#.*)? $ )|(  # EOL\\n\
-        \    [({[]     )|(   # Open bracket\\n    [)}\\\\]]  \\\n    \\  )|(   # Close\
-        \ bracket\\n    [\\\"\\\\']           # Quote\\n    )\", 104]", s: "'\n\n\n\
-        \  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
-        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
-        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  # XXX Not yet\
-        \ passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
+    args: {re_symbols: "!!python/object/apply:re._compile [\"(\\n    \\\\w*! (?! =\
+        \ )      )|(  # Start capture\\n\\\n    \\    \\\\s* (?:\\\\#.*)? $ )|(  #\
+        \ EOL\\n    [({[]     )|(   # Open bracket\\n    [)}\\\\\\\n    ]]    )|(\
+        \   # Close bracket\\n    [\\\"\\\\']           # Quote\\n    )\", 104]",
+      s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l!\
+        \ echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou\
+        \ toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 !=\
+        \ 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1235,9 +1269,11 @@ yap:safe_split: !Function
         \ [), null]\n- !!python/tuple ['\n\n    print(', '! echo Coucou toi!']\n-\
         \ !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(', '! echo \"\
         Coucou toi!\"']\n- !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(',\
-        \ 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple [')\n\n\n \
-        \   # XXX Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"\
-        Aaa\" ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
+        \ 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple [')\n\n   \
+        \ ', null]\n- !!python/tuple ['', null]\n- !!python/tuple ['\n\n    1 != 2',\
+        \ null]\n- !!python/tuple ['\n\n    assert (1 != 2) is True\n\n\n    # XXX\
+        \ Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"Aaa\"\
+        \ ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
         - !!python/tuple ['', null]\n- !!python/tuple ['', null]"
 yap:split_and_expand_shell: !Function
   cardinality: 6 known parameter lists
