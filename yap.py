@@ -297,9 +297,9 @@ def expand_env_strict(py):
 # XXX Should use Missing instead
 def expand_env_soft(py):
     return re_env.sub(
-        r'os.environ.get("\1")',
+        r'missingget(os.environ, "\1")',
         re_arg.sub(
-            r'softindex(sys.argv, \1)',
+            r'missingindex(sys.argv, \1)',
             re_all_args.sub(
                 r'sys.argv', py)))
 
@@ -382,11 +382,12 @@ class Missing(object):
     def __bool__(self):
         return False
 
-missingget(obj, variable):
-    return obj.get(variable) or Missing(variable)
+def missingget(obj, variable):
+    v = obj.get(variable)
+    return v if v is not None else Missing(variable)
 
-missingindex(array, i):
-    return softindex(array, i) or Missing(
+def missingindex(array, i):
+    return array[i] if i < len(array) else Missing(
         "Argument {}".format(i))
 '''
 
@@ -436,6 +437,7 @@ def run(args):
         'import json',
         color_lib,
         soft_index_lib,
+        missing_lib,
         call_lib,
     ]
 

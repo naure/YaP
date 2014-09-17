@@ -3,9 +3,14 @@ import unittest
 import sys
 sys.path.append('.')
 
+from yap import expand_env_soft
+
 from yap import call_lib
 escape_sh = None
 exec(call_lib)
+
+from yap import missing_lib
+exec(missing_lib)
 
 
 def B(s):
@@ -31,6 +36,43 @@ class Test(unittest.TestCase):
                 escape_sh(B(raw)),
                 B(escaped),
             )
+
+    def test_expand_env_soft(self):
+        class O(object):
+            pass
+        # Arguments
+        sys = O()
+        sys.argv = ['zero', 'un']
+
+        self.assertEqual(eval(
+            expand_env_soft('bool($1)')), True
+        )
+        self.assertEqual(eval(
+            expand_env_soft('$1 == "un"')), True
+        )
+        self.assertEqual(eval(
+            expand_env_soft('bool($2)')), False
+        )
+        self.assertEqual(eval(
+            expand_env_soft('$2 == "deux"')), False
+        )
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('"error: {}".format($2)'))
+
+        # Environment variables
+        os = O()
+        os.environ = {'env': 'ENV!', 'empty': ''}
+        self.assertEqual(eval(
+            expand_env_soft('$env')), 'ENV!'
+        )
+        self.assertEqual(eval(
+            expand_env_soft('$empty')), ''
+        )
+        self.assertEqual(eval(
+            expand_env_soft('bool($missing)')), False
+        )
+        with self.assertRaises(TypeError):
+            eval(expand_env_soft('"error: " + $missing'))
 
 
 if __name__ == '__main__':

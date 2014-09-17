@@ -39,6 +39,25 @@ def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
 
+class Missing(object):
+    def __init__(self, what):
+        self.what = what
+
+    def __str__(self):
+        raise KeyError(self.what)
+
+    def __bool__(self):
+        return False
+
+def missingget(obj, variable):
+    v = obj.get(variable)
+    return v if v is not None else Missing(variable)
+
+def missingindex(array, i):
+    return array[i] if i < len(array) else Missing(
+        "Argument {}".format(i))
+
+
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import re
 
@@ -120,12 +139,12 @@ yap_call(["echo", "With \'quotes\'"], "", None, None)
 # Environment variable in shell. Raises an error if missing.
 yap_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", None, None)
 # Environment variable in Python. Returns None if missing.
-os.environ.get("missing_variable") is None
-yap_call(["echo", "a_{}".format(os.environ.get("variable") or "default value"), "b_c"], "", None, None)
+missingget(os.environ, "missing_variable") is None
+yap_call(["echo", "a_{}".format(missingget(os.environ, "variable") or "default value"), "b_c"], "", None, None)
 yap_call(["echo", "find", ".", "-exec", "cat", str("{}"), "+"], "", None, None)
 
 # Same applies to program arguments
-if softindex(sys.argv, 1):
+if missingindex(sys.argv, 1):
     yap_call(["echo", "First argument: {}".format(sys.argv[1])], "", None, None)
     for arg in sys.argv:
         print(arg)

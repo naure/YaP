@@ -143,8 +143,8 @@ yap:do_inline_sh: !Function
     - !Effect
       calls_made: [expand_env_soft]
       local_changes: null
-      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
-        A\") )'"
+      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
+        \ \"A\") )'"
 yap:escape_py: !Function
   cardinality: 9 known parameter lists
   parameters lists:
@@ -270,8 +270,8 @@ yap:expand_env_soft: !Function
     - !Effect
       calls_made: []
       local_changes: null
-      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo os.environ.get(\"\
-        A\") )'"
+      returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
+        \ \"A\") )'"
 yap:expand_python: !Function
   cardinality: Single parameter list
   parameters lists:
@@ -296,7 +296,7 @@ yap:expand_python: !Function
         echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
         Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
         \  None))\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
-        A=..\"; echo os.environ.get(\"A\") )\n\n  '"
+        A=..\"; echo missingget(os.environ, \"A\") )\n\n  '"
 yap:extract_next_space_or_py_expr: !Function
   cardinality: 16 known parameter lists
   parameters lists:
