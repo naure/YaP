@@ -264,14 +264,21 @@ def compile_sh(cmd, is_expr):
 
     # Output conversions
     convert = 'None'
-    if 'l' in flags:
-        convert = 'str.splitlines'
     if 'i' in flags:
         convert = 'int'
-    if 'f' in flags:
+    if 'd' in flags:
         convert = 'float'
     if 'j' in flags:
         convert = 'json.loads'
+
+    if 'lf' in flags:
+        convert = 'split_lines_fields'
+    elif 'fl' in flags:
+        convert = 'split_fields_lines'
+    elif 'l' in flags:
+        convert = 'str.splitlines'
+    elif 'f' in flags:
+        convert = 'str.split'
 
     # Call the process
     process = 'yap_call([{}], "{}", {}, {})'.format(
@@ -365,6 +372,30 @@ def yap_call(cmd, flags='', indata=None, convert=None):
     return ret[0] if len(ret) == 1 else ret or None
 '''
 
+convert_lib = r'''
+import json
+from itertools import zip_longest
+
+def split_lines_fields(s):
+    return list(map(str.split, s.splitlines()))
+
+def split_fields_lines(s):
+    return list(zip_longest(*split_lines_fields(s)))
+
+def concat(strings):
+    return ''.join(strings)
+
+def joinlines(lines):
+    return '\n'.join(lines)
+
+def joinfields(fields):
+    return ' '.join(fields)
+
+def joinpaths(*args):
+    return os.sep.join(args)
+'''
+
+
 soft_index_lib = r'''
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
@@ -434,10 +465,10 @@ def run(args):
         'from sys import stdin, stdout, stderr, exit',
         'from pprint import pprint',
         'from glob import glob',
-        'import json',
 
         # YaP libs
         color_lib,
+        convert_lib,
         soft_index_lib,
         missing_lib,
         call_lib,

@@ -1,0 +1,16 @@
+#!./yap.py
+# vim: set ft=python:
+
+if $1 == 'list':
+    print(gray('Listing nicely'))
+    filenames = listdir($2 or '.')
+    for name in filenames:
+        print(
+            blue(name.rjust(15)),
+            joinfields(
+                (f! file {name} )[1:]
+            )
+        )
+
+else:
+    print(red('Unknown command: %s' % $1))

@@ -64,3 +64,8 @@ Default: Capture stdout, print stderr
     print($env_variable)
     if $1 == "first argument": pass
     $unset_env_variable is None
+
+
+# Note
+
+YaP syntax is not yet stable and might evolve soon.
