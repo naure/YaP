@@ -3,7 +3,9 @@ import unittest
 import sys
 sys.path.append('.')
 
-import yaplib
+from yap import call_lib
+escape_sh = None
+exec(call_lib)
 
 
 def B(s):
@@ -26,11 +28,10 @@ class Test(unittest.TestCase):
         ]
         for raw, escaped in data:
             self.assertEqual(
-                yaplib.escape_sh(B(raw)),
+                escape_sh(B(raw)),
                 B(escaped),
             )
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(Test)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    unittest.main(verbosity=2)

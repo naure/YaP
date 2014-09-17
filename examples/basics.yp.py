@@ -9,6 +9,7 @@ import json
 def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
+
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import re
 
