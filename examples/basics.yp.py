@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import os
-import sys
+from os import listdir
 from os.path import *
+import sys
 from sys import stdin, stdout, stderr, exit
 from pprint import pprint
 from glob import glob
@@ -39,7 +40,7 @@ def softindex(array, i, alt=None):
     return array[i] if i < len(array) else alt
 
 
-class Missing(object):
+class MissingParameter(object):
     def __init__(self, what):
         self.what = what
 
@@ -51,10 +52,10 @@ class Missing(object):
 
 def missingget(obj, variable):
     v = obj.get(variable)
-    return v if v is not None else Missing(variable)
+    return v if v is not None else MissingParameter(variable)
 
 def missingindex(array, i):
-    return array[i] if i < len(array) else Missing(
+    return array[i] if i < len(array) else MissingParameter(
         "Argument {}".format(i))
 
 
@@ -72,10 +73,10 @@ def yap_call(cmd, flags='', indata=None, convert=None):
     proc = Popen(
         cmd,
         stdin=PIPE if indata is not None else None,
-        stdout=PIPE if ('o' in flags or 's' in flags) else None,
+        stdout=PIPE if ('o' in flags or 'O' in flags) else None,
         stderr=(
             PIPE if 'e' in flags else
-            STDOUT if 's' in flags else None),
+            STDOUT if 'O' in flags else None),
         universal_newlines='b' not in flags,
         shell='h' in flags,
         env={} if 'v' in flags else None,
@@ -86,7 +87,7 @@ def yap_call(cmd, flags='', indata=None, convert=None):
     out, err = proc.communicate(indata)
     code = proc.returncode
     ret = []
-    if ('o' in flags or 's' in flags):
+    if ('o' in flags or 'O' in flags):
         if convert:
             ret.append(convert(out))
         else:
