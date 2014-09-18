@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-from logging import debug
 import re
 from itertools import starmap
 
@@ -10,6 +9,7 @@ dry_run = False
 
 # No colored output for now
 blue = gray = green = orange = red = _yap_color = lambda s, c='': s
+debug = lambda *args: None
 
 
 def parse_cmd(s, flags):
@@ -22,9 +22,7 @@ def parse_cmd(s, flags):
     current_exprs = []
     after = s
     while after:
-        debug('<< ' + after)
         before, expr, after = extract_next_space_or_py_expr(after, parse_dollar)
-        debug('==== {} = <{}> = {}'.format(before, expr, after))
         current_part += before
         if expr is not None:
             if expr.isspace():  # New argument
@@ -78,21 +76,22 @@ def extract_next_space_or_py_expr(s, parse_dollar=True):
             s[mclose.end():],
         )
 
-    for mopen, quoted, depth in safe_search(re_symbols_expr_open, s):
+    for mopen, quoted, stack in safe_search(re_symbols_expr_open, s):
         if not mopen:
             break
 
         if mopen.group() == '{':
-            for mclose, close_quoted, close_depth in safe_search(
+            for mclose, close_quoted, close_stack in safe_search(
                     re_symbols_expr_close, s, pos=mopen.end()):
 
+                close_depth = len(close_stack)
                 if mclose and not close_quoted and close_depth == 0:
                     return ret(mopen, mclose)
 
         elif mopen.group() == '$':
             if not parse_dollar:
                 continue
-            for mclose, close_quoted, close_depth in safe_search(
+            for mclose, close_quoted, close_stack in safe_search(
                     re_symbols_dollar_close, s, pos=mopen.end()):
 
                 if mclose:
@@ -108,18 +107,17 @@ def extract_next_space_or_py_expr(s, parse_dollar=True):
     return s, None, ''  # Nothing found
 
 
-# XXX Add a 'stop capture' regex group, that goes after closing. 'closing' will
-# retry the 'stop' regex.
 def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
     ' Like re.search() but aware of parenthesis, quotes, and escaping. '
     #escaped = False  # XXX Support escaping
     in_quotes = False
     in_dquotes = False
     quoted = False
-    depth = 0
+    stack = []
 
     for m in re_symbols.finditer(s, pos):
         c = m.group()
+        debug('fooound <%s>' % c)
         capture, opening, closing, quote = m.groups()
         # Toggle quote state
         if c == "'":
@@ -128,17 +126,93 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
             in_dquotes = not in_dquotes
         quoted = in_quotes or in_dquotes
 
-        if capture:  # Found it
-            yield m, quoted, depth
+        if capture is not None:  # Found it
+            debug('caaaapture <%s> ' % c, stack)
+            yield m, quoted, stack
 
-        if not quoted:
+        if c and not quoted:
             if c in openings:
-                depth += 1
-            elif c in closings:
-                depth -= 1
+                debug('ooopen')
+                stack.append(m)
+            elif c in closings and stack:
+                debug('cloooose')
+                stack.pop()
+        debug('staaack <%s>  ' % c, stack)
 
-    yield None, quoted, depth  # Not found
+    yield None, quoted, stack  # Not found
 
+
+## Looking for a (!) expression
+re_symbols_bang_open = combine_re([
+    r'\w*! (?! = )  |  \s* (?: \# .* )? $ ',   # Capture bang or EOL
+    r'\(',     # Count only parenthesis
+    r'\)',     # Count only parenthesis
+    r'["\']',  # Quotes
+], re.X | re.MULTILINE)
+
+re_symbols_bang_close = combine_re([
+    r' \)  |  $ ',   # Capture end or EOL
+    r'[({[]',     # Count all brackets
+    r'[)}\]]',    # Count all brackets
+    r'["\']',     # Quotes
+], re.X | re.MULTILINE)
+
+
+def split_bang(s):
+    ' Extract the next (..!...), yield (pure py, !expr) '
+    last_cut = 0
+
+    for mbang, open_quoted, open_stack in safe_search(re_symbols_bang_open, s):
+        if not mbang:
+            break
+        if open_quoted or mbang.start() < last_cut:
+            continue
+
+        matched = mbang.group()
+        if matched and matched[-1] == '!':
+            debug('loooking for closing. <%s>' % matched)
+            # Found a bang, look for the end of the expression
+            for mclose, close_quoted, close_stack in safe_search(
+                    re_symbols_bang_close, s, pos=mbang.end()
+            ):
+
+                debug('candidaaaate closing ', mclose.group(), close_quoted, close_stack)
+                # Candidate end
+                if not mclose or close_quoted or close_stack:
+                    continue  # Ignore if in quotes or in pending brackets
+                elif open_stack and mclose.group() != ')':
+                    continue  # We are in (! expr), wait for the closing bracket
+                else:
+                    # Found the end
+                    debug('closing')
+                    if open_stack:  # Go back to opening (, don't include the ()
+                        start = open_stack[-1].end()
+                    else:  # Not in (), start at: flags! ...
+                        start = mbang.start()
+                    stop = mclose.start()
+
+                    yield (
+                        s[last_cut:start],
+                        s[start:stop],
+                    )
+                    last_cut = stop
+                    break  # Done, look for next bang item
+
+        else:  # End-of-line
+            if not open_stack:  # End of statement
+                stop = mbang.end()
+                yield (
+                    s[last_cut:stop],
+                    None,
+                )
+                last_cut = stop
+
+    assert last_cut == len(s), 'Did not consume all the source: <%s>' % s[last_cut:]
+    #yield (s[last_cut:], None)  # Regular end, possibly empty
+
+
+def old_split_bang(s):
+    return safe_split(re_symbols_py, s)
 
 re_symbols_py = re.compile(
     r'''(
@@ -210,8 +284,9 @@ def escape_py(s):
 
 # XXX Support escaping and keep quoted quotes ('"')
 def render_arg(arg):
+    arg = arg.strip()
     if arg.startswith('"'):
-        assert arg.endswith('"')
+        assert arg.endswith('"'), 'Dangling quote: %s' % arg
         return escape_py(arg[1:-1])
     else:
         return escape_py(arg)
@@ -312,13 +387,14 @@ def expand_env_soft(py):
 
 def expand_python(s):
     ' Expand shell commands in python code. '
-    parts = safe_split(re_symbols_py, s)
+    parts = split_bang(s)
 
     def do_inline_sh(py, cmd):
         expanded_py = expand_env_soft(py)
         if not cmd:
             return expanded_py
         mixed = bool(py.strip())  # Shell inside of a Python expression
+                                  # XXX Ignore () around it
         return '{}{}'.format(expanded_py, gray(
             compile_sh(cmd, is_expr=mixed)))
 

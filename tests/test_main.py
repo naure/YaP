@@ -2,6 +2,7 @@
 import unittest
 import sys
 sys.path.append('.')
+from pprint import pprint
 
 import yap
 
@@ -16,8 +17,51 @@ def B(s):
 
 class Test(unittest.TestCase):
 
+    def check_regex(self, regex, data):
+        for s, expected in data:
+            got = [m.group() for m in regex.finditer(s)]
+            self.assertEqual(expected, got)
+
     def test_test(self):
         self.assertEqual(B('B S DB'), '\\ \' "\\')
+
+    def test_split_bang(self):
+        yp = '''
+            # Comment
+            !bang
+            Not taking next line
+            (! line 1
+               line 2)
+            ! line 3 { x
+                line 4
+            }
+            # End
+        '''
+        parsed = yap.split_bang(yp)
+        pprint(list(parsed))
+
+    def test_split_bang_multiline(self):
+        yp = '''
+            # Comment
+            stuff
+
+            ! line 3 { x
+                line 4 # bang comment
+            }
+            # End
+        '''
+        parsed = yap.split_bang(yp)
+        pprint(list(parsed))
+
+    def test_re_symbols_bang_close(self):
+        data = [
+            ('', ['']),
+            ('random stuffs', ['']),
+            ('random stuffs\nnext line', ['', '']),
+            ('opening {\nclosing }', ['{', '', '}', '']),
+            ('stuff\n closing ) ', ['', ')', '']),
+        ]
+        self.check_regex(yap.re_symbols_bang_close, data)
 
     def test_escape_py(self):
         data = [
@@ -37,5 +81,4 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(Test)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    unittest.main(verbosity=2)

@@ -1,5 +1,7 @@
-test: testtrace
-	nosetests3 -v tests/test_*.py
+testall: test testtrace
+
+test:
+	nosetests3 -vx tests/test_*.py
 
 testtrace:
 	PYTHONPATH=$$PYTHONPATH:../behavior_tests \

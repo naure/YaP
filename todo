@@ -14,9 +14,10 @@
 + Easy way to work with path ('base' / 'file')
 
 - Take input data: (input expression output ! cmd | cmd2 > output file)
-  Or:              (input file > ! cmd)
 - Make redirects with | and > before or after the !command
-  And ! < in_file, and ! > out_file
+  And (! < in_file), and (! > out_file)
+  Or:              (input file > ! cmd)
+  Copy:            (source > ! > destination)
 - Integrate docopt, parse usage string into arguments parser. Optional. Fallback
   to basic implementation, or laxist that just take all arguments.
   OR deduce from instances of $--arg
