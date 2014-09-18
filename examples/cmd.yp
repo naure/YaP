@@ -6,9 +6,11 @@ Usage: cmd.yp command argument
 
 ''')
 
-(data ! cmd)
-! cmd
-
+("Hi!" ! echo)
+#("input.txt" > ! cmd)
+#("data" ! > "out.txt")
+#src > ! > dest
+# [expr | file >] [flags]! [cmd] [> file]
 
 if $1 == 'list':
     print(gray('Listing nicely'))
@@ -20,6 +22,10 @@ if $1 == 'list':
                 (f! file {name} )[1:]
             )
         )
+
+elif $1 == 'write':
+    ! echo "Out" > $2 or "default.txt"
+
 
 else:
     print(red('Unknown command: %s' % $1))

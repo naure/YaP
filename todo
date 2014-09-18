@@ -22,16 +22,18 @@
   to basic implementation, or laxist that just take all arguments.
   OR deduce from instances of $--arg
 - raise anything
-- Alternative list syntax: (Aaa Bbb "quoted string" "for" "if")
+- Refactor parser
+- Alternative list syntax: [Aaa Bbb "quoted string" "for" "if"]
 - Explicit multi parameters expansion with {*list}
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Support escaping
 - Auto quote expression in shell mode ('h'). Handle new lines, comments, quotes.
 - A literal string beginning a line should be printed (or the whole expression).
   Or any expression that returns a string? Risk of errors and print crap.
-  Whitelist juste les couleurs? Conflit avec doctest.
+  Whitelist juste les couleurs? Conflit avec docstrings.
 - .format shortcut:    "This is {} and that is {}" this, that
   Multiline?
+  Or String interpolation
 - Modèle de projet, cookiescutter
 - joinpaths should avoid double paths
 - Test *_lib code into flake8 automatically
@@ -51,3 +53,4 @@
 - Facilities to search through columns, ..
 - Combinations of flags: int, float on each result
 - int, float, str apply with map if on a list
+- Ability to embed all libraries in a single big file

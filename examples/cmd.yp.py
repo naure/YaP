@@ -92,15 +92,16 @@ re_escape_sh = re.compile(r'([\\ ])')
 def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
-def yap_call(cmd, flags='', indata=None, convert=None):
+def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
     if 'h' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
+    outfd = outfile or PIPE
     proc = Popen(
         cmd,
         stdin=PIPE if indata is not None else None,
-        stdout=PIPE if ('o' in flags or 'O' in flags) else None,
+        stdout=outfd if ('o' in flags or 'O' in flags) else None,
         stderr=(
-            PIPE if 'e' in flags else
+            outfd if 'e' in flags else
             STDOUT if 'O' in flags else None),
         universal_newlines='b' not in flags,
         shell='h' in flags,
@@ -110,6 +111,8 @@ def yap_call(cmd, flags='', indata=None, convert=None):
     if 'p' in flags:  # Run in the background
         return proc
     out, err = proc.communicate(indata)
+    if outfile:
+        outfile.close()
     code = proc.returncode
     ret = []
     if ('o' in flags or 'O' in flags):
@@ -135,9 +138,11 @@ Usage: cmd.yp command argument
 
 ''')
 
-(yap_call(["cmd"], "", (data), None))
-yap_call(["cmd"], "", (None), None)
-
+(yap_call(["echo"], "", ("Hi!"), None, None))
+#("input.txt" > ! cmd)
+#("data" ! > "out.txt")
+#src > ! > dest
+# [expr | file >] [flags]! [cmd] [> file]
 
 if missingindex(sys.argv, 1) == 'list':
     print(gray('Listing nicely'))
@@ -146,9 +151,13 @@ if missingindex(sys.argv, 1) == 'list':
         print(
             blue(name.rjust(15)),
             joinfields(
-                (yap_call(["file", str(name)], "fo", (None), str.split))[1:]
+                (yap_call(["file", str(name)], "fo", (None), str.split, None))[1:]
             )
         )
+
+elif missingindex(sys.argv, 1) == 'write':
+    yap_call(["echo", "Out"], "o", (None), None, open(missingindex(sys.argv, 2) or "default.txt", "w"))
+
 
 else:
     print(red('Unknown command: %s' % missingindex(sys.argv, 1)))

@@ -20,22 +20,29 @@ def parse_cmd(s, flags):
     parts = []
     current_part = ''
     current_exprs = []
+
+    def finish_arg():
+        if current_part:
+            parts.append((current_part, current_exprs))
+        return '', []
+
     after = s
     while after:
         before, expr, after = extract_next_space_or_py_expr(after, parse_dollar)
         current_part += before
         if expr is not None:
-            if expr.isspace():  # New argument
-                parts.append((current_part, current_exprs))
-                current_part = ''
-                current_exprs = []
+            if expr == '>':
+                current_part, current_exprs = finish_arg()
+                parts.append((after.strip(), expr))
+                break  # All the rest is the output expression
+            elif expr.isspace():  # New argument
+                current_part, current_exprs = finish_arg()
             else:  # An expression in the current argument
                 current_part += '{}'  # for format()
                 if expr == '{}':
                     expr = '{"{}"}'  # Replace literal {} by itself
                 current_exprs.append(expr)
-    if current_part:
-        parts.append((current_part, current_exprs))
+    finish_arg()
     return parts
 
 
@@ -46,7 +53,7 @@ def combine_re(res, flags=0):
         flags)
 
 re_symbols_expr_open = combine_re([
-    r'(?: \s+ | \{ | \$)',   # Start capture
+    r'(?: \s+ | \{ | > | \$)',   # Start capture
     r'$x^',     # Ignore brackets (never matches)
     r'$x^',     # Ignore brackets (never matches)
     r'["\']',   # Quotes
@@ -97,9 +104,13 @@ def extract_next_space_or_py_expr(s, parse_dollar=True):
                 if mclose:
                     return ret(mopen, mclose)
 
-        # Just spaces
+        # The rest are not interpreted in quotes
         elif quoted:
             continue
+
+        elif mopen.group() == '>':
+            return ret(mopen, mopen)
+
         else:  # Split around the spaces and return
             return ret(mopen, mopen)
 
@@ -159,7 +170,7 @@ re_symbols_bang_close = combine_re([
 
 
 def split_bang(s):
-    ' Extract the next (..!...), yield (pure py, !expr) '
+    ' Extract the next (..!...), yield (pure py, input, flags!, cmd) '
     last_cut = 0
 
     for mbang, open_quoted, open_stack in safe_search(re_symbols_bang_open, s):
@@ -318,28 +329,15 @@ def render_sh_arg(arg, exprs):
     return '"{}".format({})'.format(orange(rendered_arg), format_args)
 
 
-def split_and_expand_shell(sh, flags):
-    ' Expand expressions in a shell command or argument. '
-    parts = parse_cmd(sh.strip(), flags)
-    rendered_parts = [render_sh_arg(arg, exprs) for arg, exprs in parts]
-    return rendered_parts
+def listsplit(l, sep):
+    try:
+        i = l.index(sep)
+        return l[:i], l[i + 1:]
+    except ValueError:
+        return l, []
 
 
-output_flags = ('o', 'e', 'r')
-re_sh = re.compile(r'(\w*)!', re.DOTALL)
-
-def compile_sh(in_expr, bang, cmd, is_expr):
-    ' Compile a shell command into python code'
-    flags = bang[:-1]
-    if is_expr and not any(f in flags for f in output_flags):
-        flags += 'o'  # By default, capture stdout if inside an expression
-
-    # The command and arguments list
-    cmd_args = split_and_expand_shell(cmd, flags)
-    if dry_run:
-        cmd_args.insert(0, '"echo"')
-
-    # Output conversions
+def flags_to_function(flags):
     convert = 'None'
     if 'i' in flags:
         convert = 'int'
@@ -347,7 +345,6 @@ def compile_sh(in_expr, bang, cmd, is_expr):
         convert = 'float'
     if 'j' in flags:
         convert = 'json.loads'
-
     if 'lf' in flags:
         convert = 'split_lines_fields'
     elif 'fl' in flags:
@@ -356,10 +353,46 @@ def compile_sh(in_expr, bang, cmd, is_expr):
         convert = 'str.splitlines'
     elif 'f' in flags:
         convert = 'str.split'
+    return convert
+
+
+def render_file(raw, mode):
+    expanded = expand_env_soft(raw)
+    return 'open({}, "{}")'.format(expanded, mode)
+
+
+output_flags = ('o', 'e', 'r')
+re_sh = re.compile(r'(\w*)!', re.DOTALL)
+
+def compile_sh(in_expr, bang, cmd, must_capture):
+    ' Compile a shell command into python code'
+    flags = bang[:-1]
+
+    # The command, arguments list and output file
+    parts = parse_cmd(cmd.strip(), flags)
+    if parts and parts[-1][1] == '>':
+        argparts = parts[:-1]
+        # Prepare the output file which is a Python expression
+        outfile = render_file(parts[-1][0], 'w')
+        must_capture = True
+    else:
+        argparts = parts
+        outfile = 'None'
+
+    if must_capture and not any(f in flags for f in output_flags):
+        flags += 'o'  # By default, capture stdout if inside an expression
+
+    # Render the expressions in arguments
+    cmd_args = [render_sh_arg(arg, exprs) for arg, exprs in argparts]
+    if dry_run:
+        cmd_args.insert(0, '"echo"')
+
+    # Output conversions
+    convert = flags_to_function(flags)
 
     # Call the process
-    process = 'yap_call([{}], "{}", ({}), {})'.format(
-        ', '.join(cmd_args), flags, in_expr, convert)
+    process = 'yap_call([{}], "{}", ({}), {}, {})'.format(
+        ', '.join(cmd_args), flags, in_expr, convert, outfile)
     return process
 
 
@@ -399,7 +432,7 @@ def expand_python(s):
         mixed = pystrip and pystrip != '('  # Shell inside of a Python expression
         in_expr = in_expr.strip() or 'None'
         return '{}{}'.format(expanded_py, gray(
-            compile_sh(in_expr, bang, cmd, is_expr=mixed)))
+            compile_sh(in_expr, bang, cmd, must_capture=mixed)))
 
     return ''.join(starmap(do_inline_sh, parts))
 
@@ -415,15 +448,16 @@ re_escape_sh = re.compile(r'([\\ ])')
 def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
-def yap_call(cmd, flags='', indata=None, convert=None):
+def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
     if 'h' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
+    outfd = outfile or PIPE
     proc = Popen(
         cmd,
         stdin=PIPE if indata is not None else None,
-        stdout=PIPE if ('o' in flags or 'O' in flags) else None,
+        stdout=outfd if ('o' in flags or 'O' in flags) else None,
         stderr=(
-            PIPE if 'e' in flags else
+            outfd if 'e' in flags else
             STDOUT if 'O' in flags else None),
         universal_newlines='b' not in flags,
         shell='h' in flags,
@@ -433,6 +467,8 @@ def yap_call(cmd, flags='', indata=None, convert=None):
     if 'p' in flags:  # Run in the background
         return proc
     out, err = proc.communicate(indata)
+    if outfile:
+        outfile.close()
     code = proc.returncode
     ret = []
     if ('o' in flags or 'O' in flags):
