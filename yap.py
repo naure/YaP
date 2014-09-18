@@ -185,15 +185,20 @@ def split_bang(s):
                 else:
                     # Found the end
                     debug('closing')
-                    if open_stack:  # Go back to opening (, don't include the ()
-                        start = open_stack[-1].end()
-                    else:  # Not in (), start at: flags! ...
-                        start = mbang.start()
+                    # Format: input flags! cmd
+                    bang_start = mbang.start()
+                    cmd_start = mbang.end()
                     stop = mclose.start()
+                    if open_stack:  # Go back to opening (, don't include the ()
+                        in_start = open_stack[-1].end()
+                    else:  # Not in (), start at: flags! ...
+                        in_start = bang_start
 
                     yield (
-                        s[last_cut:start],
-                        s[start:stop],
+                        s[last_cut:in_start],
+                        s[in_start:bang_start],
+                        s[bang_start:cmd_start],
+                        s[cmd_start:stop],
                     )
                     last_cut = stop
                     break  # Done, look for next bang item
@@ -203,7 +208,7 @@ def split_bang(s):
                 stop = mbang.end()
                 yield (
                     s[last_cut:stop],
-                    None,
+                    None, None, None
                 )
                 last_cut = stop
 
@@ -321,21 +326,18 @@ def split_and_expand_shell(sh, flags):
 
 
 output_flags = ('o', 'e', 'r')
-re_sh = re.compile(r'(\w*)!(.*)', re.DOTALL)
+re_sh = re.compile(r'(\w*)!', re.DOTALL)
 
-def compile_sh(cmd, is_expr):
+def compile_sh(in_expr, bang, cmd, is_expr):
     ' Compile a shell command into python code'
-    flags, sh = re_sh.match(cmd).groups()
+    flags = bang[:-1]
     if is_expr and not any(f in flags for f in output_flags):
         flags += 'o'  # By default, capture stdout if inside an expression
 
     # The command and arguments list
-    cmd_args = split_and_expand_shell(sh, flags)
+    cmd_args = split_and_expand_shell(cmd, flags)
     if dry_run:
         cmd_args.insert(0, '"echo"')
-
-    # Input (XXX Not implemented)
-    indata = 'None'
 
     # Output conversions
     convert = 'None'
@@ -356,8 +358,8 @@ def compile_sh(cmd, is_expr):
         convert = 'str.split'
 
     # Call the process
-    process = 'yap_call([{}], "{}", {}, {})'.format(
-        ', '.join(cmd_args), flags, indata, convert)
+    process = 'yap_call([{}], "{}", ({}), {})'.format(
+        ', '.join(cmd_args), flags, in_expr, convert)
     return process
 
 
@@ -389,14 +391,15 @@ def expand_python(s):
     ' Expand shell commands in python code. '
     parts = split_bang(s)
 
-    def do_inline_sh(py, cmd):
+    def do_inline_sh(py, in_expr, bang, cmd):
         expanded_py = expand_env_soft(py)
         if not cmd:
             return expanded_py
-        mixed = bool(py.strip())  # Shell inside of a Python expression
-                                  # XXX Ignore () around it
+        pystrip = py.strip()
+        mixed = pystrip and pystrip != '('  # Shell inside of a Python expression
+        in_expr = in_expr.strip() or 'None'
         return '{}{}'.format(expanded_py, gray(
-            compile_sh(cmd, is_expr=mixed)))
+            compile_sh(in_expr, bang, cmd, is_expr=mixed)))
 
     return ''.join(starmap(do_inline_sh, parts))
 

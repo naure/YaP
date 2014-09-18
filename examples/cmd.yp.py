@@ -135,6 +135,9 @@ Usage: cmd.yp command argument
 
 ''')
 
+(yap_call(["cmd"], "", (data), None))
+yap_call(["cmd"], "", (None), None)
+
 
 if missingindex(sys.argv, 1) == 'list':
     print(gray('Listing nicely'))
@@ -143,7 +146,7 @@ if missingindex(sys.argv, 1) == 'list':
         print(
             blue(name.rjust(15)),
             joinfields(
-                (yap_call(["file", str(name)], "fo", None, str.split))[1:]
+                (yap_call(["file", str(name)], "fo", (None), str.split))[1:]
             )
         )
 

@@ -6,6 +6,9 @@ Usage: cmd.yp command argument
 
 ''')
 
+(data ! cmd)
+! cmd
+
 
 if $1 == 'list':
     print(gray('Listing nicely'))

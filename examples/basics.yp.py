@@ -135,77 +135,77 @@ numbers = {1: 'one', 2: 'two'}
 print(sys.argv)
 
 # Regular shell commands
-yap_call(["echo", "Shell command"], "", None, None)
+yap_call(["echo", "Shell command"], "", (None), None)
 # Capture the output
-now = yap_call(["date", "+%s"], "o", None, None)
+now = yap_call(["date", "+%s"], "o", (None), None)
 # Command in brackets. Print result
-print(yap_call(["date", "+%s"], "o", None, None))
+print(yap_call(["date", "+%s"], "o", (None), None))
 
-multiline = (yap_call(["echo", "A", "B", "-o", "(parentheses)", "-and", "!", "are", "ignored"], "o", None, None))
+multiline = (yap_call(["echo", "A", "B", "-o", "(parentheses)", "-and", "!", "are", "ignored"], "o", (None), None))
 
-system_shell = (yap_call(["A=\"Aaa\";", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", None, None))
+system_shell = (yap_call(["A=\"Aaa\";", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", (None), None))
 print(system_shell)
 
 # Interpolation of commands
 for key, value in numbers.items():
-    yap_call(["echo", "{}={}".format(key, value)], "", None, None)
+    yap_call(["echo", "{}={}".format(key, value)], "", (None), None)
 
-yap_call(["echo", str("Any python expression, ignore in quotes".upper())], "", None, None)
+yap_call(["echo", str("Any python expression, ignore in quotes".upper())], "", (None), None)
 
 yap_call(["echo", str(
     "Same lines joining rules as Python"
-)], "", None, None)
+)], "", (None), None)
 
 yap_call(["echo", str(
     {"inline": "dictionnary"}
-)], "", None, None)
+)], "", (None), None)
 
-yap_call(["echo", "With \'quotes\'"], "", None, None)
+yap_call(["echo", "With \'quotes\'"], "", (None), None)
 
 # Environment variable in shell. Raises an error if missing.
-yap_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", None, None)
+yap_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", (None), None)
 # Environment variable in Python. Returns None if missing.
 missingget(os.environ, "missing_variable") is None
-yap_call(["echo", "a_{}".format(missingget(os.environ, "variable") or "default value"), "b_c"], "", None, None)
-yap_call(["echo", "find", ".", "-exec", "cat", str("{}"), "+"], "", None, None)
+yap_call(["echo", "a_{}".format(missingget(os.environ, "variable") or "default value"), "b_c"], "", (None), None)
+yap_call(["echo", "find", ".", "-exec", "cat", str("{}"), "+"], "", (None), None)
 
 # Same applies to program arguments
 if missingindex(sys.argv, 1):
-    yap_call(["echo", "First argument: {}".format(sys.argv[1])], "", None, None)
+    yap_call(["echo", "First argument: {}".format(sys.argv[1])], "", (None), None)
     for arg in sys.argv:
         print(arg)
 
 
 # Output conversion
-file_list = yap_call(["ls", "-1"], "lo", None, str.splitlines)
+file_list = yap_call(["ls", "-1"], "lo", (None), str.splitlines)
 
-simple_string = 'Output: ' + yap_call(["echo", "some", "output"], "o", None, None)
-from_json = yap_call(["echo", "[1, 2]"], "jo", None, json.loads)
-to_integer = 2 + (yap_call(["echo", "2"], "io", None, int)) + 2
-list_of_lines = yap_call(["ls"], "lo", None, str.splitlines)
-rows_then_columns = yap_call(["ls", "-l"], "co", None, None)
-fields_then_rows = yap_call(["ls", "-l"], "r", None, None)
-binary = yap_call(["echo", "cat", "doc.pdf"], "bo", None, None)
+simple_string = 'Output: ' + yap_call(["echo", "some", "output"], "o", (None), None)
+from_json = yap_call(["echo", "[1, 2]"], "jo", (None), json.loads)
+to_integer = 2 + (yap_call(["echo", "2"], "io", (None), int)) + 2
+list_of_lines = yap_call(["ls"], "lo", (None), str.splitlines)
+rows_then_columns = yap_call(["ls", "-l"], "co", (None), None)
+fields_then_rows = yap_call(["ls", "-l"], "r", (None), None)
+binary = yap_call(["echo", "cat", "doc.pdf"], "bo", (None), None)
 
 # Print stdout and stderr
-yap_call(["echo"], "", None, None)
+yap_call(["echo"], "", (None), None)
 # Capture stdout, print stderr
-out = yap_call(["echo"], "o", None, None)
+out = yap_call(["echo"], "o", (None), None)
 # Capture stderr, print stdout
-err = yap_call(["echo"], "e", None, None)
+err = yap_call(["echo"], "e", (None), None)
 # Capture both
-out, err = yap_call(["echo"], "oe", None, None)
+out, err = yap_call(["echo"], "oe", (None), None)
 # Include the return code
-out, err, ret = yap_call(["echo", "May fail.."], "oer", None, None)
+out, err, ret = yap_call(["echo", "May fail.."], "oer", (None), None)
 if ret == 0:
     print(out)
 # n to ignore errors
-yap_call(["false", "unsafe", "cmd"], "n", None, None)
+yap_call(["false", "unsafe", "cmd"], "n", (None), None)
 # p to run in the background and get a proc object
-proc = yap_call(["echo", "sleep", "1"], "po", None, None)
+proc = yap_call(["echo", "sleep", "1"], "po", (None), None)
 out, err = proc.communicate("input")
 # h to run through a shell
-print(yap_call(["echo", "a", "b", "|", "grep", "a"], "ho", None, None))
+print(yap_call(["echo", "a", "b", "|", "grep", "a"], "ho", (None), None))
 # v to run with a clean environment
-print(yap_call(["echo", "clean"], "vo", None, None))
-yap_call(["echo", "Ok!"], "", None, None)
+print(yap_call(["echo", "clean"], "vo", (None), None))
+yap_call(["echo", "Ok!"], "", (None), None)

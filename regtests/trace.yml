@@ -3,59 +3,60 @@ yap:compile_sh: !Function
   cardinality: 6 known parameter lists
   parameters lists:
   - !Call
-    args: {cmd: l! echo "Coucou!", is_expr: 'true'}
+    args: {bang: l!, cmd: ''' echo "Coucou!"''', in_expr: None, is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
-      returns: yap_call(["echo", "Coucou!"], "lo", None, str.splitlines)
+      returns: yap_call(["echo", "Coucou!"], "lo", (None), str.splitlines)
   - !Call
-    args: {cmd: '''! echo Coucou!''', is_expr: 'true'}
+    args: {bang: '''!''', cmd: ''' echo Coucou!''', in_expr: None, is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
-      returns: yap_call(["echo", "Coucou!"], "o", None, None)
+      returns: yap_call(["echo", "Coucou!"], "o", (None), None)
   - !Call
-    args: {cmd: '''! echo "Coucou!"''', is_expr: 'true'}
+    args: {bang: '''!''', cmd: ''' echo "Coucou!"''', in_expr: None, is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
-      returns: yap_call(["echo", "Coucou!"], "o", None, None)
+      returns: yap_call(["echo", "Coucou!"], "o", (None), None)
   - !Call
-    args: {cmd: '''! echo Coucou toi!''', is_expr: 'true'}
+    args: {bang: '''!''', cmd: ''' echo Coucou toi!''', in_expr: None, is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
-      returns: yap_call(["echo", "Coucou", "toi!"], "o", None, None)
+      returns: yap_call(["echo", "Coucou", "toi!"], "o", (None), None)
   - !Call
-    args: {cmd: '''! echo "Coucou toi!"''', is_expr: 'true'}
+    args: {bang: '''!''', cmd: ''' echo "Coucou toi!"''', in_expr: None, is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
-      returns: yap_call(["echo", "Coucou toi!"], "o", None, None)
+      returns: yap_call(["echo", "Coucou toi!"], "o", (None), None)
   - !Call
-    args: {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''', is_expr: 'true'}
+    args: {bang: h!, cmd: ''' A="Aaa" ; echo "A=.." ; echo $A ''', in_expr: None,
+      is_expr: 'true'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [split_and_expand_shell]
       local_changes: null
       returns: yap_call(["A=\"Aaa\"", ";", "echo", "A=..", ";", "echo", "$A"], "ho",
-        None, None)
+        (None), None)
 yap:do_inline_sh: !Function
-  cardinality: 13 known parameter lists
+  cardinality: 14 known parameter lists
   parameters lists:
   - !Call
-    args: {cmd: 'null', py: )}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: )}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -63,7 +64,7 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: )
   - !Call
-    args: {cmd: 'null', py: ''''''}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: ''''''}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -71,7 +72,7 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: ''''''
   - !Call
-    args: {cmd: 'null', py: "'\n\n  '"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "'\n\n  '"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -79,7 +80,7 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: "'\n\n  '"
   - !Call
-    args: {cmd: 'null', py: "')\n\n  '"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "')\n\n  '"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -87,7 +88,7 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: "')\n\n  '"
   - !Call
-    args: {cmd: 'null', py: "'\n\n  1 != 2'"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "'\n\n  1 != 2'"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -95,57 +96,71 @@ yap:do_inline_sh: !Function
       local_changes: null
       returns: "'\n\n  1 != 2'"
   - !Call
-    args: {cmd: l! echo "Coucou!", py: "'\n\n  print('"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "'\n\n  # Comment'"}
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [expand_env_soft, compile_sh]
+      calls_made: [expand_env_soft]
       local_changes: null
-      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", None, str.splitlines)'"
+      returns: "'\n\n  # Comment'"
   - !Call
-    args: {cmd: '''! echo Coucou!''', py: "'\n\n  print('"}
+    args: {bang: l!, cmd: ''' echo "Coucou!"''', in_expr: '''''', py: "'\n\n  print('"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [expand_env_soft, compile_sh]
-      local_changes: null
-      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
+      local_changes: {in_expr: None}
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", (None), str.splitlines)'"
   - !Call
-    args: {cmd: '''! echo "Coucou!"''', py: "'\n\n  print('"}
+    args: {bang: '''!''', cmd: ''' echo Coucou!''', in_expr: '''''', py: "'\n\n  print('"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [expand_env_soft, compile_sh]
-      local_changes: null
-      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None)'"
+      local_changes: {in_expr: None}
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", (None), None)'"
   - !Call
-    args: {cmd: '''! echo Coucou toi!''', py: "'\n\n  print('"}
+    args: {bang: '''!''', cmd: ''' echo "Coucou!"''', in_expr: '''''', py: "'\n\n\
+        \  print('"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [expand_env_soft, compile_sh]
-      local_changes: null
-      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", None,\
+      local_changes: {in_expr: None}
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", (None), None)'"
+  - !Call
+    args: {bang: '''!''', cmd: ''' echo Coucou toi!''', in_expr: '''''', py: "'\n\n\
+        \  print('"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [expand_env_soft, compile_sh]
+      local_changes: {in_expr: None}
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", (None),\
         \ None)'"
   - !Call
-    args: {cmd: '''! echo "Coucou toi!"''', py: "'\n\n  print('"}
+    args: {bang: '''!''', cmd: ''' echo "Coucou toi!"''', in_expr: '''''', py: "'\n\
+        \n  print('"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [expand_env_soft, compile_sh]
-      local_changes: null
-      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", None, None)'"
+      local_changes: {in_expr: None}
+      returns: "'\n\n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", (None),\
+        \ None)'"
   - !Call
-    args: {cmd: '''h! A="Aaa" ; echo "A=.." ; echo $A ''', py: "'\n\n  print('"}
+    args: {bang: h!, cmd: ''' A="Aaa" ; echo "A=.." ; echo $A ''', in_expr: '''''',
+      py: "'\n\n  print('"}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: [expand_env_soft, compile_sh]
-      local_changes: null
+      local_changes: {in_expr: None}
       returns: "'\n\n  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\"\
-        , \";\", \"echo\", \"$A\"], \"ho\", None,\n  None)'"
+        , \";\", \"echo\", \"$A\"], \"ho\", (None),\n  None)'"
   - !Call
-    args: {cmd: 'null', py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "'\n\n  #print(h! A=\"\
+        Aaa\" ; echo \"A=..\"; echo $A )'"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -154,7 +169,8 @@ yap:do_inline_sh: !Function
       returns: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
         \ \"A\") )'"
   - !Call
-    args: {cmd: 'null', py: "'\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing'"}
+    args: {bang: 'null', cmd: 'null', in_expr: 'null', py: "'\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing'"}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -237,7 +253,7 @@ yap:escape_py: !Function
       local_changes: null
       returns: Coucou toi!
 yap:expand_env_soft: !Function
-  cardinality: 8 known parameter lists
+  cardinality: 9 known parameter lists
   parameters lists:
   - !Call
     args: {py: )}
@@ -288,6 +304,14 @@ yap:expand_env_soft: !Function
       local_changes: null
       returns: "'\n\n  print('"
   - !Call
+    args: {py: "'\n\n  # Comment'"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: "'\n\n  # Comment'"
+  - !Call
     args: {py: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'"}
     cardinality: Single possible effect
     effects list:
@@ -308,28 +332,32 @@ yap:expand_python: !Function
   cardinality: Single parameter list
   parameters lists:
   - !Call
-    args: {s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n \
-        \ print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo\
-        \ \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\
-        \n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n \
-        \ #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
+    args: {s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"\
+        Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
     cardinality: Single possible effect
     effects list:
     - !Effect
-      calls_made: [safe_split, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
-        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
-        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh,
-        do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh, do_inline_sh]
+      calls_made: [split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang, do_inline_sh, split_bang, do_inline_sh, split_bang,
+        do_inline_sh, split_bang]
       local_changes: null
-      returns: "'\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\
-        \n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", None, None))\n\n  print(yap_call([\"\
-        echo\", \"Coucou!\"], \"lo\", None, str.splitlines))\n\n  print(yap_call([\"\
-        echo\", \"Coucou\", \"toi!\"], \"o\", None, None))\n\n  print(yap_call([\"\
-        echo\", \"Coucou toi!\"], \"o\", None, None))\n\n  print(yap_call([\"A=\\\"\
-        Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"echo\", \"$A\"], \"ho\", None,\n\
-        \  None))\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet\
-        \ passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo missingget(os.environ,\
-        \ \"A\") )\n\n  '"
+      returns: "'\n\n  # Comment\n\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"\
+        o\", (None), None))\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"o\", (None),\
+        \ None))\n\n  print(yap_call([\"echo\", \"Coucou!\"], \"lo\", (None), str.splitlines))\n\
+        \n  print(yap_call([\"echo\", \"Coucou\", \"toi!\"], \"o\", (None), None))\n\
+        \n  print(yap_call([\"echo\", \"Coucou toi!\"], \"o\", (None), None))\n\n\
+        \  print(yap_call([\"A=\\\"Aaa\\\"\", \";\", \"echo\", \"A=..\", \";\", \"\
+        echo\", \"$A\"], \"ho\", (None),\n  None))\n\n\n  1 != 2\n\n  assert (1 !=\
+        \ 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo\
+        \ \"A=..\"; echo missingget(os.environ, \"A\") )\n\n  '"
 yap:extract_next_space_or_py_expr: !Function
   cardinality: 16 known parameter lists
   parameters lists:
@@ -813,7 +841,7 @@ yap:run: !Function
       local_changes: null
       returns: 'null'
 yap:safe_search: !Function
-  cardinality: 33 known parameter lists
+  cardinality: 58 known parameter lists
   parameters lists:
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
@@ -829,7 +857,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: toi!}
@@ -838,7 +866,13 @@ yap:safe_search: !Function
     - !Effect
       calls_made: []
       local_changes: null
-      returns: '!!python/tuple [null, false, 0]'
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo $A}
@@ -853,7 +887,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo $A}
@@ -868,7 +902,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou!}
@@ -877,7 +911,13 @@ yap:safe_search: !Function
     - !Effect
       calls_made: []
       local_changes: null
-      returns: '!!python/tuple [null, false, 0]'
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou!"'''}
@@ -886,7 +926,13 @@ yap:safe_search: !Function
     - !Effect
       calls_made: []
       local_changes: null
-      returns: '!!python/tuple [null, false, 0]'
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou toi!}
@@ -901,7 +947,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou!}
@@ -916,7 +962,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou!"}
@@ -931,7 +977,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"A=.." ; echo
@@ -947,7 +993,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"'''}
@@ -962,7 +1008,7 @@ yap:safe_search: !Function
 
         - true
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou toi!}
@@ -977,7 +1023,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "A=.." ;
@@ -993,7 +1039,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou toi!"}
@@ -1008,7 +1054,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo "A=.."
@@ -1024,7 +1070,7 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
     args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: '!!python/object/apply:re._compile
         [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: A="Aaa" ; echo
@@ -1040,11 +1086,11 @@ yap:safe_search: !Function
 
         - false
 
-        - 0'
+        - []'
   - !Call
-    args: {closings: ')}]', depth: '0', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
+    args: {closings: ')}]', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
       pos: '0', quoted: 'false', re_symbols: '!!python/object/apply:re._compile [''((?:
-        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: toi!}
+        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: toi!, stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1052,9 +1098,9 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {closings: ')}]', depth: '0', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
+    args: {closings: ')}]', in_dquotes: 'false', in_quotes: 'false', openings: '({[',
       pos: '0', quoted: 'false', re_symbols: '!!python/object/apply:re._compile [''((?:
-        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou!}
+        \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou!, stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1062,10 +1108,10 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: $, capture: $, closing: 'null', closings: ')}]', depth: '0', in_dquotes: 'false',
+    args: {c: $, capture: $, closing: 'null', closings: ')}]', in_dquotes: 'false',
       in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
       openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
-        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: $A}
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: $A, stack: '[]'}
     cardinality: 2 different effects, depends on side-effects!
     effects list:
     - !Effect
@@ -1075,13 +1121,18 @@ yap:safe_search: !Function
     - !Effect
       calls_made: []
       local_changes: null
-      returns: '!!python/tuple [null, false, 0]'
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo $A}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo $A, stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1089,11 +1140,10 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: ; echo $A}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo $A, stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1101,11 +1151,11 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: '''"''', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: '''"Coucou!"'''}
+    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: '''"''', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou!"''',
+      stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1113,11 +1163,10 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: Coucou toi!}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: Coucou toi!, stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1125,11 +1174,11 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo Coucou!}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou!,
+      stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1137,11 +1186,11 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo "Coucou!"}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou!",
+      stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
@@ -1149,132 +1198,713 @@ yap:safe_search: !Function
       local_changes: null
       returns: 'null'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'true', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}',
-      opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'true', re_symbols: '!!python/object/apply:re._compile
-        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"'''}
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'true',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'true', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"''',
+      stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: []
       local_changes: {c: '''"''', capture: 'null', in_dquotes: 'false', quote: '''"''',
         quoted: 'false'}
-      returns: '!!python/tuple [null, false, 0]'
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
   - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"A=.." ; echo
+        $A''', stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: '''"''', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: '''"Coucou toi!"''',
+      stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo Coucou toi!,
+      stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "A=.." ;
+        echo $A, stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: echo "Coucou toi!",
+      stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: ; echo "A=.."
+        ; echo $A, stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'', 104]', s: A="Aaa" ; echo
+        "A=.." ; echo $A, stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '41', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '90', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '19', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '66', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '116', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '145', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {closings: ')}]', openings: '({[', pos: '0', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '41', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '90', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '19', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '66', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '116', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: ), capture: ), closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '145', quote: 'null', quoted: 'false', re_symbols: '!!python/object/apply:re._compile
+        [''( \)  |  $ )|([({[])|([)}\]])|(["\''''])'', 104]', s: "'\n\n  # Comment\n\
+        \n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+  - !Call
+    args: {c: '''''', capture: '''''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '[]'}
+    cardinality: 7 different effects, depends on side-effects!
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: 'null'
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - null
+
+        - false
+
+        - []'
+    - !Effect
+      calls_made: []
+      local_changes: null
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+    - !Effect
+      calls_made: []
+      local_changes: {c: "'\n\n\n  # XXX Not yet passing'", capture: "'\n\n\n  # XXX\
+          \ Not yet passing'"}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+    - !Effect
+      calls_made: []
+      local_changes: {c: h!, capture: h!, stack: '- !!python/object:_sre.SRE_Match
+          {}'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - - !!python/object:_sre.SRE_Match {}'
+    - !Effect
+      calls_made: []
+      local_changes: {c: l!, capture: l!, stack: '- !!python/object:_sre.SRE_Match
+          {}'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - - !!python/object:_sre.SRE_Match {}'
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''!''', capture: '''!''', stack: '- !!python/object:_sre.SRE_Match
+          {}'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - - !!python/object:_sre.SRE_Match {}'
+  - !Call
+    args: {c: "'\n\n  '", capture: "'\n\n  '", closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''''', capture: ''''''}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: "'\n\n  # Comment'", capture: "'\n\n  # Comment'", closing: 'null',
+      closings: ')}]', in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
+        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
+      re_symbols: "!!python/object/apply:re._compile ['(\\w*! (?! = )  |  \\s* (?:\
+        \ \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n  104]", s: "'\n\n  # Comment\n\n\
+        \n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '  ''', capture: '  '''}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: '''!''', capture: '''!''', closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: 4 different effects, depends on side-effects!
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: toi!, capture: toi!}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - - !!python/object:_sre.SRE_Match {}'
+    - !Effect
+      calls_made: []
+      local_changes: {c: Coucou!, capture: Coucou!}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - - !!python/object:_sre.SRE_Match {}'
+    - !Effect
+      calls_made: []
+      local_changes: {c: toi!, capture: toi!, in_dquotes: 'true', quoted: 'true'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - true
+
+        - - !!python/object:_sre.SRE_Match {}'
+    - !Effect
+      calls_made: []
+      local_changes: {c: Coucou!, capture: Coucou!, in_dquotes: 'true', quoted: 'true'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - true
+
+        - - !!python/object:_sre.SRE_Match {}'
+  - !Call
+    args: {c: h!, capture: h!, closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: "'\n\n  '", capture: "'\n\n  '", stack: '[]'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: l!, capture: l!, closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: Coucou!, capture: Coucou!, in_dquotes: 'true', quoted: 'true'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - true
+
+        - - !!python/object:_sre.SRE_Match {}'
+  - !Call
+    args: {c: toi!, capture: toi!, closing: 'null', closings: ')}]', in_dquotes: 'true',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'true', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''''', capture: '''''', in_dquotes: 'false', quoted: 'false',
+        stack: '[]'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: toi!, capture: toi!, closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''''', capture: '''''', stack: '[]'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: Coucou!, capture: Coucou!, closing: 'null', closings: ')}]', in_dquotes: 'true',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'true', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''''', capture: '''''', in_dquotes: 'false', quoted: 'false',
+        stack: '[]'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: Coucou!, capture: Coucou!, closing: 'null', closings: ')}]', in_dquotes: 'false',
+      in_quotes: 'false', m: '!!python/object:_sre.SRE_Match {}', opening: 'null',
+      openings: '({[', pos: '0', quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '- !!python/object:_sre.SRE_Match {}'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '''''', capture: '''''', stack: '[]'}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: "'\n\n\n  # XXX Not yet passing'", capture: "'\n\n\n  # XXX Not yet\
+        \ passing'", closing: 'null', closings: ')}]', in_dquotes: 'false', in_quotes: 'false',
+      m: '!!python/object:_sre.SRE_Match {}', opening: 'null', openings: '({[', pos: '0',
+      quote: 'null', quoted: 'false', re_symbols: "!!python/object/apply:re._compile\
+        \ ['(\\w*! (?! = )  |  \\s* (?: \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n \
+        \ 104]", s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo\
+        \ \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '",
+      stack: '[]'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: []
+      local_changes: {c: '  #print(h! A="Aaa" ; echo "A=.."; echo $A )''', capture: '  #print(h!
+          A="Aaa" ; echo "A=.."; echo $A )'''}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
+  - !Call
+    args: {c: "'\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'", capture: "'\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )'", closing: 'null', closings: ')}]',
       in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
         {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: '''"A=.." ; echo $A'''}
+      re_symbols: "!!python/object/apply:re._compile ['(\\w*! (?! = )  |  \\s* (?:\
+        \ \\# .* )? $ )|(\\()|(\\))|([\"\\''])',\n  104]", s: "'\n\n  # Comment\n\n\
+        \n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo\
+        \ \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\"\
+        )\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert\
+        \ (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ;\
+        \ echo \"A=..\"; echo $A )\n\n  '", stack: '[]'}
     cardinality: Single possible effect
     effects list:
     - !Effect
       calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: '''"''', capture: 'null', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: '''"''', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: '''"Coucou toi!"'''}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo Coucou toi!}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo "A=.." ; echo $A}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: echo "Coucou toi!"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: ; echo "A=.." ; echo $A}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-  - !Call
-    args: {c: ''' ''', capture: ''' ''', closing: 'null', closings: ')}]', depth: '0',
-      in_dquotes: 'false', in_quotes: 'false', m: '!!python/object:_sre.SRE_Match
-        {}', opening: 'null', openings: '({[', pos: '0', quote: 'null', quoted: 'false',
-      re_symbols: '!!python/object/apply:re._compile [''((?: \s+ | \{ | \$))|($x^)|($x^)|(["\''''])'',
-        104]', s: A="Aaa" ; echo "A=.." ; echo $A}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: 'null'
-yap:safe_split: !Function
-  cardinality: Single parameter list
-  parameters lists:
-  - !Call
-    args: {re_symbols: "!!python/object/apply:re._compile [\"(\\n    \\\\w*! (?! =\
-        \ )      )|(  # Start capture\\n\\\n    \\    \\\\s* (?:\\\\#.*)? $ )|(  #\
-        \ EOL\\n    [({[]     )|(   # Open bracket\\n    [)}\\\\\\\n    ]]    )|(\
-        \   # Close bracket\\n    [\\\"\\\\']           # Quote\\n    )\", 104]",
-      s: "'\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l!\
-        \ echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou\
-        \ toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 !=\
-        \ 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\n  #print(h!\
-        \ A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
-    cardinality: Single possible effect
-    effects list:
-    - !Effect
-      calls_made: []
-      local_changes: null
-      returns: "- !!python/tuple ['\n\n    ', null]\n- !!python/tuple ['', null]\n\
-        - !!python/tuple ['\n\n    print(', '! echo Coucou!']\n- !!python/tuple [),\
-        \ null]\n- !!python/tuple ['\n\n    print(', '! echo \"Coucou!\"']\n- !!python/tuple\
-        \ [), null]\n- !!python/tuple ['\n\n    print(', l! echo \"Coucou!\"]\n- !!python/tuple\
-        \ [), null]\n- !!python/tuple ['\n\n    print(', '! echo Coucou toi!']\n-\
-        \ !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(', '! echo \"\
-        Coucou toi!\"']\n- !!python/tuple [), null]\n- !!python/tuple ['\n\n    print(',\
-        \ 'h! A=\"Aaa\" ; echo \"A=..\" ; echo $A ']\n- !!python/tuple [')\n\n   \
-        \ ', null]\n- !!python/tuple ['', null]\n- !!python/tuple ['\n\n    1 != 2',\
-        \ null]\n- !!python/tuple ['\n\n    assert (1 != 2) is True\n\n\n    # XXX\
-        \ Not yet passing', null]\n- !!python/tuple ['\n\n    #print(h! A=\"Aaa\"\
-        \ ; echo \"A=..\"; echo $A )', null]\n- !!python/tuple ['\n\n    ', null]\n\
-        - !!python/tuple ['', null]\n- !!python/tuple ['', null]"
+      local_changes: {c: '  ''', capture: '  '''}
+      returns: '!!python/tuple
+
+        - !!python/object:_sre.SRE_Match {}
+
+        - false
+
+        - []'
 yap:split_and_expand_shell: !Function
   cardinality: 6 known parameter lists
   parameters lists:
@@ -1328,3 +1958,350 @@ yap:split_and_expand_shell: !Function
       local_changes: null
       returns: '[''"A=\"Aaa\""'', ''";"'', ''"echo"'', ''"A=.."'', ''";"'', ''"echo"'',
         ''"$A"'']'
+yap:split_bang: !Function
+  cardinality: 22 known parameter lists
+  parameters lists:
+  - !Call
+    args: {s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"\
+        Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\
+        \n  print(! echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not\
+        \ yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '"}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: null
+      returns: "!!python/tuple ['\n\n    # Comment', null, null, null]"
+  - !Call
+    args: {last_cut: '11', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', open_quoted: 'false', open_stack: '[]', s: "'\n\n  # Comment\n\n\n  print(!\
+        \ echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\"\
+        )\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '11'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {matched: '''!''', open_stack: '- !!python/object:_sre.SRE_Match
+          {}', stop: '32'}
+      returns: "!!python/tuple ['\n\n    print(', '', '!', ' echo Coucou!']"
+  - !Call
+    args: {last_cut: '10', matched: "'\n\n  '", mbang: '!!python/object:_sre.SRE_Match
+        {}', open_quoted: 'false', open_stack: '[]', s: "'\n\n  # Comment\n\n\n  print(!\
+        \ echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\"\
+        )\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '11'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '11', matched: ''''''}
+      returns: '!!python/tuple ['''', null, null, null]'
+  - !Call
+    args: {last_cut: '0', matched: "'\n\n  # Comment'", mbang: '!!python/object:_sre.SRE_Match
+        {}', open_quoted: 'false', open_stack: '[]', s: "'\n\n  # Comment\n\n\n  print(!\
+        \ echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\"\
+        )\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '10'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '10', matched: '  ''', stop: '11'}
+      returns: "!!python/tuple ['\n\n    ', null, null, null]"
+  - !Call
+    args: {bang_start: '40', close_quoted: 'false', close_stack: '[]', cmd_start: '41',
+      in_start: '40', last_cut: '56', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '57'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {bang_start: '64', cmd_start: '66', in_start: '64', last_cut: '57',
+        matched: l!, open_stack: '- !!python/object:_sre.SRE_Match {}', stop: '81'}
+      returns: "!!python/tuple ['\n\n    print(', '', l!, ' echo \"Coucou!\"']"
+  - !Call
+    args: {bang_start: '18', close_quoted: 'false', close_stack: '[]', cmd_start: '19',
+      in_start: '18', last_cut: '32', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '33'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {bang_start: '40', cmd_start: '41', in_start: '40', last_cut: '33',
+        matched: '''!''', open_stack: '- !!python/object:_sre.SRE_Match {}', stop: '56'}
+      returns: "!!python/tuple ['\n\n    print(', '', '!', ' echo \"Coucou!\"']"
+  - !Call
+    args: {bang_start: '64', close_quoted: 'false', close_stack: '[]', cmd_start: '66',
+      in_start: '64', last_cut: '81', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '82'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {bang_start: '89', cmd_start: '90', in_start: '89', last_cut: '82',
+        matched: '''!''', open_stack: '- !!python/object:_sre.SRE_Match {}', stop: '107'}
+      returns: "!!python/tuple ['\n\n    print(', '', '!', ' echo Coucou toi!']"
+  - !Call
+    args: {bang_start: '89', close_quoted: 'false', close_stack: '[]', cmd_start: '90',
+      in_start: '89', last_cut: '107', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '108'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {bang_start: '115', cmd_start: '116', in_start: '115', last_cut: '108',
+        matched: '''!''', open_stack: '- !!python/object:_sre.SRE_Match {}', stop: '135'}
+      returns: "!!python/tuple ['\n\n    print(', '', '!', ' echo \"Coucou toi!\"\
+        ']"
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '178', matched: "'\n\n  '", mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '180'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '180', matched: ''''''}
+      returns: '!!python/tuple ['''', null, null, null]'
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '277', matched: "'\n\n  '", mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '278'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '278', matched: ''''''}
+      returns: '!!python/tuple ['''', null, null, null]'
+  - !Call
+    args: {bang_start: '115', close_quoted: 'false', close_stack: '[]', cmd_start: '116',
+      in_start: '115', last_cut: '135', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '136'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {bang_start: '143', cmd_start: '145', in_start: '143', last_cut: '136',
+        matched: h!, open_stack: '- !!python/object:_sre.SRE_Match {}', stop: '178'}
+      returns: "!!python/tuple ['\n\n    print(', '', h!, ' A=\"Aaa\" ; echo \"A=..\"\
+        \ ; echo $A ']"
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '180', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '180'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {stop: '187'}
+      returns: "!!python/tuple ['\n\n    1 != 2', null, null, null]"
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '180', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '187'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '187', matched: "'\n\n\n  # XXX Not yet passing'",
+        stop: '234'}
+      returns: "!!python/tuple ['\n\n    assert (1 != 2) is True\n\n\n    # XXX Not\
+        \ yet passing', null, null, null]"
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '278', matched: '''''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '[]',
+      s: "'\n\n  # Comment\n\n\n  print(! echo Coucou!)\n\n  print(! echo \"Coucou!\"\
+        )\n\n  print(l! echo \"Coucou!\")\n\n  print(! echo Coucou toi!)\n\n  print(!\
+        \ echo \"Coucou toi!\")\n\n  print(h! A=\"Aaa\" ; echo \"A=..\" ; echo $A\
+        \ )\n\n\n  1 != 2\n\n  assert (1 != 2) is True\n\n\n  # XXX Not yet passing\n\
+        \n  #print(h! A=\"Aaa\" ; echo \"A=..\"; echo $A )\n\n  '", stop: '278'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {mbang: 'null'}
+      returns: 'null'
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '187', matched: "'\n\n\n  # XXX Not yet passing'",
+      mbang: '!!python/object:_sre.SRE_Match {}', mclose: '!!python/object:_sre.SRE_Match
+        {}', open_quoted: 'false', open_stack: '[]', s: "'\n\n  # Comment\n\n\n  print(!\
+        \ echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\"\
+        )\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '234'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '234', matched: '  #print(h! A="Aaa" ; echo "A=..";
+          echo $A )''', stop: '277'}
+      returns: "!!python/tuple ['\n\n    #print(h! A=\"Aaa\" ; echo \"A=..\"; echo\
+        \ $A )', null, null, null]"
+  - !Call
+    args: {bang_start: '64', close_quoted: 'false', close_stack: '[]', cmd_start: '66',
+      in_start: '64', last_cut: '57', matched: l!, mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '81'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: {last_cut: '81', matched: '''''', open_stack: '[]', stop: '82'}
+      returns: '!!python/tuple [), null, null, null]'
+  - !Call
+    args: {bang_start: '40', close_quoted: 'false', close_stack: '[]', cmd_start: '41',
+      in_start: '40', last_cut: '33', matched: '''!''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '56'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: {last_cut: '56', matched: '''''', open_stack: '[]', stop: '57'}
+      returns: '!!python/tuple [), null, null, null]'
+  - !Call
+    args: {bang_start: '18', close_quoted: 'false', close_stack: '[]', cmd_start: '19',
+      in_start: '18', last_cut: '11', matched: '''!''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '32'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: {last_cut: '32', matched: '''''', open_stack: '[]', stop: '33'}
+      returns: '!!python/tuple [), null, null, null]'
+  - !Call
+    args: {bang_start: '89', close_quoted: 'false', close_stack: '[]', cmd_start: '90',
+      in_start: '89', last_cut: '82', matched: '''!''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '107'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: {last_cut: '107', matched: '''''', open_stack: '[]', stop: '108'}
+      returns: '!!python/tuple [), null, null, null]'
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '136', matched: h!, mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '178'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search]
+      local_changes: {last_cut: '178', matched: "'\n\n  '", open_stack: '[]', stop: '180'}
+      returns: "!!python/tuple [')\n\n    ', null, null, null]"
+  - !Call
+    args: {bang_start: '115', close_quoted: 'false', close_stack: '[]', cmd_start: '116',
+      in_start: '115', last_cut: '108', matched: '''!''', mbang: '!!python/object:_sre.SRE_Match
+        {}', mclose: '!!python/object:_sre.SRE_Match {}', open_quoted: 'false', open_stack: '-
+        !!python/object:_sre.SRE_Match {}', s: "'\n\n  # Comment\n\n\n  print(! echo\
+        \ Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\")\n\
+        \n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '135'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search, safe_search, safe_search]
+      local_changes: {last_cut: '135', matched: '''''', open_stack: '[]', stop: '136'}
+      returns: '!!python/tuple [), null, null, null]'
+  - !Call
+    args: {bang_start: '143', close_quoted: 'false', close_stack: '[]', cmd_start: '145',
+      in_start: '143', last_cut: '234', matched: "'\n\n  #print(h! A=\"Aaa\" ; echo\
+        \ \"A=..\"; echo $A )'", mbang: '!!python/object:_sre.SRE_Match {}', mclose: '!!python/object:_sre.SRE_Match
+        {}', open_quoted: 'false', open_stack: '[]', s: "'\n\n  # Comment\n\n\n  print(!\
+        \ echo Coucou!)\n\n  print(! echo \"Coucou!\")\n\n  print(l! echo \"Coucou!\"\
+        )\n\n  print(! echo Coucou toi!)\n\n  print(! echo \"Coucou toi!\")\n\n  print(h!\
+        \ A=\"Aaa\" ; echo \"A=..\" ; echo $A )\n\n\n  1 != 2\n\n  assert (1 != 2)\
+        \ is True\n\n\n  # XXX Not yet passing\n\n  #print(h! A=\"Aaa\" ; echo \"\
+        A=..\"; echo $A )\n\n  '", stop: '277'}
+    cardinality: Single possible effect
+    effects list:
+    - !Effect
+      calls_made: [safe_search]
+      local_changes: {last_cut: '277', matched: '  ''', stop: '278'}
+      returns: "!!python/tuple ['\n\n    ', null, null, null]"
