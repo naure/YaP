@@ -92,13 +92,20 @@ re_escape_sh = re.compile(r'([\\ ])')
 def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
-def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
+def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
     if 'h' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
+    if infile is None or hasattr(infile, 'fileno'):
+        infd = infile
+        indata = None
+    else:
+        infd = PIPE
+        indata = infile
     outfd = outfile or PIPE
+
     proc = Popen(
         cmd,
-        stdin=PIPE if indata is not None else None,
+        stdin=infd,
         stdout=outfd if ('o' in flags or 'O' in flags) else None,
         stderr=(
             outfd if 'e' in flags else
@@ -110,9 +117,11 @@ def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
     )
     if 'p' in flags:  # Run in the background
         return proc
+
     out, err = proc.communicate(indata)
     if outfile:
         outfile.close()
+
     code = proc.returncode
     ret = []
     if ('o' in flags or 'O' in flags):
@@ -139,8 +148,9 @@ Usage: cmd.yp command argument
 ''')
 
 (yap_call(["echo"], "", ("Hi!"), None, None))
-#("input.txt" > ! cmd)
-#("data" ! > "out.txt")
+(yap_call(["cmd"], "", (open("input.txt" , "r")), None, None))
+(yap_call([], "o", ("data"), None, open("out.txt", "w")))
+(yap_call(["echo"], "", (open("input.txt" , "r")), None, None))
 #src > ! > dest
 # [expr | file >] [flags]! [cmd] [> file]
 

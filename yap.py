@@ -368,6 +368,13 @@ def compile_sh(in_expr, bang, cmd, must_capture):
     ' Compile a shell command into python code'
     flags = bang[:-1]
 
+    # Input as Python expression. Can be a filename, data, or nothing
+    in_expr = in_expr.strip()
+    if in_expr.endswith('>'):
+        infile = render_file(in_expr[:-1], 'r')
+    else:
+        infile = in_expr or 'None'
+
     # The command, arguments list and output file
     parts = parse_cmd(cmd.strip(), flags)
     if parts and parts[-1][1] == '>':
@@ -392,7 +399,7 @@ def compile_sh(in_expr, bang, cmd, must_capture):
 
     # Call the process
     process = 'yap_call([{}], "{}", ({}), {}, {})'.format(
-        ', '.join(cmd_args), flags, in_expr, convert, outfile)
+        ', '.join(cmd_args), flags, infile, convert, outfile)
     return process
 
 
@@ -448,13 +455,20 @@ re_escape_sh = re.compile(r'([\\ ])')
 def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
-def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
+def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
     if 'h' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
+    if infile is None or hasattr(infile, 'fileno'):
+        infd = infile
+        indata = None
+    else:
+        infd = PIPE
+        indata = infile
     outfd = outfile or PIPE
+
     proc = Popen(
         cmd,
-        stdin=PIPE if indata is not None else None,
+        stdin=infd,
         stdout=outfd if ('o' in flags or 'O' in flags) else None,
         stderr=(
             outfd if 'e' in flags else
@@ -466,9 +480,11 @@ def yap_call(cmd, flags='', indata=None, convert=None, outfile=None):
     )
     if 'p' in flags:  # Run in the background
         return proc
+
     out, err = proc.communicate(indata)
     if outfile:
         outfile.close()
+
     code = proc.returncode
     ret = []
     if ('o' in flags or 'O' in flags):

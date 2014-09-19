@@ -7,8 +7,9 @@ Usage: cmd.yp command argument
 ''')
 
 ("Hi!" ! echo)
-#("input.txt" > ! cmd)
-#("data" ! > "out.txt")
+("input.txt" > ! cmd)
+("data" ! > "out.txt")
+("input.txt" > ! echo )
 #src > ! > dest
 # [expr | file >] [flags]! [cmd] [> file]
 
