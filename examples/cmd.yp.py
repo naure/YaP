@@ -69,8 +69,11 @@ class MissingParameter(object):
     def __init__(self, what):
         self.what = what
 
-    def __str__(self):
+    def access(self, *args):
         raise KeyError(self.what)
+
+    __str__ = __repr__ = __getitem__ = __getattr__ = __getslice__ = __call__ = access
+    __int__ = __add__ = __sub__ = __gt__ = __lt__ = __ge__ = __le__ = access
 
     def __bool__(self):
         return False

@@ -20,8 +20,12 @@
   Copy:            (source > ! > destination)
 - Integrate docopt, parse usage string into arguments parser. Optional. Fallback
   to basic implementation, or laxist that just take all arguments.
-  OR deduce from instances of $--arg
+  OR deduce from instances of $--arg. $--option always take a parameter.
+  Use ('--option' in $*) otherwise.
+  Ignore --options for $1..
 - raise anything
+- Global try/catch: specify what to do in case of uncaught exception
+- Facility for searching/filtering text, like re.search per line.
 - Refactor parser
 - Alternative list syntax: [Aaa Bbb "quoted string" "for" "if"]
 - Explicit multi parameters expansion with {*list}

@@ -7,6 +7,7 @@ sys.path.append('.')
 
 from .utils import compare_paths, red
 from behavior_tests.trace import trace, format_db
+from behavior_tests.store import format_db
 #import behavior_tests.tools
 import yap
 

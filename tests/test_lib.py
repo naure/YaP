@@ -56,8 +56,21 @@ class Test(unittest.TestCase):
         self.assertEqual(eval(
             expand_env_soft('$2 == "deux"')), False
         )
+        self.assertEqual(eval(
+            expand_env_soft('$2 == $2')), False
+        )
         with self.assertRaises(KeyError):
             eval(expand_env_soft('"error: {}".format($2)'))
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('$2[0]'))
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('$2[-3:]'))
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('$2.attr'))
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('$2 + "nope"'))
+        with self.assertRaises(KeyError):
+            eval(expand_env_soft('int($2)'))
 
         # Environment variables
         os = O()
