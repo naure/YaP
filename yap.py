@@ -224,73 +224,6 @@ def split_bang(s):
                 last_cut = stop
 
     assert last_cut == len(s), 'Did not consume all the source: <%s>' % s[last_cut:]
-    #yield (s[last_cut:], None)  # Regular end, possibly empty
-
-
-def old_split_bang(s):
-    return safe_split(re_symbols_py, s)
-
-re_symbols_py = re.compile(
-    r'''(
-    \w*! (?! = )      )|(  # Start capture
-    \s* (?:\#.*)? $ )|(  # EOL
-    [({[]     )|(   # Open bracket
-    [)}\]]    )|(   # Close bracket
-    ["\']           # Quote
-    )''',
-    re.X | re.MULTILINE)
-
-# XXX Make use of safe_search
-def safe_split(re_symbols, s):
-    ' Like re.split() but aware of parenthesis, quotes, and escaping. '
-    #escaped = False  # XXX Support escaping
-    in_quotes = False
-    in_dquotes = False
-    depth = 0
-
-    capturing_since = None
-    capturing_depth = None
-
-    parts = []
-    part_start = 0
-
-    for m in re_symbols.finditer(s):
-        capture, eol, opening, closing, quote = m.groups()
-        eol = eol is not None
-        if quote:
-            # Toggle quote state and move on
-            if quote == "'":
-                in_quotes = not in_quotes
-            elif quote == '"':
-                in_dquotes = not in_dquotes
-
-        elif not in_quotes and not in_dquotes:
-            if opening:
-                depth += 1
-            elif closing:
-                depth -= 1
-
-            if capturing_depth is None:
-                if eol and depth == 0:  # End of pure Python statement
-                    parts.append((s[part_start:m.end()], None))
-                    part_start = m.end()
-
-                if capture:
-                    # Start capturing
-                    capturing_since = m.start()
-                    capturing_depth = depth
-
-            elif depth < capturing_depth or (eol and depth == 0):
-                    # Finish capturing
-                    parts.append((
-                        s[part_start:capturing_since],  # Regular
-                        s[capturing_since:m.start()],  # Captured
-                    ))
-                    part_start = m.start()
-                    capturing_depth = None
-        #else: ignore quoted part
-    parts.append((s[part_start:], None))  # Regular end, possibly empty
-    return parts
 
 
 re_escape_py = re.compile(r'([\\\'"])')
@@ -329,14 +262,6 @@ def render_sh_arg(arg, exprs):
     return '"{}".format({})'.format(orange(rendered_arg), format_args)
 
 
-def listsplit(l, sep):
-    try:
-        i = l.index(sep)
-        return l[:i], l[i + 1:]
-    except ValueError:
-        return l, []
-
-
 def flags_to_function(flags):
     convert = 'None'
     if 'i' in flags:
@@ -362,7 +287,6 @@ def render_file(raw, mode):
 
 
 output_flags = ('o', 'e', 'r')
-re_sh = re.compile(r'(\w*)!', re.DOTALL)
 
 def compile_sh(in_expr, bang, cmd, must_capture):
     ' Compile a shell command into python code'
