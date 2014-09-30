@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import os
 from os import listdir
 from os.path import *
@@ -7,8 +8,10 @@ from sys import stdin, stdout, stderr, exit
 from pprint import pprint
 from glob import glob
 
-def set_usage(usage):
-    print(orange('Usage yet not implemented'))
+
+import logging
+from logging import debug, info, warning, error
+logging.basicConfig(format='{}: %(levelname)s: %(message)s'.format(__file__))
 
 
 if sys.stdout.isatty():
@@ -60,9 +63,17 @@ def joinfields(fields):
 def joinpaths(*args):
     return os.sep.join(args)
 
+def read(filename):
+    with open(filename) as fd:
+        return filename.read()
+
+def write(filename, content):
+    with open(filename, 'w') as fd:
+        fd.write(content)
+
 
 def listget(array, i, alt=None):
-    return array[i] if i < len(array) else alt
+    return array[i] if 0 <= i < len(array) else alt
 
 
 class MissingParameter(object):
@@ -83,7 +94,7 @@ def missingget(obj, variable):
     return v if v is not None else MissingParameter(variable)
 
 def missingindex(array, i):
-    return array[i] if i < len(array) else MissingParameter(
+    return array[i] if 0 <= i < len(array) else MissingParameter(
         "Argument {}".format(i))
 
 

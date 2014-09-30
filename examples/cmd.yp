@@ -1,10 +1,11 @@
 #!./yap.py
 # vim: set ft=python:
 
-set_usage('''
+__doc__ = '''
+Doc string
 Usage: cmd.yp command argument
+'''
 
-''')
 
 ("Hi!" ! echo)
 ("input.txt" > ! cmd)

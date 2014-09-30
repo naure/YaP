@@ -448,12 +448,20 @@ def joinfields(fields):
 
 def joinpaths(*args):
     return os.sep.join(args)
+
+def read(filename):
+    with open(filename) as fd:
+        return filename.read()
+
+def write(filename, content):
+    with open(filename, 'w') as fd:
+        fd.write(content)
 '''
 
 
 listget_lib = r'''
 def listget(array, i, alt=None):
-    return array[i] if i < len(array) else alt
+    return array[i] if 0 <= i < len(array) else alt
 '''
 
 missing_lib = r'''
@@ -475,7 +483,7 @@ def missingget(obj, variable):
     return v if v is not None else MissingParameter(variable)
 
 def missingindex(array, i):
-    return array[i] if i < len(array) else MissingParameter(
+    return array[i] if 0 <= i < len(array) else MissingParameter(
         "Argument {}".format(i))
 '''
 
@@ -508,10 +516,30 @@ else:
     blue = gray = green = orange = red = _yap_color = lambda s, c='': s
 '''
 
-usage_lib = '''
-def set_usage(usage):
-    print(orange('Usage yet not implemented'))
+imports = '''
+import os
+from os import listdir
+from os.path import *
+import sys
+from sys import stdin, stdout, stderr, exit
+from pprint import pprint
+from glob import glob
 '''
+
+logging_lib = '''
+import logging
+from logging import debug, info, warning, error
+logging.basicConfig(format='{}: %(levelname)s: %(message)s'.format(__file__))
+'''
+
+
+def make_globals(filename):
+    return {
+        '__file__': filename,
+        '__name__': '__main__',
+        '__package__': None,
+        '__doc__': None,
+    }
 
 
 def run(args):
@@ -521,16 +549,10 @@ def run(args):
 
     header = [
         '#!/usr/bin/env python',
-        'import os',
-        'from os import listdir',
-        'from os.path import *',
-        'import sys',
-        'from sys import stdin, stdout, stderr, exit',
-        'from pprint import pprint',
-        'from glob import glob',
+        imports,
 
         # YaP libs
-        usage_lib,
+        logging_lib,
         color_lib,
         convert_lib,
         listget_lib,
@@ -550,7 +572,7 @@ def run(args):
             print('Compiled to {}'.format(args.output))
     else:
         sys.argv = [args.source] + args.script_args
-        exec(pycode, {})
+        exec(compile(pycode, args.source, 'exec'), make_globals(args.source))
 
 
 def main(cmd_args):
