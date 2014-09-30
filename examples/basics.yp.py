@@ -71,6 +71,12 @@ def write(filename, content):
     with open(filename, 'w') as fd:
         fd.write(content)
 
+def grep(regex, lines):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
+    regexc = re.compile(regex)
+    return filter(regexc.search, lines)
+
 
 def listget(array, i, alt=None):
     return array[i] if 0 <= i < len(array) else alt

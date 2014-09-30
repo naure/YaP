@@ -71,6 +71,12 @@ def write(filename, content):
     with open(filename, 'w') as fd:
         fd.write(content)
 
+def grep(regex, lines):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
+    regexc = re.compile(regex)
+    return filter(regexc.search, lines)
+
 
 def listget(array, i, alt=None):
     return array[i] if 0 <= i < len(array) else alt
@@ -162,13 +168,6 @@ Usage: cmd.yp command argument
 '''
 
 
-(yap_call(["echo"], "", ("Hi!"), None, None))
-(yap_call(["cmd"], "", (open("input.txt" , "r")), None, None))
-(yap_call([], "o", ("data"), None, open("out.txt", "w")))
-(yap_call(["echo"], "", (open("input.txt" , "r")), None, None))
-#src > ! > dest
-# [expr | file >] [flags]! [cmd] [> file]
-
 if missingindex(sys.argv, 1) == 'list':
     print(gray('Listing nicely'))
     filenames = listdir(missingindex(sys.argv, 2) or '.')
@@ -183,6 +182,16 @@ if missingindex(sys.argv, 1) == 'list':
 elif missingindex(sys.argv, 1) == 'write':
     yap_call(["echo", "Out"], "o", (None), None, open(missingindex(sys.argv, 2) or "default.txt", "w"))
 
+elif missingindex(sys.argv, 1) == 'grep':
+    print(concat(
+        grep(missingindex(sys.argv, 2), open(missingindex(sys.argv, 3)))
+    ))
+
+elif missingindex(sys.argv, 1) == 'demo':
+    (yap_call(["echo"], "", ("Hi!"), None, None))
+    (yap_call(["cmd"], "", (open("input.txt" , "r")), None, None))
+    (yap_call([], "o", ("data"), None, open("out.txt", "w")))
+    (yap_call(["echo"], "", (open("input.txt" , "r")), None, None))
 
 else:
     print(red('Unknown command: %s' % missingindex(sys.argv, 1)))

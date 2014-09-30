@@ -7,13 +7,6 @@ Usage: cmd.yp command argument
 '''
 
 
-("Hi!" ! echo)
-("input.txt" > ! cmd)
-("data" ! > "out.txt")
-("input.txt" > ! echo )
-#src > ! > dest
-# [expr | file >] [flags]! [cmd] [> file]
-
 if $1 == 'list':
     print(gray('Listing nicely'))
     filenames = listdir($2 or '.')
@@ -28,6 +21,16 @@ if $1 == 'list':
 elif $1 == 'write':
     ! echo "Out" > $2 or "default.txt"
 
+elif $1 == 'grep':
+    print(concat(
+        grep($2, open($3))
+    ))
+
+elif $1 == 'demo':
+    ("Hi!" ! echo)
+    ("input.txt" > ! cmd)
+    ("data" ! > "out.txt")
+    ("input.txt" > ! echo )
 
 else:
     print(red('Unknown command: %s' % $1))

@@ -456,6 +456,12 @@ def read(filename):
 def write(filename, content):
     with open(filename, 'w') as fd:
         fd.write(content)
+
+def grep(regex, lines):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
+    regexc = re.compile(regex)
+    return filter(regexc.search, lines)
 '''
 
 
