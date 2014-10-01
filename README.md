@@ -1,14 +1,20 @@
 
-Yap
+# YaP
+
+A modern shell language derived from Python.
+
+* auto-gen TOC:
+{:toc}
 
 # Design Goals
 
 ## Truly integrated
 
-Mix Shell and Python expressions. Outputs can be used
+Mix Shell and Python expressions, both ways. Outputs can be used
 directly as strings, or easily interpreted in various ways.
 
-Lots of conveniences for scripting: $1 for program arguments, $env_var, listdir, read, ...
+Lots of straight-forward conveniences for arguments, files and strings handling.
+
 Command interpolation with { any(expression) }.
 
 ## Safe:
@@ -24,7 +30,7 @@ raise an error as expected.
 
 Failures of called processes must be handled, either implicitly or explicitely.
 
-Besides, it doesn't contain decades-old security bugs like bash :D
+Besides, it does not contain prehistoric security bugs like bash :D
 
 ## Powerful:
 
@@ -67,6 +73,7 @@ write some after glancing sideways at the examples in this README.
 ## Variables in commands
 
     ! echo { some_python.upper() }
+    ! touch prefix_{var}.ext
 
     # Safe program arguments. Exception if missing
     ! ls $1
@@ -87,7 +94,7 @@ write some after glancing sideways at the examples in this README.
 
 ## Working with files
 
-    # Pipe to and from filenames
+    # Pipe to and from filenames with the > symbol
     (filename > ! wc > "words_count.txt")
 
     # Pipe from string
