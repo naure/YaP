@@ -1,0 +1,8 @@
+#!./yap.py
+# vim: set ft=python:
+
+for file in $*[1:]:
+    print(green(file) + ':')
+    print(concat(
+        grep($1, open(file))
+    ))

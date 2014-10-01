@@ -8,7 +8,7 @@ Yap
 Mix Shell and Python expressions. Outputs can be used
 directly as strings, or easily interpreted in various ways.
 
-Lots of convenience for scripting: $1 for sys.argv[1], $env_var, listdir, ...
+Lots of conveniences for scripting: $1 for program arguments, $env_var, listdir, read, ...
 Command interpolation with { any(expression) }.
 
 ## Safe:
@@ -22,10 +22,14 @@ raise an error as expected.
     print($1)  # Raises an exception if missing
     print($1 or 'Default')  # Or provide an alternative
 
+Failures of called processes must be handled, either implicitly or explicitely.
+
+Besides, it doesn't contain decades-old security bugs like bash :D
+
 ## Powerful:
 
 Solve each task with the best suited language. Python for logic and shell for system
-interaction.
+interaction. Cross-platform like Python.
 
 ## Simple:
 
@@ -38,34 +42,117 @@ Any Python programmer should be able to understand Yap. And he should be able to
 write some after glancing sideways at the examples in this README.
 
 
-
 # Syntax:
 
-## Output
+## Running commands
 
-Default: Capture stdout, print stderr
+    # Run command. Output will be printed on the console
+    ! cmd
 
+    # Capture output in an expression. stderr still goes to the console
     some_python = 'full output: ' + ! shell command
+    print(! date +%s)
 
-    some_integer = 2 + i! echo 2
-    return_code = c! false
+    # Specify what exactly to capture
+    stdout, stderr = se! true
+    output_and_errors = O! true
+
+    # The above raise exceptions on failures. Instead, you can capture the return code
+    return_code = c! true
     stdout, stderr, return_code = sec! false
+    if return_code:
+        error("Something went wrong")
+
+
+## Variables in commands
+
+    ! echo { some_python.upper() }
+
+    # Safe program arguments. Exception if missing
+    ! ls $1
+    # Arguments list. Does not include the program name
+    for arg in $*:
+        ! ls {arg}
+
+    # Same for environment variable
+    ! echo $env_variable
+    print($env_variable)
+
+    # Test values or provide defaults
+    ! ls { $1 or "." }
+    if $1 == "first argument":
+        pass
+    $unknown_env_variable is None
+
+
+## Working with files
+
+    # Pipe to and from filenames
+    (filename > ! wc > "words_count.txt")
+
+    # Pipe from string
+    (some_data ! cmd)
+
+    # Read and write files
+    some_data = read(filename)
+    write(filename, some_data)
+
+    # Many common operations are readily available
+    exists(filename)
+    joinpaths("/tmp", "dir", "file")
+    listdir(".")
+    glob("*.py")
+
+
+## Working with data
+
+    # Conversion of command outputs
+    some_integer = (i! echo 2) + 2
     list_of_lines = l! ls
     rows_then_fields = f! ls -l
     fields_then_rows = r! ls -l
     json = j! ls -l
-    print(!(date +%s))
 
-    output = !input|(wc)
-    output = se!input| wc
+    # Join lists of strings
+    concat, joinlines, joinfields
 
-    ! echo { some_python.upper() }
-    ! echo $env_variable
-    print($env_variable)
-    if $1 == "first argument": pass
-    $unset_env_variable is None
+    # Filter text, list of lines, or an open file, with a regex
+    for matching_line in grep("^pattern", open(file)):
+        print(matching_line)
+
+    # Pretty print and colors. Colors are simply ignored if not using a terminal.
+    pprint(..), red(..), blue(..), green(..), ..
+
+
+# Examples
+
+## grep
+
+yap grep.yp pattern files...
+
+    for file in $*[1:]:
+        print(green(file) + ':')
+        print(concat(
+            grep($1, open(file))
+        ))
+
+## Nice listing with file type
+
+yap listing.yp [directory]
+
+    print(gray('Listing nicely'))
+    filenames = listdir($1 or '.')
+    for name in filenames:
+        print(
+            blue(name.rjust(15)),
+            joinfields(
+                (f! file {name} )[1:]
+            )
+        )
 
 
 # Note
 
-YaP syntax is not yet stable and might evolve soon.
+YaP is not yet stable and might evolve soon.
+
+Questions and feedback are most welcome!

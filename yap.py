@@ -339,7 +339,7 @@ def expand_env_strict(py):
         re_arg.sub(
             r'sys.argv[\1]',
             re_all_args.sub(
-                r'sys.argv', py)))
+                r'sys.argv[1:]', py)))
 
 
 def expand_env_soft(py):
@@ -348,7 +348,7 @@ def expand_env_soft(py):
         re_arg.sub(
             r'missingindex(sys.argv, \1)',
             re_all_args.sub(
-                r'sys.argv', py)))
+                r'sys.argv[1:]', py)))
 
 
 def expand_python(s):

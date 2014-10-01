@@ -160,84 +160,10 @@ def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
     return ret[0] if len(ret) == 1 else ret or None
 
 #!./yap.py
+# vim: set ft=python:
 
-# Regular python
-print("Python")
-numbers = {1: 'one', 2: 'two'}
-print(sys.argv)
-
-# Regular shell commands
-yap_call(["echo", "Shell command"], "", (None), None, None)
-# Capture the output
-now = yap_call(["date", "+%s"], "o", (None), None, None)
-# Command in brackets. Print result
-print(yap_call(["date", "+%s"], "o", (None), None, None))
-
-multiline = (yap_call(["echo", "A", "B", "-o", "(parentheses)", "-and", "!", "are", "ignored"], "o", (None), None, None))
-
-system_shell = (yap_call(["A=\"Aaa\";", "echo", "$A;", "echo", "Semi-colons are", "required to separate commands."], "ho", (None), None, None))
-print(system_shell)
-
-# Interpolation of commands
-for key, value in numbers.items():
-    yap_call(["echo", "{}={}".format(key, value)], "", (None), None, None)
-
-yap_call(["echo", str("Any python expression, ignore in quotes".upper())], "", (None), None, None)
-
-yap_call(["echo", str(
-    "Same lines joining rules as Python"
-)], "", (None), None, None)
-
-yap_call(["echo", str(
-    {"inline": "dictionnary"}
-)], "", (None), None, None)
-
-yap_call(["echo", "With \'quotes\'"], "", (None), None, None)
-
-# Environment variable in shell. Raises an error if missing.
-yap_call(["echo", "{}/somewhere".format(os.environ["HOME"])], "", (None), None, None)
-# Environment variable in Python. Returns None if missing.
-missingget(os.environ, "missing_variable") is None
-yap_call(["echo", "a_{}".format(missingget(os.environ, "variable") or "default value"), "b_c"], "", (None), None, None)
-yap_call(["echo", "find", ".", "-exec", "cat", str("{}"), "+"], "", (None), None, None)
-
-# Same applies to program arguments
-if missingindex(sys.argv, 1):
-    yap_call(["echo", "First argument: {}".format(sys.argv[1])], "", (None), None, None)
-    for arg in sys.argv[1:]:
-        print(arg)
-
-
-# Output conversion
-file_list = yap_call(["ls", "-1"], "lo", (None), str.splitlines, None)
-
-simple_string = 'Output: ' + yap_call(["echo", "some", "output"], "o", (None), None, None)
-from_json = yap_call(["echo", "[1, 2]"], "jo", (None), json.loads, None)
-to_integer = 2 + (yap_call(["echo", "2"], "io", (None), int, None)) + 2
-list_of_lines = yap_call(["ls"], "lo", (None), str.splitlines, None)
-rows_then_columns = yap_call(["ls", "-l"], "co", (None), None, None)
-fields_then_rows = yap_call(["ls", "-l"], "r", (None), None, None)
-binary = yap_call(["echo", "cat", "doc.pdf"], "bo", (None), None, None)
-
-# Print stdout and stderr
-yap_call(["echo"], "", (None), None, None)
-# Capture stdout, print stderr
-out = yap_call(["echo"], "o", (None), None, None)
-# Capture stderr, print stdout
-err = yap_call(["echo"], "e", (None), None, None)
-# Capture both
-out, err = yap_call(["echo"], "oe", (None), None, None)
-# Include the return code
-out, err, ret = yap_call(["echo", "May fail.."], "oer", (None), None, None)
-if ret == 0:
-    print(out)
-# n to ignore errors
-yap_call(["false", "unsafe", "cmd"], "n", (None), None, None)
-# p to run in the background and get a proc object
-proc = yap_call(["echo", "sleep", "1"], "po", (None), None, None)
-out, err = proc.communicate("input")
-# h to run through a shell
-print(yap_call(["echo", "a", "b", "|", "grep", "a"], "ho", (None), None, None))
-# v to run with a clean environment
-print(yap_call(["echo", "clean"], "vo", (None), None, None))
-yap_call(["echo", "Ok!"], "", (None), None, None)
+for file in sys.argv[1:][1:]:
+    print(green(file) + ':')
+    print(concat(
+        grep(missingindex(sys.argv, 1), open(file))
+    ))
