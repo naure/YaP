@@ -3,9 +3,6 @@
 
 A modern shell language derived from Python.
 
-* auto-gen TOC:
-{:toc}
-
 # Design Goals
 
 ## Truly integrated
