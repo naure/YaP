@@ -23,6 +23,7 @@
 - Explicit multi parameters groups expansion with {** [('-o', option) ..]}
 - Split into yaplib optionally
 - Support multi-files, including mix YaP and Python
+- Put generated code in package structure with a main
 - Make redirects with |
 - Show usage message on missing argument
 - Integrate docopt, parse usage string into arguments parser. Optional. Fallback
@@ -32,7 +33,6 @@
   Ignore --options for $1..
 - raise anything
 - Global try/catch: specify what to do in case of uncaught exception
-- 
 - Refactor parser
 - Alternative list syntax: [Aaa Bbb "quoted string" "for" "if"]
 - Support escaping

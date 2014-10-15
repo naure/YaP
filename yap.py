@@ -128,7 +128,6 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
 
     for m in re_symbols.finditer(s, pos):
         c = m.group()
-        debug('fooound <%s>' % c)
         capture, opening, closing, quote = m.groups()
         # Toggle quote state
         if c == "'":
@@ -138,17 +137,13 @@ def safe_search(re_symbols, s, pos=0, openings='({[', closings=')}]'):
         quoted = in_quotes or in_dquotes
 
         if capture is not None:  # Found it
-            debug('caaaapture <%s> ' % c, stack)
             yield m, quoted, stack
 
         if c and not quoted:
             if c in openings:
-                debug('ooopen')
                 stack.append(m)
             elif c in closings and stack:
-                debug('cloooose')
                 stack.pop()
-        debug('staaack <%s>  ' % c, stack)
 
     yield None, quoted, stack  # Not found
 
@@ -181,13 +176,11 @@ def split_bang(s):
 
         matched = mbang.group()
         if matched and matched[-1] == '!':
-            debug('loooking for closing. <%s>' % matched)
             # Found a bang, look for the end of the expression
             for mclose, close_quoted, close_stack in safe_search(
                     re_symbols_bang_close, s, pos=mbang.end()
             ):
 
-                debug('candidaaaate closing ', mclose.group(), close_quoted, close_stack)
                 # Candidate end
                 if not mclose or close_quoted or close_stack:
                     continue  # Ignore if in quotes or in pending brackets
@@ -195,7 +188,6 @@ def split_bang(s):
                     continue  # We are in (! expr), wait for the closing bracket
                 else:
                     # Found the end
-                    debug('closing')
                     # Format: input flags! cmd
                     bang_start = mbang.start()
                     cmd_start = mbang.end()
@@ -242,7 +234,6 @@ def render_arg(arg):
 
 
 def render_py_expr(expr):
-    debug('==== render: ' + expr)
     if expr.startswith('{'):
         return expand_env_soft(expr[1:-1])
     elif expr.startswith('$'):
@@ -253,7 +244,6 @@ def render_sh_arg(arg, exprs):
     rendered_arg = render_arg(arg)
     if not exprs:  # No expansion, "plain string"
         return '"{}"'.format(orange(rendered_arg))
-    # XXX Should wrap the expressions with ()
     rendered_exprs = [green(render_py_expr(p)) for p in exprs]
     if arg == '{}':  # Only one expression without text
         return 'str({})'.format(rendered_exprs[0])
