@@ -153,10 +153,3 @@ yap listing.yp [directory]
                 (f! file {name} )[1:]
             )
         )
-
-
-# Note
-
-YaP is not yet stable and might evolve soon.
-
-Questions and feedback are most welcome!
