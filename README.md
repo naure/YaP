@@ -3,6 +3,16 @@
 
 A modern shell language derived from Python.
 
+# Install
+
+    sudo wget https://raw.githubusercontent.com/naure/YaP/master/yap.py -O /usr/local/bin/yap
+    sudo chmod +x /usr/local/bin/yap
+
+Then try:
+
+    echo 'print( ! ls )' > list.yap
+    yap list.yap
+
 # Design Goals
 
 ## Truly integrated
