@@ -10,8 +10,8 @@ A modern shell language derived from Python.
 
 Then try:
 
-    echo 'print( ! ls )' > list.yap
-    yap list.yap
+    echo 'print( ! ls )' > list_example.yap
+    yap list_example.yap
 
 # Design Goals
 
