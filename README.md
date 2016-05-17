@@ -67,12 +67,12 @@ write some after glancing sideways at the examples in this README.
     print(! date +%s)
 
     # Specify what exactly to capture
-    stdout, stderr = se! true
+    stdout, stderr = oe! true
     output_and_errors = O! true
 
     # The above raise exceptions on failures. Instead, you can capture the return code
-    return_code = c! true
-    stdout, stderr, return_code = sec! false
+    return_code = r! true
+    stdout, stderr, return_code = oer! false
     if return_code:
         error("Something went wrong")
 
@@ -122,9 +122,11 @@ write some after glancing sideways at the examples in this README.
 
     # Conversion of command outputs
     some_integer = (i! echo 2) + 2
+    some_float = (d! echo 2.5) + 2
     list_of_lines = l! ls
-    rows_then_fields = f! ls -l
-    fields_then_rows = r! ls -l
+    list_of_words = f! ls
+    lines_then_fields = lf! ls -l
+    fields_then_lines = fl! ls -l
     json = j! ls -l
 
     # Join lists of strings
