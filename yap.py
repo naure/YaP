@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import sys
 import re
@@ -419,7 +419,10 @@ def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
 
 convert_lib = r'''
 import json
-from itertools import zip_longest
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
 
 def split_lines_fields(s):
     return list(map(str.split, s.splitlines()))
