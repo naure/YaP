@@ -474,6 +474,9 @@ class MissingParameter(object):
     __str__ = __repr__ = __getitem__ = __getattr__ = __getslice__ = __call__ = access
     __int__ = __add__ = __sub__ = __gt__ = __lt__ = __ge__ = __le__ = access
 
+    def __nonzero__(self):
+        return False
+
     def __bool__(self):
         return False
 
