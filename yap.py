@@ -444,7 +444,7 @@ def joinpaths(*args):
 
 def read(filename):
     with open(filename) as fd:
-        return filename.read()
+        return fd.read()
 
 def write(filename, content):
     with open(filename, 'w') as fd:
