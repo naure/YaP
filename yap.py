@@ -531,7 +531,7 @@ from glob import glob
 logging_lib = '''
 import logging
 from logging import debug, info, warning, error
-logging.basicConfig(format='{}: %(levelname)s: %(message)s'.format(__file__))
+logging.basicConfig(level=logging.INFO, format='{}: %(levelname)s: %(message)s'.format(__file__))
 '''
 
 
