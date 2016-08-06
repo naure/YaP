@@ -544,12 +544,9 @@ def make_globals(filename):
     }
 
 
-def run(args):
-    " Compile yap file and execute it, or just save it "
-    with sys.stdin if args.source == '-' else open(args.source) as f:
-        source = f.read()
+def compile_yap(source):
 
-    header = [
+    headers = [
         '#!/usr/bin/env python',
         imports,
 
@@ -562,8 +559,16 @@ def run(args):
         call_lib,
     ]
 
-    compiled = blue(expand_python(source))
-    pycode = '\n'.join(header) + '\n' + compiled
+    pycode = '\n'.join(headers) + '\n\n' + expand_python(source)
+    return pycode
+
+
+def run(args):
+    " Compile yap file and execute it, or just save it "
+    with sys.stdin if args.source == '-' else open(args.source) as f:
+        source = f.read()
+
+    pycode = compile_yap(source)
 
     if args.output:
         if args.output == '-':
