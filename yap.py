@@ -16,7 +16,7 @@ def parse_cmd(s, flags):
     ''' Extract arguments from a shell command while parsing the {expressions}.
         Return [ (argument, [expressions, ..]), .. ].
     '''
-    parse_dollar = not 'h' in flags
+    parse_dollar = not 's' in flags
     parts = []
     current_part = ''
     current_exprs = []
@@ -370,7 +370,7 @@ def escape_sh(s):
     return re_escape_sh.sub(r'\\\1', s)
 
 def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
-    if 'h' in flags:  # Shell mode
+    if 's' in flags:  # Shell mode
         cmd = ' '.join(map(escape_sh, cmd))
     if infile is None or hasattr(infile, 'fileno'):
         infd = infile
@@ -388,7 +388,7 @@ def yap_call(cmd, flags='', infile=None, convert=None, outfile=None):
             outfd if 'e' in flags else
             STDOUT if 'O' in flags else None),
         universal_newlines='b' not in flags,
-        shell='h' in flags,
+        shell='s' in flags,
         env={} if 'v' in flags else None,
         bufsize=-1,  # Buffered
     )

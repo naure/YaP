@@ -76,6 +76,9 @@ write some after glancing sideways at the examples in this README.
     if return_code:
         error("Something went wrong")
 
+    # The s prefix runs the command in a shell
+    s! cat foo | grep bar
+
 
 ## Variables in commands
 
