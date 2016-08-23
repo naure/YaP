@@ -17,20 +17,19 @@ Then try:
 
 ## Truly integrated
 
-Mix Shell and Python expressions, both ways. Outputs can be used
-directly as strings, or easily interpreted in various ways.
+The best of both worlds: Python code and inline shell commands. Outputs can be interpreted
+directly as strings, lists of lines, csv, or json objects.
 
-Lots of straight-forward conveniences for arguments, files and strings handling.
+Lots of straight-forward conveniences for arguments, files, strings and errors handling.
 
 Command interpolation with { any(expression) }.
 
 ## Safe:
 
+Shell scripting is tricky, error-prone and unsafe. 
 Hell is quotes. And spaces in filenames. Or space-separated lists. When missing arguments gives an empty string messing up your paths. And logic with nothing but strings. Avoid all of this.
 
-In Yap, code is independent of input. Python's data structures and logic are
-well-defined. Missing arguments like $1 or environment variables like $var will
-raise an error as expected.
+Yap is a normal programming language; the code doesn't depend on input values. It uses the well-defined Python's data structures and logic. Common cases like missing arguments will raise an error as expected.
 
     print($1)  # Raises an exception if missing
     print($1 or 'Default')  # Or provide an alternative
@@ -145,19 +144,11 @@ write some after glancing sideways at the examples in this README.
 
 # Examples
 
-## grep
-
-yap grep.yp pattern files...
-
-    for file in $*[1:]:
-        print(green(file) + ':')
-        print(concat(
-            grep($1, open(file))
-        ))
-
-## Nice listing with file type
+## Nice colored listing with file type
 
 yap listing.yp [directory]
+
+    #!/usr/bin/env yap
 
     print(gray('Listing nicely'))
     filenames = listdir($1 or '.')
@@ -168,6 +159,18 @@ yap listing.yp [directory]
                 (f! file {name} )[1:]
             )
         )
+
+## Simple grep clone
+
+yap grep.yp pattern files...
+
+    #!/usr/bin/env yap
+    
+    for file in $*[1:]:
+        print(green(file) + ':')
+        print(concat(
+            grep($1, open(file))
+        ))
 
 # Status
 
